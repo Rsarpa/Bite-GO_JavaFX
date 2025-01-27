@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.DashAluController">
+   <children>
+      <TableView layoutX="68.0" layoutY="120.0" prefHeight="193.0" prefWidth="428.0">
+        <columns>
+          <TableColumn prefWidth="75.0" text="Nombre" />
+          <TableColumn prefWidth="75.0" text="DNI" />
+          <TableColumn prefWidth="75.0" text="Localidad" />
+        </columns>
+      </TableView>
+      <Label contentDisplay="CENTER" layoutX="31.0" layoutY="36.0" prefHeight="39.0" prefWidth="168.0" text="Dashboard Alumno">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Button layoutX="210.0" layoutY="335.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="30.0" text="&lt;" />
+      <Button layoutX="342.0" layoutY="336.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="30.0" text="&gt;" />
+      <Label layoutX="286.0" layoutY="340.0" text="1" />
+   </children>
+</AnchorPane>
