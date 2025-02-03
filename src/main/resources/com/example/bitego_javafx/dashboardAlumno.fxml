@@ -4,22 +4,29 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.DashAluController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.AlumnoController">
    <children>
-      <TableView layoutX="68.0" layoutY="120.0" prefHeight="193.0" prefWidth="428.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="Nombre" />
-          <TableColumn prefWidth="75.0" text="DNI" />
-          <TableColumn prefWidth="75.0" text="Localidad" />
-        </columns>
-      </TableView>
       <Label contentDisplay="CENTER" layoutX="31.0" layoutY="36.0" prefHeight="39.0" prefWidth="168.0" text="Dashboard Alumno">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="210.0" layoutY="335.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="30.0" text="&lt;" />
-      <Button layoutX="342.0" layoutY="336.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="30.0" text="&gt;" />
-      <Label layoutX="286.0" layoutY="340.0" text="1" />
+      <Pane layoutX="31.0" layoutY="93.0" prefHeight="99.0" prefWidth="345.0" style="-fx-background-radius: 5; -fx-border-color: black;">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" prefHeight="22.0" prefWidth="132.0" text="Pedidos para hoy">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </Label>
+            <ListView layoutX="14.0" layoutY="45.0" prefHeight="33.0" prefWidth="214.0" />
+            <Button cancelButton="true" layoutX="249.0" layoutY="49.0" mnemonicParsing="false" text="Cancelar" textFill="#da3737" />
+         </children></Pane>
+      <Separator layoutX="31.0" layoutY="73.0" prefHeight="1.0" prefWidth="264.0" />
+      <ToggleButton layoutX="96.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="157.0" text="Bocadillo frío" />
+      <ListView layoutX="84.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
+      <ListView layoutX="334.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
+      <ToggleButton layoutX="356.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="158.0" text="Bocadillo caliente" />
+      <Button layoutX="493.0" layoutY="23.0" mnemonicParsing="false" text="Cerrar Sesión" textFill="#da3737" />
+      <Button layoutX="392.0" layoutY="23.0" mnemonicParsing="false" text="Movimientos" />
    </children>
 </AnchorPane>

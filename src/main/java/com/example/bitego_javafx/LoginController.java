@@ -29,7 +29,7 @@ public class LoginController {
 
     @FXML
     protected void LoginButton() throws SQLException {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        //welcomeText.setText("Welcome to JavaFX Application!");
         // Obtener los datos de los campos
         String email = correoField.getText();
         String contrasena = contrasenaField.getText();
@@ -41,7 +41,7 @@ public class LoginController {
         if (connection != null) {
             System.out.println("Conexion establecida");
             String sql = "select * from usuario where email = '" + email + "' and contrasenya = '" + contrasena + "'";
-            System.out.println(sql);
+            //System.out.println(sql);
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -68,6 +68,8 @@ public class LoginController {
                 newStage.setTitle("Datos Introducidos");
                 newStage.setScene(scene);
                 newStage.show();*/
+            }else{
+                welcomeText.setText("Usuario no registrado");
             }
 
             /*while (rs.next()){
