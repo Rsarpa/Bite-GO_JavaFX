@@ -16,6 +16,6 @@
    </Label>
   <TextField fx:id="correoField" promptText="Correo Electrónico" />
   <PasswordField fx:id="contrasenaField" promptText="Contraseña" />
-  <Button fx:id="loginButton" onAction="#LoginButton" text="Iniciar Sesión" />
+  <Button fx:id="loginButton" onAction="#onLoginButtonClick" text="Iniciar Sesión" />
   <Label fx:id="welcomeText" textFill="#d71212" />
 </VBox>

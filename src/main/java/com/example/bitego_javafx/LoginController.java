@@ -1,5 +1,10 @@
 package com.example.bitego_javafx;
 
+import Controler.LoginDAO;
+import com.example.bitego_javafx.Clases.Usuario;
+import com.example.bitego_javafx.Util.Conexion;
+import jakarta.persistence.Query;
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -9,13 +14,18 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Queue;
 
 public class LoginController {
+
     @FXML
     private TextField correoField;
 
@@ -24,57 +34,48 @@ public class LoginController {
 
     @FXML
     private Button loginButton;
+
     @FXML
     private Label welcomeText;
 
+
     @FXML
-    protected void LoginButton() throws SQLException {
+    private void onLoginButtonClick() throws SQLException {
+
         //welcomeText.setText("Welcome to JavaFX Application!");
         // Obtener los datos de los campos
         String email = correoField.getText();
         String contrasena = contrasenaField.getText();
 
-        Connection connection=null;
-        connection = Conexion.getInstance();
-
-
-        if (connection != null) {
-            System.out.println("Conexion establecida");
-            String sql = "select * from usuario where email = '" + email + "' and contrasenya = '" + contrasena + "'";
-            //System.out.println(sql);
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            if (rs.next()) {
-                try {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("dashboardAlumno.fxml"));
-                    AnchorPane root = loader.load();
-                    Stage stage = (Stage) loginButton.getScene().getWindow();
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                /*// Crear una ventana nueva
-                Stage newStage = new Stage();
-                VBox vbox = new VBox(10);
-                vbox.setStyle("-fx-padding: 20;");
-
-                // Etiquetas con los datos
-                vbox.getChildren().add(new Label("Usuario: " + email));
-                vbox.getChildren().add(new Label("Bienvenido!!!"));
-
-                Scene scene = new Scene(vbox, 300, 200);
-                newStage.setTitle("Datos Introducidos");
-                newStage.setScene(scene);
-                newStage.show();*/
-            }else{
-                welcomeText.setText("Usuario no registrado");
-            }
-
-            /*while (rs.next()){
-                System.out.println(rs.getString("dni") + " " + rs.getString(2) + " " + rs.getString(3));
-            }*/
+        if (email.isEmpty() || contrasena.isEmpty()){
+            welcomeText.setText("Por favor complete los campos");
         }
+
+        SessionFactory sf = Conexion.getSessionFactory();
+        LoginDAO login = new LoginDAO(sf);
+        Usuario usuario = login.log(email, contrasena);
+        //Usuario usuario = loginDAO.log(email, contrasena);
+
+
+        if (usuario != null){
+            System.out.println("Usuario registrado");
+
+            switch (usuario.getRol()){
+                case "Alumno":
+                    //todo redirigir ventana alumno
+                    break;
+
+                case "Administrador":
+                    //todo redirigir ventana admin
+                    break;
+
+                case "Cocina":
+                    //todo redirigir ventana cocina
+                    break;
+            }
+        }else {
+            welcomeText.setText("Usuario no registrado");
+        }
+
     }
 }
