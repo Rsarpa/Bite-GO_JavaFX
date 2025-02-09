@@ -9,7 +9,7 @@ public class Conexion {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            return new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
+            return new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Error al crear SessionFactory: " + ex);
             throw new ExceptionInInitializerError(ex);

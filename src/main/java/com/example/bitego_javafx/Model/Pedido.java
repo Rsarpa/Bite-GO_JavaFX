@@ -1,4 +1,4 @@
-package com.example.bitego_javafx.Clases;
+package com.example.bitego_javafx.Model;
 
 import java.util.Date;
 

@@ -1,28 +1,14 @@
-package com.example.bitego_javafx;
+package com.example.bitego_javafx.Controller;
 
-import Controler.LoginDAO;
-import com.example.bitego_javafx.Clases.Usuario;
-import com.example.bitego_javafx.Util.Conexion;
-import jakarta.persistence.Query;
-import javafx.animation.Transition;
+import DAO.LoginDAO;
+import com.example.bitego_javafx.Model.Usuario;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Queue;
 
 public class LoginController {
 
@@ -45,20 +31,24 @@ public class LoginController {
         //welcomeText.setText("Welcome to JavaFX Application!");
         // Obtener los datos de los campos
         String email = correoField.getText();
-        String contrasena = contrasenaField.getText();
+        String contrasenya = contrasenaField.getText();
+        String rol = "";
 
-        if (email.isEmpty() || contrasena.isEmpty()){
+        if (email.isEmpty() || contrasenya.isEmpty()){
             welcomeText.setText("Por favor complete los campos");
         }
 
-        SessionFactory sf = Conexion.getSessionFactory();
-        LoginDAO login = new LoginDAO(sf);
-        Usuario usuario = login.log(email, contrasena);
-        //Usuario usuario = loginDAO.log(email, contrasena);
+        Usuario usuario = new Usuario();
 
+        try {
+            LoginDAO login = new LoginDAO();
+            usuario = login.log(email, contrasenya);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("No se puedo realizar la consulta");
+        }
 
         if (usuario != null){
-            System.out.println("Usuario registrado");
 
             switch (usuario.getRol()){
                 case "Alumno":

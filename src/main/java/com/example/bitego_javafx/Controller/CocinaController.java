@@ -1,14 +1,15 @@
-package com.example.bitego_javafx;
+package com.example.bitego_javafx.Controller;
 
-import Controler.PedidoDAO;
-import com.example.bitego_javafx.Clases.Pedido;
-import com.example.bitego_javafx.Util.Conexion;
+import DAO.PedidoDAO;
+import com.example.bitego_javafx.Model.Pedido;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.hibernate.SessionFactory;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class CocinaController {
     @FXML
@@ -37,7 +38,7 @@ public class CocinaController {
 
 
     @FXML
-    public void initialize(){
+    protected void cargarDatos(){
 
         // Recorrer el spinner para recoger la selección del usuario
         for (MenuItem item : cursoFilter.getItems()) {
@@ -50,21 +51,21 @@ public class CocinaController {
         String apellido = apellidoFilter.getText();
         String curso = cursoFilter.getText(); // Obtener el curso seleccionado
 
+        //configurar las columnas con los atributos de la clase Pedido
         nombreAlu.setCellValueFactory(new PropertyValueFactory<>("nombreAlumno"));
         lista_curso.setCellValueFactory(new PropertyValueFactory<>("curso"));
         tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
         try {
-            cargarDatos(nombre, apellido, curso);
+            PedidoDAO pedido = new PedidoDAO();
+            //Recoger resultado del metodo en List
+            List<Pedido> pedidoList = pedido.listarPedidos(nombre,apellido,curso);
+
+            ObservableList<Pedido> ol = FXCollections.observableArrayList(pedidoList);
+            tableView.setItems(ol);
         }catch (SQLException e){
             e.printStackTrace();
         }
 
-    }
-
-    private void cargarDatos(String nombre, String apellido, String curso) throws SQLException{
-        SessionFactory sf = Conexion.getSessionFactory();
-        PedidoDAO pedido = new PedidoDAO(sf);
-        pedido.listarPedidos(nombre,apellido,curso);
     }
 }
