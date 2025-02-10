@@ -1,28 +1,32 @@
 package com.example.bitego_javafx.Controller;
 
 import DAO.PedidoDAO;
-import com.example.bitego_javafx.Model.Pedido;
+import com.example.bitego_javafx.Model.PedidoBocadillo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class CocinaController {
+public class CocinaController implements Initializable {
     @FXML
-    private TableView<Pedido> tableView;
-
-    @FXML
-    private TableColumn<Pedido, String> nombreAlu;
+    private TableView<PedidoBocadillo> tableView;
 
     @FXML
-    private TableColumn<Pedido, String> lista_curso;
+    private TableColumn<PedidoBocadillo, String> nombreAlu;
 
     @FXML
-    private TableColumn <Pedido, String> tipo;
+    private TableColumn<PedidoBocadillo, String> lista_curso;
+
+    @FXML
+    private TableColumn <PedidoBocadillo, String> tipo;
 
     @FXML
     private Button cerrarSesion;
@@ -34,38 +38,54 @@ public class CocinaController {
     private TextField apellidoFilter;
 
     @FXML
-    private SplitMenuButton cursoFilter;
+    private ComboBox cursoFilter;
 
 
     @FXML
     protected void cargarDatos(){
 
+
         // Recorrer el spinner para recoger la selección del usuario
-        for (MenuItem item : cursoFilter.getItems()) {
+        /*for (MenuItem item : cursoFilter.getItems()) {
             item.setOnAction(event -> {
                 cursoFilter.setText(item.getText()); // Mostrar selección en el botón
             });
-        }
+        }*/
 
         String nombre = nombreFilter.getText();
         String apellido = apellidoFilter.getText();
-        String curso = cursoFilter.getText(); // Obtener el curso seleccionado
+        String curso = "";//cursoFilter.getText(); // Obtener el curso seleccionado
 
-        //configurar las columnas con los atributos de la clase Pedido
-        nombreAlu.setCellValueFactory(new PropertyValueFactory<>("nombreAlumno"));
-        lista_curso.setCellValueFactory(new PropertyValueFactory<>("curso"));
-        tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+        //System.out.println("curso: " + curso);
+
 
         try {
             PedidoDAO pedido = new PedidoDAO();
-            //Recoger resultado del metodo en List
-            List<Pedido> pedidoList = pedido.listarPedidos(nombre,apellido,curso);
 
-            ObservableList<Pedido> ol = FXCollections.observableArrayList(pedidoList);
+            //Recoger resultado del metodo en List
+            List<PedidoBocadillo> pedidoList = pedido.listarPedidos(null, null, null);
+            ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
+
+            //configurar las columnas con los atributos de la clase Pedido
+            nombreAlu.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
+            //lista_curso.setCellValueFactory(new PropertyValueFactory<>("id_curso"));
+            tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         }catch (SQLException e){
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void initialize(URL url, java.util.ResourceBundle resourceBundle) {
+        List<String> list = new ArrayList<>();
+        list.add("1ºESO");
+        list.add("2ºESO");
+        list.add("3ºESO");
+        list.add("4ºESO");
+        ObservableList ol = FXCollections.observableList(list);
+        cursoFilter.getItems().clear();
+        cursoFilter.setItems(ol);
     }
 }

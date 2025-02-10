@@ -2,12 +2,18 @@ package com.example.bitego_javafx.Controller;
 
 import DAO.LoginDAO;
 import com.example.bitego_javafx.Model.Usuario;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginController {
@@ -48,24 +54,42 @@ public class LoginController {
             System.out.println("No se puedo realizar la consulta");
         }
 
+
         if (usuario != null){
 
             switch (usuario.getRol()){
                 case "Alumno":
-                    //todo redirigir ventana alumno
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAlumno.fxml");
                     break;
 
                 case "Administrador":
-                    //todo redirigir ventana admin
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAdmin.fxml");
                     break;
 
                 case "Cocina":
-                    //todo redirigir ventana cocina
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardCocina.fxml");
                     break;
             }
         }else {
             welcomeText.setText("Usuario no registrado");
         }
 
+    }
+
+    private void cambiarDashboard(String ruta){
+        try{
+            //recoger clase del fichero ruta
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
+            Scene scene = new Scene(loader.load(), 600, 400);
+
+            Stage stage = new Stage();
+            stage.setTitle("Hello!");
+            stage.setScene(scene);
+            stage.show();
+
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

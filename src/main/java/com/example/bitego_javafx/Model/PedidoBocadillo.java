@@ -1,20 +1,36 @@
 package com.example.bitego_javafx.Model;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
-public class Pedido {
+@Entity
+@Table(name = "pedido_bocadillo")
+public class PedidoBocadillo {
+
+    @Id
     private int id_pedido;
-    private int id_alumno;
+    @Column(name = "id_bocadillo", nullable = false)
+
     private String id_bocadillo;
+    @Column(name = "fecha_hora", nullable = false)
     private Date fecha_hora;
+    @Column(name = "retirado", nullable = false)
+
     private Date retirado;
+    @Column(name = "costo_final", nullable = false)
+
     private Float costo_final;
+    @Column(name = "id_descuento", nullable = false)
+
     private int id_descuento;
 
+    /*@ManyToOne
+    @JoinColumn(name = "id_alumno")
+    private Alumno alumno;*/
 
-    public Pedido(int id_pedido, int id_alumno, String id_bocadillo, Date fecha_hora, Date retirado, Float costo_final, int id_descuento) {
+    public PedidoBocadillo(int id_pedido, String id_bocadillo, Date fecha_hora, Date retirado, Float costo_final, int id_descuento) {
         this.id_pedido = id_pedido;
-        this.id_alumno = id_alumno;
         this.id_bocadillo = id_bocadillo;
         this.fecha_hora = fecha_hora;
         this.retirado = retirado;
@@ -22,15 +38,12 @@ public class Pedido {
         this.id_descuento = id_descuento;
     }
 
-    public Pedido(){}
+    public PedidoBocadillo(){}
 
     public void setId_pedido(int id_pedido) {
         this.id_pedido = id_pedido;
     }
 
-    public void setId_alumno(int id_alumno) {
-        this.id_alumno = id_alumno;
-    }
 
     public void setId_bocadillo(String id_bocadillo) {
         this.id_bocadillo = id_bocadillo;

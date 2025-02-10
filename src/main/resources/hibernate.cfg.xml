@@ -11,7 +11,7 @@
         <property name="hibernate.show_sql">true</property>
 
         <mapping class="com.example.bitego_javafx.Model.Usuario"/>
-        <mapping class="com.example.bitego_javafx.Model.Pedido"/>
+        <mapping class="com.example.bitego_javafx.Model.PedidoBocadillo"/>
 
 
     </session-factory>
