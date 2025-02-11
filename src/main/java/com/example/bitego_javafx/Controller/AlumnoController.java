@@ -125,6 +125,7 @@ public class AlumnoController {
         Date fechaActual = new Date(System.currentTimeMillis());
         System.out.println(fechaActual);
         PedidoBocadillo pedidoFrio=new PedidoBocadillo(alumno,bocadilloFrio,fechaActual,false,bocadilloFrio.getPrecio_base(),null);
+        System.out.println("Donde estamos"+pedidoFrio);
         PedidoDAO pedidoDAO=new PedidoDAO();
         pedidoDAO.realizarPedido(pedidoFrio);
     }
@@ -134,5 +135,9 @@ public class AlumnoController {
         Date fechaActual = new Date(System.currentTimeMillis());
         System.out.println(fechaActual);
         System.out.println("Hermano quieres Caliente "+bocadilloCaliente.getNombre());
+        PedidoBocadillo pedidoCaliente=new PedidoBocadillo(alumno,bocadilloCaliente,fechaActual,false,bocadilloCaliente.getPrecio_base(),null);
+        System.out.println("Donde estamos "+pedidoCaliente);
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        pedidoDAO.realizarPedido(pedidoCaliente);
     }
 }

@@ -41,7 +41,7 @@
                <Label fx:id="lblDescripcionFrio" styleClass="bocadillo-descripcion" text="" />
                <Label fx:id="lblPrecioFrio" styleClass="bocadillo-precio" text="" />
                <Label fx:id="lblAlergenosFrio" styleClass="bocadillo-alergenos" text="" />
-               <ToggleButton fx:id="btnFrio" onAction="#pedirCaliente" styleClass="toggle-button" text="Seleccionar" />
+               <ToggleButton fx:id="btnFrio" onAction="#pedirFrio" styleClass="toggle-button" text="Seleccionar" />
             </VBox>
 
             <!-- Bocadillo Caliente -->
@@ -51,7 +51,7 @@
                <Label fx:id="lblDescripcionCaliente" styleClass="bocadillo-descripcion" text="" />
                <Label fx:id="lblPrecioCaliente" styleClass="bocadillo-precio" text="" />
                <Label fx:id="lblAlergenosCaliente" styleClass="bocadillo-alergenos" text="" />
-               <ToggleButton fx:id="btnCaliente" onAction="#pedirFrio" styleClass="toggle-button" text="Seleccionar" />
+               <ToggleButton fx:id="btnCaliente" onAction="#pedirCaliente" styleClass="toggle-button" text="Seleccionar" />
             </VBox>
          </HBox>
          <Button fx:id="btnconfirmar" styleClass="confirm-button" text="Confirmar Elección" />
