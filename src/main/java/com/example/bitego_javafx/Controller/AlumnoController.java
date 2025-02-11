@@ -23,9 +23,20 @@ public class AlumnoController {
     private ToggleButton btnFrio, btnCaliente;
 
     @FXML
+    private Label lblEmail;
+
+    @FXML
     public void initialize() {
+        //Carga los bocadillos asociados al dia
         cargarBocadillos();
-        alumno=UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+
+        if(usuario!=null){
+            alumno=UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+            lblEmail.setText(alumno.getEmail());
+        }else{
+            System.out.println("Alumno no inicializado");
+        }
+
     }
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
