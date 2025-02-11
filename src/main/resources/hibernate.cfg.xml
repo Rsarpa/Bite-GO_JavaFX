@@ -12,6 +12,9 @@
 
         <mapping class="com.example.bitego_javafx.Model.Usuario"/>
         <mapping class="com.example.bitego_javafx.Model.PedidoBocadillo"/>
+        <mapping class="com.example.bitego_javafx.Model.Bocadillo"/>
+        <mapping class="com.example.bitego_javafx.Model.Alergeno"/>
+
 
 
     </session-factory>
