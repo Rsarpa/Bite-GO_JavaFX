@@ -80,7 +80,7 @@ public class LoginController {
         try{
             //recoger clase del fichero ruta
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
-            Scene scene = new Scene(loader.load(), 800, 500);
+            Scene scene = new Scene(loader.load(), 1200, 800);
 
             Stage stage = new Stage();
             stage.setTitle("Hello!");

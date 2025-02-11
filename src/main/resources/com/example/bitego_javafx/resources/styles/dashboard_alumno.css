@@ -113,3 +113,47 @@
     -fx-background-color: #1D854B;
     -fx-cursor: hand;
 }
+
+/* 📌 Estilos para los Labels de los bocadillos */
+.bocadillo-nombre {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 5px;
+}
+
+.bocadillo-tipo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2980B9;
+}
+
+.bocadillo-descripcion {
+    -fx-font-size: 14px;
+    -fx-text-fill: #555;
+    -fx-wrap-text: true;
+    -fx-padding: 5px;
+}
+
+.bocadillo-precio {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #27AE60;
+}
+
+.bocadillo-alergenos {
+    -fx-font-size: 14px;
+    -fx-text-fill: #E74C3C;
+}
+
+/* 📦 Estilos para los contenedores de bocadillos */
+.bocadillo-card {
+    -fx-background-color: white;
+    -fx-border-color: #D5DBDB; /* Gris claro */
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 15px;
+    -fx-spacing: 10px;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0, 0, 2);
+}
