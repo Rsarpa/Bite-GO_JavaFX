@@ -11,7 +11,6 @@ public class PedidoBocadillo {
     @Id
     private int id_pedido;
     @Column(name = "id_bocadillo", nullable = false)
-
     private String id_bocadillo;
     @Column(name = "fecha_hora", nullable = false)
     private Date fecha_hora;
@@ -40,30 +39,52 @@ public class PedidoBocadillo {
 
     public PedidoBocadillo(){}
 
+
+    public int getId_pedido() {
+        return id_pedido;
+    }
+
     public void setId_pedido(int id_pedido) {
         this.id_pedido = id_pedido;
     }
 
+    public String getId_bocadillo() {
+        return id_bocadillo;
+    }
 
     public void setId_bocadillo(String id_bocadillo) {
         this.id_bocadillo = id_bocadillo;
+    }
+
+    public Date getFecha_hora() {
+        return fecha_hora;
     }
 
     public void setFecha_hora(Date fecha_hora) {
         this.fecha_hora = fecha_hora;
     }
 
+    public Date getRetirado() {
+        return retirado;
+    }
+
     public void setRetirado(Date retirado) {
         this.retirado = retirado;
+    }
+
+    public Float getCosto_final() {
+        return costo_final;
     }
 
     public void setCosto_final(Float costo_final) {
         this.costo_final = costo_final;
     }
 
+    public int getId_descuento() {
+        return id_descuento;
+    }
+
     public void setId_descuento(int id_descuento) {
         this.id_descuento = id_descuento;
     }
-
-
 }

@@ -34,7 +34,7 @@ public class PedidoDAO {
             }*/
 
             listaPedidos = session.createQuery (jpql, PedidoBocadillo.class)
-                    //.setParameter("nombre", nombreAlu)
+                    //.setParameter("nombreAlu", nombreAlu)
                     //.setParameter("apellidoAlu", apellidoAlu)
                     //.setParameter("curso", curso)
                     .getResultList();

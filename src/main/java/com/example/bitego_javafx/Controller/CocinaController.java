@@ -1,6 +1,7 @@
 package com.example.bitego_javafx.Controller;
 
 import DAO.PedidoDAO;
+import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -20,13 +22,30 @@ public class CocinaController implements Initializable {
     private TableView<PedidoBocadillo> tableView;
 
     @FXML
+    private TableColumn<PedidoBocadillo, Integer> colIdPedido;
+
+    @FXML
+    private TableColumn<PedidoBocadillo, Integer> colIdBocadillo;
+
+    @FXML
+    private TableColumn<PedidoBocadillo, LocalDateTime> colFechaHora;
+
+    @FXML
+    private TableColumn<PedidoBocadillo, Boolean> colRetirado;
+
+    @FXML
+    private TableColumn<PedidoBocadillo, Double> colCostoFinal;
+
+    @FXML
+    private TableColumn<PedidoBocadillo, Integer> colIdDescuento;
+    /*@FXML
     private TableColumn<PedidoBocadillo, String> nombreAlu;
 
     @FXML
     private TableColumn<PedidoBocadillo, String> lista_curso;
 
     @FXML
-    private TableColumn <PedidoBocadillo, String> tipo;
+    private TableColumn <PedidoBocadillo, String> tipo;*/
 
     @FXML
     private Button cerrarSesion;
@@ -38,7 +57,7 @@ public class CocinaController implements Initializable {
     private TextField apellidoFilter;
 
     @FXML
-    private ComboBox cursoFilter;
+    private ComboBox<String> cursoFilter;
 
 
     @FXML
@@ -54,7 +73,7 @@ public class CocinaController implements Initializable {
 
         String nombre = nombreFilter.getText();
         String apellido = apellidoFilter.getText();
-        String curso = "";//cursoFilter.getText(); // Obtener el curso seleccionado
+        String curso = cursoFilter.getValue(); // Obtener el curso seleccionado
 
         //System.out.println("curso: " + curso);
 
@@ -63,14 +82,24 @@ public class CocinaController implements Initializable {
             PedidoDAO pedido = new PedidoDAO();
 
             //Recoger resultado del metodo en List
-            List<PedidoBocadillo> pedidoList = pedido.listarPedidos(null, null, null);
+            List<PedidoBocadillo> pedidoList = pedido.listarPedidos(nombre, apellido, curso);
             ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
 
             //configurar las columnas con los atributos de la clase Pedido
-            nombreAlu.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
+            colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
+            colIdBocadillo.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
+            colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
+            colRetirado.setCellValueFactory(new PropertyValueFactory<>("retirado"));
+            colCostoFinal.setCellValueFactory(new PropertyValueFactory<>("costo_final"));
+            colIdDescuento.setCellValueFactory(new PropertyValueFactory<>("id_descuento"));
+
+            //nombreAlu.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
+            //lista_curso.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
             //lista_curso.setCellValueFactory(new PropertyValueFactory<>("id_curso"));
-            tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+            //tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
+
+
         }catch (SQLException e){
             e.printStackTrace();
         }
