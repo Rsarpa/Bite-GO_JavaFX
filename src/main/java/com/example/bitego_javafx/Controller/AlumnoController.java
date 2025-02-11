@@ -1,14 +1,19 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.BocadilloDao;
+import DAO.BocadilloDAO;
+import DAO.UsuarioDAO;
 import com.example.bitego_javafx.Model.Alergeno;
+import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
+import com.example.bitego_javafx.Model.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import java.util.List;
 
 public class AlumnoController {
+    private Usuario usuario;
+    private Alumno alumno;
 
     @FXML
     private Label lblNombreFrio, lblTipoFrio, lblDescripcionFrio, lblPrecioFrio, lblAlergenosFrio;
@@ -20,10 +25,15 @@ public class AlumnoController {
     @FXML
     public void initialize() {
         cargarBocadillos();
+        alumno=UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+    }
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
     }
 
     private void cargarBocadillos() {
-        BocadilloDao bocadilloDAO = new BocadilloDao();
+        BocadilloDAO bocadilloDAO = new BocadilloDAO();
         List<Bocadillo> bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
 
         for (Bocadillo b : bocadillosHoy) {
@@ -62,6 +72,14 @@ public class AlumnoController {
             return alergenos.substring(0, alergenos.length() - 2); // Eliminar la última coma y espacio
         }
         return "Ninguno";
+    }
+
+    public Alumno getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(Alumno alumno) {
+        this.alumno = alumno;
     }
 
     /*

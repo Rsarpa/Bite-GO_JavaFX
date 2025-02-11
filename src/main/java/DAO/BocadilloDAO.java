@@ -7,7 +7,7 @@ import org.hibernate.Session;
 import java.time.LocalDate;
 import java.util.List;
 
-public class BocadilloDao {
+public class BocadilloDAO {
 
     public List<Bocadillo> obtenerBocadillosDelDia() {
         List<Bocadillo> bocadillos = null;

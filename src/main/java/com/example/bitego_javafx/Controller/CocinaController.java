@@ -2,6 +2,7 @@ package com.example.bitego_javafx.Controller;
 
 import DAO.PedidoDAO;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
+import com.example.bitego_javafx.Model.Usuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CocinaController implements Initializable {
+    private Usuario usuario;
+
     @FXML
     private TableView<PedidoBocadillo> tableView;
 
@@ -40,6 +43,10 @@ public class CocinaController implements Initializable {
     @FXML
     private ComboBox cursoFilter;
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
+    }
 
     @FXML
     protected void cargarDatos(){
