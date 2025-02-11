@@ -1,19 +1,22 @@
 package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.BocadilloDAO;
+import com.example.bitego_javafx.DAO.PedidoDAO;
 import com.example.bitego_javafx.DAO.UsuarioDAO;
-import com.example.bitego_javafx.Model.Alergeno;
-import com.example.bitego_javafx.Model.Alumno;
-import com.example.bitego_javafx.Model.Bocadillo;
-import com.example.bitego_javafx.Model.Usuario;
+import com.example.bitego_javafx.Model.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AlumnoController {
     private Usuario usuario;
     private Alumno alumno;
+    private List<Bocadillo> bocadillosHoy;
+    private Bocadillo bocadilloFrio,bocadilloCaliente;
 
     @FXML
     private Label lblNombreFrio, lblTipoFrio, lblDescripcionFrio, lblPrecioFrio, lblAlergenosFrio;
@@ -52,12 +55,14 @@ public class AlumnoController {
 
     private void cargarBocadillos() {
         BocadilloDAO bocadilloDAO = new BocadilloDAO();
-        List<Bocadillo> bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
+        bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
 
         for (Bocadillo b : bocadillosHoy) {
             if ("Frio".equalsIgnoreCase(b.getTipo())) {
+                bocadilloFrio=b;
                 actualizarBocadilloFrio(b);
             } else if ("Caliente".equalsIgnoreCase(b.getTipo())) {
+                bocadilloCaliente=b;
                 actualizarBocadilloCaliente(b);
             }
         }
@@ -114,4 +119,20 @@ public class AlumnoController {
             }
         }
      */
+    @FXML
+    private void pedirFrio(){
+        System.out.println("Hermano quieres frio "+bocadilloFrio.getNombre());
+        Date fechaActual = new Date(System.currentTimeMillis());
+        System.out.println(fechaActual);
+        PedidoBocadillo pedidoFrio=new PedidoBocadillo(alumno,bocadilloFrio,fechaActual,false,bocadilloFrio.getPrecio_base(),null);
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        pedidoDAO.realizarPedido(pedidoFrio);
+    }
+
+    @FXML
+    private void pedirCaliente(){
+        Date fechaActual = new Date(System.currentTimeMillis());
+        System.out.println(fechaActual);
+        System.out.println("Hermano quieres Caliente "+bocadilloCaliente.getNombre());
+    }
 }

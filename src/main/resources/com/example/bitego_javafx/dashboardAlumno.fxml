@@ -10,7 +10,7 @@
    <top>
       <HBox spacing="15" styleClass="top-bar">
          <Label styleClass="title-label" text="BiteGO - Panel del Alumno" />
-         <Label  fx:id="lblEmail" styleClass="title-label" />
+         <Label fx:id="lblEmail" styleClass="title-label" />
          <Region HBox.hgrow="ALWAYS" />
          <Button fx:id="btnHistorial" styleClass="top-button" text="Historial" />
          <Button fx:id="btnSalir" styleClass="logout-button" text="Cerrar Sesión" />
@@ -41,7 +41,7 @@
                <Label fx:id="lblDescripcionFrio" styleClass="bocadillo-descripcion" text="" />
                <Label fx:id="lblPrecioFrio" styleClass="bocadillo-precio" text="" />
                <Label fx:id="lblAlergenosFrio" styleClass="bocadillo-alergenos" text="" />
-               <ToggleButton fx:id="btnFrio" styleClass="toggle-button" text="Seleccionar" />
+               <ToggleButton fx:id="btnFrio" onAction="#pedirCaliente" styleClass="toggle-button" text="Seleccionar" />
             </VBox>
 
             <!-- Bocadillo Caliente -->
@@ -51,10 +51,10 @@
                <Label fx:id="lblDescripcionCaliente" styleClass="bocadillo-descripcion" text="" />
                <Label fx:id="lblPrecioCaliente" styleClass="bocadillo-precio" text="" />
                <Label fx:id="lblAlergenosCaliente" styleClass="bocadillo-alergenos" text="" />
-               <ToggleButton fx:id="btnCaliente" styleClass="toggle-button" text="Seleccionar" />
+               <ToggleButton fx:id="btnCaliente" onAction="#pedirFrio" styleClass="toggle-button" text="Seleccionar" />
             </VBox>
          </HBox>
-         <Button fx:id="btnconfirmar"  styleClass="confirm-button" text="Confirmar Elección" />
+         <Button fx:id="btnconfirmar" styleClass="confirm-button" text="Confirmar Elección" />
       </VBox>
    </center>
 

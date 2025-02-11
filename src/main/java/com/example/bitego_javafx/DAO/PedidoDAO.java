@@ -11,6 +11,9 @@ import java.util.List;
 
 public class PedidoDAO {
 
+    public PedidoDAO() {
+    }
+
     public List<PedidoBocadillo> listarPedidos(String nombreAlu, String apellidoAlu, String curso) throws SQLException {
 
         //todo pendiente
@@ -47,6 +50,25 @@ public class PedidoDAO {
         }
         return listaPedidos;
     }
+
+    public void realizarPedido(PedidoBocadillo pedido) {
+        Transaction transaction = null;
+        System.out.println("hermano estás entrando o no");
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.save(pedido);
+            transaction.commit();
+            System.out.println("Todo realizado correctamente");
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                System.out.println("Que mierda está pasando");
+            }
+            e.printStackTrace();
+            System.out.println("Error al realizar el pedido");
+        }
+    }
+
 
 
 }
