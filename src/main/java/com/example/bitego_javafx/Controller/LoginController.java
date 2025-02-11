@@ -5,6 +5,7 @@ import com.example.bitego_javafx.Model.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,7 +33,7 @@ public class LoginController {
 
 
     @FXML
-    private void onLoginButtonClick() throws SQLException {
+    private void onLoginButtonClick(ActionEvent event) throws SQLException {
 
         //welcomeText.setText("Welcome to JavaFX Application!");
         // Obtener los datos de los campos
@@ -59,15 +60,15 @@ public class LoginController {
 
             switch (usuario.getRol()){
                 case "Alumno":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardAlumno.fxml");
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAlumno.fxml", event);
                     break;
 
                 case "Administrador":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardAdmin.fxml");
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAdmin.fxml", event);
                     break;
 
                 case "Cocina":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardCocina.fxml");
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardCocina.fxml", event);
                     break;
             }
         }else {
@@ -76,16 +77,21 @@ public class LoginController {
 
     }
 
-    private void cambiarDashboard(String ruta){
+    private void cambiarDashboard(String ruta, ActionEvent event){
         try{
+
+            // Cerrar la ventana actual
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
             //recoger clase del fichero ruta
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
             Scene scene = new Scene(loader.load(), 600, 400);
 
-            Stage stage = new Stage();
-            stage.setTitle("Hello!");
-            stage.setScene(scene);
-            stage.show();
+            Stage stageNuevo = new Stage();
+            stageNuevo.setTitle("Hello!");
+            stageNuevo.setScene(scene);
+            stageNuevo.show();
 
 
         }catch (IOException e){

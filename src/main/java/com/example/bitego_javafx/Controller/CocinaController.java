@@ -5,11 +5,17 @@ import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -116,5 +122,26 @@ public class CocinaController implements Initializable {
         ObservableList ol = FXCollections.observableList(list);
         cursoFilter.getItems().clear();
         cursoFilter.setItems(ol);
+    }
+
+
+    @FXML
+    public void cerrarSesion(ActionEvent event){
+        try {
+            // Cerrar la ventana actual
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
+           // Parent root = loader.load();
+            Stage mainStage = new Stage();
+            Scene scene = new Scene(loader.load(), 320, 240);
+
+            mainStage.setTitle("Hello!");
+            mainStage.setScene(scene);
+            mainStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
