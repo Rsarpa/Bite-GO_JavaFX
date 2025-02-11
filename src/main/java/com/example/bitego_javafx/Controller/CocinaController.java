@@ -1,6 +1,6 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.PedidoDAO;
+import com.example.bitego_javafx.DAO.PedidoDAO;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.collections.FXCollections;
@@ -14,7 +14,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class CocinaController implements Initializable {
     private Usuario usuario;

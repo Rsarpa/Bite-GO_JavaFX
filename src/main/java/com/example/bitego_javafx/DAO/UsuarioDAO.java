@@ -1,4 +1,4 @@
-package DAO;
+package com.example.bitego_javafx.DAO;
 
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Util.Conexion;

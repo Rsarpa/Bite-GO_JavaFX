@@ -1,7 +1,7 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.BocadilloDAO;
-import DAO.UsuarioDAO;
+import com.example.bitego_javafx.DAO.BocadilloDAO;
+import com.example.bitego_javafx.DAO.UsuarioDAO;
 import com.example.bitego_javafx.Model.Alergeno;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;

@@ -1,8 +1,7 @@
-package DAO;
+package com.example.bitego_javafx.DAO;
 
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Util.Conexion;
-import jakarta.persistence.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

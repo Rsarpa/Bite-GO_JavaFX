@@ -1,0 +1,57 @@
+/* 🌎 Estilos Generales */
+.root {
+    -fx-background-color: #f5f5f7; /* Blanco suave */
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+/* 📋 Tabla de Alumnos */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #D5DBDB;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.table-column {
+    -fx-alignment: CENTER-LEFT;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* 🏷️ Barra de Menú */
+.menu-bar {
+    -fx-background-color: #2C3E50;
+}
+
+.menu .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.menu-item {
+    -fx-background-color: white;
+    -fx-text-fill: #2C3E50;
+}
+
+.menu-item:hover {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+}
+
+/* 🔎 Campo de Búsqueda */
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #2980B9;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* 🎭 Etiquetas */
+.label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2C3E50;
+    -fx-font-weight: bold;
+}

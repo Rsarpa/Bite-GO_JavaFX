@@ -1,6 +1,6 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.LoginDAO;
+import com.example.bitego_javafx.DAO.LoginDAO;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
