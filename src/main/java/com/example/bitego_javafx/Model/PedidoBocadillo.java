@@ -24,9 +24,9 @@ public class PedidoBocadillo {
 
     private int id_descuento;
 
-    /*@ManyToOne
+    @ManyToOne
     @JoinColumn(name = "id_alumno")
-    private Alumno alumno;*/
+    private Alumno alumno;
 
     public PedidoBocadillo(int id_pedido, String id_bocadillo, Date fecha_hora, Date retirado, Float costo_final, int id_descuento) {
         this.id_pedido = id_pedido;

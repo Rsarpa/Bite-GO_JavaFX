@@ -27,21 +27,28 @@ public class AlumnoController {
 
     @FXML
     public void initialize() {
-        //Carga los bocadillos asociados al dia
+        /*//Carga los bocadillos asociados al dia
         cargarBocadillos();
-
+        //System.out.println("Usuario en initializate"+usuario.getEmail());
         if(usuario!=null){
             alumno=UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
             lblEmail.setText(alumno.getEmail());
         }else{
             System.out.println("Alumno no inicializado");
-        }
+        }*/
 
     }
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
+
+        if (usuario != null) {
+            alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+            lblEmail.setText(alumno.getEmail());
+            cargarBocadillos();  // Mueve la carga de bocadillos aquí para asegurarte de que el usuario ya está disponible
+        }
     }
+
 
     private void cargarBocadillos() {
         BocadilloDAO bocadilloDAO = new BocadilloDAO();

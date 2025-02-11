@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -44,7 +45,7 @@ public class LoginController {
             welcomeText.setText("Por favor complete los campos");
         }
 
-        Usuario usuario = new Usuario();
+        Usuario usuario = null;
 
         try {
             LoginDAO login = new LoginDAO();
@@ -59,15 +60,15 @@ public class LoginController {
 
             switch (usuario.getRol()){
                 case "Alumno":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardAlumno.fxml", event);
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAlumno.fxml", usuario);
                     break;
 
                 case "Administrador":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardAdmin.fxml", event);
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardAdmin.fxml", usuario);
                     break;
 
                 case "Cocina":
-                    cambiarDashboard("/com/example/bitego_javafx/dashboardCocina.fxml", event);
+                    cambiarDashboard("/com/example/bitego_javafx/dashboardCocina.fxml", usuario);
                     break;
             }
         }else {
@@ -76,24 +77,32 @@ public class LoginController {
 
     }
 
-    private void cambiarDashboard(String ruta, ActionEvent event){
-        try{
-
-            // Cerrar la ventana actual
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
-
-            //recoger clase del fichero ruta
+    private void cambiarDashboard(String ruta, Usuario usuario) {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
-            Scene scene = new Scene(loader.load(), 600, 400);
+            Parent root = loader.load();
 
-            Stage stageNuevo = new Stage();
-            stageNuevo.setTitle("Hello!");
-            stageNuevo.setScene(scene);
-            stageNuevo.show();
+            // Obtener el controlador de la vista cargada
+            Object controller = loader.getController();
 
+            // Verificar el tipo de usuario y pasarlo al controlador correspondiente
+            if (controller instanceof AlumnoController && usuario.getRol().equals("Alumno")) {
+                ((AlumnoController) controller).setUsuario(usuario);
+            } else if (controller instanceof AdminController && usuario.getRol().equals("Administrador")) {
+                ((AdminController) controller).setUsuario(usuario);
+            } else if (controller instanceof CocinaController && usuario.getRol().equals("Cocina")) {
+                ((CocinaController) controller).setUsuario(usuario);
+            }
 
-        }catch (IOException e){
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 1200, 800));
+            stage.show();
+
+            // Cerrar la ventana de login después de iniciar sesión
+            Stage loginStage = (Stage) loginButton.getScene().getWindow();
+            loginStage.close();
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
