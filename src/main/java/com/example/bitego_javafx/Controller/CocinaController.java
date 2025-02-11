@@ -1,8 +1,8 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.PedidoDAO;
-import com.example.bitego_javafx.Model.Alumno;
+import com.example.bitego_javafx.DAO.PedidoDAO;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
+import com.example.bitego_javafx.Model.Usuario;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,9 +21,10 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class CocinaController implements Initializable {
+    private Usuario usuario;
+
     @FXML
     private TableView<PedidoBocadillo> tableView;
 
@@ -65,6 +66,10 @@ public class CocinaController implements Initializable {
     @FXML
     private ComboBox<String> cursoFilter;
 
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
+    }
 
     @FXML
     protected void cargarDatos(){

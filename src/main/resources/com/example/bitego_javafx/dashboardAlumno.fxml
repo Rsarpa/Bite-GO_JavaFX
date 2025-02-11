@@ -1,32 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AlumnoController">
-   <children>
-      <Label contentDisplay="CENTER" layoutX="31.0" layoutY="36.0" prefHeight="39.0" prefWidth="168.0" text="Dashboard Alumno">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Pane layoutX="31.0" layoutY="93.0" prefHeight="99.0" prefWidth="345.0" style="-fx-background-radius: 5; -fx-border-color: black;">
-         <children>
-            <Label layoutX="14.0" layoutY="14.0" prefHeight="22.0" prefWidth="132.0" text="Pedidos para hoy">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-            <ListView layoutX="14.0" layoutY="45.0" prefHeight="33.0" prefWidth="214.0" />
-            <Button cancelButton="true" layoutX="249.0" layoutY="49.0" mnemonicParsing="false" text="Cancelar" textFill="#da3737" />
-         </children></Pane>
-      <Separator layoutX="31.0" layoutY="73.0" prefHeight="1.0" prefWidth="264.0" />
-      <ToggleButton layoutX="96.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="157.0" text="Bocadillo frío" />
-      <ListView layoutX="84.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
-      <ListView layoutX="334.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
-      <ToggleButton layoutX="356.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="158.0" text="Bocadillo caliente" />
-      <Button layoutX="493.0" layoutY="23.0" mnemonicParsing="false" text="Cerrar Sesión" textFill="#da3737" />
-      <Button layoutX="392.0" layoutY="23.0" mnemonicParsing="false" text="Movimientos" />
-   </children>
-</AnchorPane>
+<BorderPane stylesheets="@resources/styles/dashboard_alumno.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AlumnoController">
+
+   <!-- 🔷 Barra Superior -->
+   <top>
+      <HBox spacing="15" styleClass="top-bar">
+         <Label styleClass="title-label" text="BiteGO - Panel del Alumno" />
+         <Label  fx:id="lblEmail" />
+         <Region HBox.hgrow="ALWAYS" />
+         <Button fx:id="btnHistorial" styleClass="top-button" text="Historial" />
+         <Button fx:id="btnSalir" styleClass="logout-button" text="Cerrar Sesión" />
+      </HBox>
+   </top>
+
+   <!-- 📌 Panel Lateral (Pedidos) -->
+   <left>
+      <VBox spacing="15" styleClass="side-pane">
+         <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+         </padding>
+         <Label styleClass="section-title" text="📋 Pedidos de Hoy" />
+         <ListView fx:id="listViewPedidos" prefHeight="200" />
+         <Button fx:id="btnCancelar" styleClass="cancel-button" text="Cancelar Pedido" />
+      </VBox>
+   </left>
+
+   <!-- 🍽️ Panel Central (Selección de bocadillos) -->
+   <center>
+      <VBox spacing="20" styleClass="center-pane">
+         <Label styleClass="section-title" text="Selecciona tu bocadillo del día" />
+         <HBox alignment="CENTER" spacing="40">
+            <!-- Bocadillo Frío -->
+            <VBox alignment="CENTER" styleClass="bocadillo-card">
+               <Label fx:id="lblNombreFrio" styleClass="bocadillo-nombre" text="" />
+               <Label fx:id="lblTipoFrio" styleClass="bocadillo-tipo" text="Frío" />
+               <Label fx:id="lblDescripcionFrio" styleClass="bocadillo-descripcion" text="" />
+               <Label fx:id="lblPrecioFrio" styleClass="bocadillo-precio" text="" />
+               <Label fx:id="lblAlergenosFrio" styleClass="bocadillo-alergenos" text="" />
+               <ToggleButton fx:id="btnFrio" styleClass="toggle-button" text="Seleccionar" />
+            </VBox>
+
+            <!-- Bocadillo Caliente -->
+            <VBox alignment="CENTER" styleClass="bocadillo-card">
+               <Label fx:id="lblNombreCaliente" styleClass="bocadillo-nombre" text="" />
+               <Label fx:id="lblTipoCaliente" styleClass="bocadillo-tipo" text="Caliente" />
+               <Label fx:id="lblDescripcionCaliente" styleClass="bocadillo-descripcion" text="" />
+               <Label fx:id="lblPrecioCaliente" styleClass="bocadillo-precio" text="" />
+               <Label fx:id="lblAlergenosCaliente" styleClass="bocadillo-alergenos" text="" />
+               <ToggleButton fx:id="btnCaliente" styleClass="toggle-button" text="Seleccionar" />
+            </VBox>
+         </HBox>
+         <Button fx:id="btnconfirmar"  styleClass="confirm-button" text="Confirmar Elección" />
+      </VBox>
+   </center>
+
+</BorderPane>

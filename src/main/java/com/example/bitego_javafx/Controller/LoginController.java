@@ -1,12 +1,11 @@
 package com.example.bitego_javafx.Controller;
 
-import DAO.LoginDAO;
+import com.example.bitego_javafx.DAO.LoginDAO;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
