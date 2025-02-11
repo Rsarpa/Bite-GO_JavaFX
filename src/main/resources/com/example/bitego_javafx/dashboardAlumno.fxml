@@ -10,7 +10,7 @@
    <top>
       <HBox spacing="15" styleClass="top-bar">
          <Label styleClass="title-label" text="BiteGO - Panel del Alumno" />
-         <Label  fx:id="lblEmail" />
+         <Label  fx:id="lblEmail" styleClass="title-label" />
          <Region HBox.hgrow="ALWAYS" />
          <Button fx:id="btnHistorial" styleClass="top-button" text="Historial" />
          <Button fx:id="btnSalir" styleClass="logout-button" text="Cerrar Sesión" />
