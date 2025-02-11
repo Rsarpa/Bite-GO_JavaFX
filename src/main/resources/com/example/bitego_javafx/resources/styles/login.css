@@ -1,0 +1,60 @@
+/* 🌎 Estilos Generales */
+.root {
+    -fx-background-color: #f8f9fa;
+    -fx-font-family: 'Arial', sans-serif;
+}
+
+/* 🔷 Estilo del Título */
+.title-label {
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* 🟩 Campos de Entrada */
+.input-field {
+    -fx-pref-width: 250px;
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-border-color: #BFC9CA;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: white;
+    -fx-transition: all 0.3s ease;
+}
+
+/* Cambia el borde cuando el campo está en foco */
+.input-field:focused {
+    -fx-border-color: #2980B9;
+    -fx-border-width: 2px;
+}
+
+/* 🌟 Hover en el campo de entrada */
+.input-field:hover {
+    -fx-border-color: #5D6D7E;
+}
+
+/* ✅ Botón Iniciar Sesión */
+.login-button {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 7px;
+    -fx-padding: 10px 15px;
+    -fx-font-size: 14px;
+    -fx-pref-width: 250px;
+    -fx-cursor: hand;
+}
+
+/* Efecto al pasar el mouse */
+.login-button:hover {
+    -fx-background-color: #1F618D;
+     -fx-cursor: hand;
+
+}
+
+/* 🚨 Mensajes de Error */
+.error-message {
+    -fx-font-size: 12px;
+    -fx-text-fill: #E74C3C;
+}

@@ -2,31 +2,51 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AlumnoController">
-   <children>
-      <Label contentDisplay="CENTER" layoutX="31.0" layoutY="36.0" prefHeight="39.0" prefWidth="168.0" text="Dashboard Alumno">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Pane layoutX="31.0" layoutY="93.0" prefHeight="99.0" prefWidth="345.0" style="-fx-background-radius: 5; -fx-border-color: black;">
-         <children>
-            <Label layoutX="14.0" layoutY="14.0" prefHeight="22.0" prefWidth="132.0" text="Pedidos para hoy">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-            <ListView layoutX="14.0" layoutY="45.0" prefHeight="33.0" prefWidth="214.0" />
-            <Button cancelButton="true" layoutX="249.0" layoutY="49.0" mnemonicParsing="false" text="Cancelar" textFill="#da3737" />
-         </children></Pane>
-      <Separator layoutX="31.0" layoutY="73.0" prefHeight="1.0" prefWidth="264.0" />
-      <ToggleButton layoutX="96.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="157.0" text="Bocadillo frío" />
-      <ListView layoutX="84.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
-      <ListView layoutX="334.0" layoutY="220.0" prefHeight="47.0" prefWidth="202.0" />
-      <ToggleButton layoutX="356.0" layoutY="285.0" mnemonicParsing="false" prefHeight="75.0" prefWidth="158.0" text="Bocadillo caliente" />
-      <Button layoutX="493.0" layoutY="23.0" mnemonicParsing="false" text="Cerrar Sesión" textFill="#da3737" />
-      <Button layoutX="392.0" layoutY="23.0" mnemonicParsing="false" text="Movimientos" />
-   </children>
-</AnchorPane>
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.bitego_javafx.Controller.AlumnoController"
+            stylesheets="@resources/styles/dashboard_alumno.css">
+
+   <!-- 🔷 Barra Superior -->
+   <top>
+      <HBox styleClass="top-bar" spacing="15">
+         <Label text="BiteGO - Panel del Alumno" styleClass="title-label"/>
+         <Region HBox.hgrow="ALWAYS"/>
+         <Button text="Historial" styleClass="top-button"/>
+         <Button text="Cerrar Sesión" styleClass="logout-button"/>
+      </HBox>
+   </top>
+
+   <!-- 📌 Panel Lateral (Pedidos) -->
+   <left>
+      <VBox styleClass="side-pane" spacing="15">
+         <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+         </padding>
+         <Label text="📋 Pedidos de Hoy" styleClass="section-title"/>
+         <ListView fx:id="listViewPedidos" prefHeight="200"/>
+         <Button text="Cancelar Pedido" styleClass="cancel-button"/>
+      </VBox>
+   </left>
+
+   <!-- 🍽️ Panel Central (Selección de bocadillos) -->
+   <center>
+      <VBox styleClass="center-pane" spacing="20">
+         <Label text="Selecciona tu bocadillo del día" styleClass="section-title"/>
+         <HBox spacing="40" alignment="CENTER">
+            <VBox alignment="CENTER">
+               <ImageView fx:id="imgBocadilloFrio" fitWidth="180" fitHeight="180"/>
+               <ToggleButton text="Bocadillo Frío" fx:id="btnFrio" styleClass="toggle-button"/>
+            </VBox>
+            <VBox alignment="CENTER">
+               <ImageView fx:id="imgBocadilloCaliente" fitWidth="180" fitHeight="180"/>
+               <ToggleButton text="Bocadillo Caliente" fx:id="btnCaliente" styleClass="toggle-button"/>
+            </VBox>
+         </HBox>
+         <Button text="Confirmar Elección" styleClass="confirm-button"/>
+      </VBox>
+   </center>
+
+</BorderPane>
