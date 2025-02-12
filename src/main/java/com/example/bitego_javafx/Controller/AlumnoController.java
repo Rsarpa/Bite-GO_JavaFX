@@ -5,8 +5,12 @@ import com.example.bitego_javafx.DAO.PedidoDAO;
 import com.example.bitego_javafx.DAO.UsuarioDAO;
 import com.example.bitego_javafx.Model.*;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -40,6 +44,41 @@ public class AlumnoController {
     @FXML
     private Button btnCancelar;
 
+    //Sesion
+    @FXML
+    private Button btnSalir;
+
+    @FXML
+    private void cerrarSesion() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cerrar Sesión");
+        alert.setHeaderText("¿Seguro que quieres cerrar sesión?");
+        alert.setContentText("Se perderán los datos de sesión.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Cargar la pantalla de login
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
+                Parent root = loader.load();
+
+                // Obtener la ventana actual
+                Stage stage = (Stage) btnSalir.getScene().getWindow();
+
+                // Configurar nueva escena
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+                System.out.println("Sesión cerrada correctamente.");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error al intentar cerrar sesión.");
+            }
+        }
+    }
 
     @FXML
     public void initialize() {
