@@ -102,6 +102,9 @@ public class LoginController {
             if(usuario.getRol().equals("Alumno")){
                 stage.setScene(new Scene(root, 1200, 800));
             }
+            if(usuario.getRol().equals("Cocina")){
+                stage.setScene(new Scene(root, 800, 600));
+            }
             stage.show();
 
             // Cerrar la ventana de login después de iniciar sesión
