@@ -1,10 +1,13 @@
 package com.example.bitego_javafx.DAO;
 
+import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Util.Conexion;
+import com.sun.jna.platform.win32.OaIdl;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,7 @@ public class PedidoDAO {
         return listaPedidos;
     }
 
-    public void realizarPedido(PedidoBocadillo pedido) {
+    public Boolean realizarPedido(PedidoBocadillo pedido) {
         Transaction transaction = null;
         System.out.println("hermano estás entrando o no");
         try (Session session = Conexion.getSessionFactory().openSession()) {
@@ -59,15 +62,41 @@ public class PedidoDAO {
             session.save(pedido);
             transaction.commit();
             System.out.println("Todo realizado correctamente");
+            return true;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
                 System.out.println("Que mierda está pasando");
+                return false;
             }
             e.printStackTrace();
             System.out.println("Error al realizar el pedido");
         }
+        return null;
     }
+
+
+    public PedidoBocadillo obtenerPedidoDelDia(int id_alumno, Date fecha) {
+        PedidoBocadillo pedidoHoy = null;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            pedidoHoy = session.createQuery(
+                            "FROM PedidoBocadillo WHERE alumno.id = :id AND DATE(fecha_hora) = :fechahoy",
+                            PedidoBocadillo.class)
+                    .setParameter("id", id_alumno)
+                    .setParameter("fechahoy", fecha)
+                    .setMaxResults(1)  // Para asegurarnos de obtener solo un resultado
+                    .uniqueResult();   // Devuelve un solo objeto o null si no hay resultados
+            return pedidoHoy;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
 
 
 
