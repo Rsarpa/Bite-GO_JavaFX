@@ -97,7 +97,7 @@ public class LoginController {
             Stage stage = new Stage();
             //stage.setScene(new Scene(root, 1200, 800));
             if(usuario.getRol().equals("Administrador")){
-                stage.setScene(new Scene(root, 800, 600));
+                stage.setScene(new Scene(root, 1000, 800));
             }
             if(usuario.getRol().equals("Alumno")){
                 stage.setScene(new Scene(root, 1200, 800));
