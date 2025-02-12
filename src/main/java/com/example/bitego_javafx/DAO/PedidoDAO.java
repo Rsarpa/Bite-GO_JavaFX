@@ -78,8 +78,11 @@ public class PedidoDAO {
 
     public PedidoBocadillo obtenerPedidoDelDia(int id_alumno, Date fecha) {
         PedidoBocadillo pedidoHoy = null;
+        Transaction transaction = null;
 
         try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction(); // Inicia la transacción
+
             pedidoHoy = session.createQuery(
                             "FROM PedidoBocadillo WHERE alumno.id = :id AND DATE(fecha_hora) = :fechahoy",
                             PedidoBocadillo.class)
@@ -87,15 +90,38 @@ public class PedidoDAO {
                     .setParameter("fechahoy", fecha)
                     .setMaxResults(1)  // Para asegurarnos de obtener solo un resultado
                     .uniqueResult();   // Devuelve un solo objeto o null si no hay resultados
-            return pedidoHoy;
+
+            transaction.commit(); // Confirma la transacción
+
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback(); // Revierte la transacción en caso de error
+            }
             e.printStackTrace();
         }
 
-        return null;
+        return pedidoHoy;
     }
 
 
+    public Boolean cancelarPedido(int id_alumno,Date fecha){
+        PedidoBocadillo pedidoHoy=obtenerPedidoDelDia(id_alumno,fecha);
+        Transaction transaction = null;
+        try (Session session=Conexion.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            session.delete(pedidoHoy);
+            transaction.commit();
+            System.out.println("Pedido eliminado correctamente");
+            return true;
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Error al cancelar el pedido");
+        }
+        return false;
+    }
 
 
 

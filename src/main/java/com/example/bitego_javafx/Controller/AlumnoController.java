@@ -132,15 +132,18 @@ public class AlumnoController {
      */
     @FXML
     private void pedirFrio(){
-        //System.out.println("Hermano quieres frio "+bocadilloFrio.getNombre());
-        Date fechaActual = new Date(System.currentTimeMillis());
-        //System.out.println(fechaActual);
-        PedidoBocadillo pedidoFrio=new PedidoBocadillo(alumno,bocadilloFrio,fechaActual,false,bocadilloFrio.getPrecio_base(),null);
-        //System.out.println("Donde estamos"+pedidoFrio);
-        PedidoDAO pedidoDAO=new PedidoDAO();
-        if(pedidoDAO.realizarPedido(pedidoFrio)){
-            modoPedido();
+        if (mostrarAlerta()){
+            //System.out.println("Hermano quieres frio "+bocadilloFrio.getNombre());
+            Date fechaActual = new Date(System.currentTimeMillis());
+            //System.out.println(fechaActual);
+            PedidoBocadillo pedidoFrio=new PedidoBocadillo(alumno,bocadilloFrio,fechaActual,false,bocadilloFrio.getPrecio_base(),null);
+            //System.out.println("Donde estamos"+pedidoFrio);
+            PedidoDAO pedidoDAO=new PedidoDAO();
+            if(pedidoDAO.realizarPedido(pedidoFrio)){
+                modoPedido();
+            }
         }
+
     }
 
     @FXML
@@ -161,8 +164,8 @@ public class AlumnoController {
     private Boolean mostrarAlerta() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmación");
-        alert.setHeaderText("¿Estás seguro?");
-        alert.setContentText("Esta acción no se puede deshacer.");
+        alert.setHeaderText("¿Estás seguro ?");
+        alert.setContentText("Realizar Pedido");
 
         // Mostrar y esperar respuesta del usuario
         Optional<ButtonType> result = alert.showAndWait();
@@ -233,7 +236,13 @@ public class AlumnoController {
     }
     @FXML
     private void cancelarPedido(){
-
+        Date fechaActual = new Date(System.currentTimeMillis());
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        if(pedidoDAO.cancelarPedido(alumno.getId_alumno(),fechaActual)){
+            modoNoPedido();
+        }else{
+            System.out.println("Pedido no cancelado");
+        }
     }
 
 }
