@@ -9,6 +9,25 @@ import java.util.List;
 
 public class AlumnoDAO {
 
+    public List<Alumno> obtenerAlumnos() {
+        List<Alumno> alumnos = null;
+        Transaction transaction = null;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            alumnos = session.createQuery("FROM Alumno", Alumno.class).getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Error al recuperar la lista de alumnos");
+        }
+
+        return alumnos;
+    }
+
     public void save(Alumno alumno) {
         Transaction transaction = null;
         try (Session session = Conexion.getSessionFactory().openSession()) {

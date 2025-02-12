@@ -35,7 +35,7 @@ public class PedidoBocadillo {
     @Column(name = "id_descuento")
     private Integer id_descuento;  // Cambiado de int a Integer para permitir null
 
-    // 🔹 Constructor sin id_pedido (Hibernate lo maneja)
+    // Constructor sin id_pedido (Hibernate lo maneja)
     public PedidoBocadillo(Alumno alumno, Bocadillo bocadillo, Date fecha_hora, Boolean retirado, Float costo_final, Integer id_descuento) {
         this.alumno = alumno;
         this.bocadillo = bocadillo;

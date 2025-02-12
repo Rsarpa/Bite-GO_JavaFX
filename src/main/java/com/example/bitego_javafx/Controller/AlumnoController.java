@@ -84,6 +84,7 @@ public class AlumnoController {
     public void initialize() {
 
     }
+
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
@@ -93,7 +94,7 @@ public class AlumnoController {
             lblEmail.setText(alumno.getEmail());
             cargarBocadillos();
 
-            // AHORA podemos inicializar correctamente
+            //Inicializamos antes de que se cree el scene, asi ya todo estará inicializado
             if (comprobarPedidoDia()) {
                 modoPedido();
             } else {
@@ -101,7 +102,6 @@ public class AlumnoController {
             }
         }
     }
-
 
     private void cargarBocadillos() {
         BocadilloDAO bocadilloDAO = new BocadilloDAO();
