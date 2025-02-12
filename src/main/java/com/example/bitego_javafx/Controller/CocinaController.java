@@ -98,17 +98,16 @@ public class CocinaController implements Initializable {
             colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
             colIdBocadillo.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
             colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
-            AtomicInteger pedidoId = new AtomicInteger();
-            botonPreparar.setCellFactory(param -> new TableCell<>() {
+
+            botonPreparar.setCellFactory(param -> new TableCell<PedidoBocadillo, Void>() {
                 private final Button btn = new Button("Check");
 
                 {
                     btn.setOnAction(event -> {
-                        // Obtener el pedido de la fila actual
-                        ol.forEach(pedidoBocadillo -> {
-                            pedidoId.set(pedidoBocadillo.getId_pedido());
-                        });
-                        System.out.println("Id del pedido selecionado: " + pedidoId);
+                        PedidoBocadillo pedido = getTableView().getItems().get(getIndex()); // Obtener el pedido de la fila actual
+                        if (pedido != null) {
+                            System.out.println("Id del pedido seleccionado: " + pedido.getId_pedido());
+                        };
                     });
                 }
             });
@@ -134,8 +133,9 @@ public class CocinaController implements Initializable {
     public void cerrarSesion(ActionEvent event){
         try {
             // Cerrar la ventana actual
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.close();
+            //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            //stage.close();
+            cerrarSesion.getScene().getWindow().hide();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
            // Parent root = loader.load();
