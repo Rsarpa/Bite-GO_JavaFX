@@ -95,7 +95,13 @@ public class LoginController {
             }
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 1200, 800));
+            //stage.setScene(new Scene(root, 1200, 800));
+            if(usuario.getRol().equals("Administrador")){
+                stage.setScene(new Scene(root, 800, 600));
+            }
+            if(usuario.getRol().equals("Alumno")){
+                stage.setScene(new Scene(root, 1200, 800));
+            }
             stage.show();
 
             // Cerrar la ventana de login después de iniciar sesión

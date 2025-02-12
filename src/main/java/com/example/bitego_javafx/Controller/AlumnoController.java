@@ -1,19 +1,28 @@
 package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.BocadilloDAO;
+import com.example.bitego_javafx.DAO.PedidoDAO;
 import com.example.bitego_javafx.DAO.UsuarioDAO;
-import com.example.bitego_javafx.Model.Alergeno;
-import com.example.bitego_javafx.Model.Alumno;
-import com.example.bitego_javafx.Model.Bocadillo;
-import com.example.bitego_javafx.Model.Usuario;
+import com.example.bitego_javafx.Model.*;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 public class AlumnoController {
     private Usuario usuario;
     private Alumno alumno;
+    private List<Bocadillo> bocadillosHoy;
+    private Bocadillo bocadilloFrio,bocadilloCaliente;
 
     @FXML
     private Label lblNombreFrio, lblTipoFrio, lblDescripcionFrio, lblPrecioFrio, lblAlergenosFrio;
@@ -25,17 +34,54 @@ public class AlumnoController {
     @FXML
     private Label lblEmail;
 
+    //Reserva
+    @FXML
+    private VBox cardPedido;
+
+    @FXML
+    private Label lblNombrePedido, lblFechaLimite, lblRetirado, lblCosto;
+
+    @FXML
+    private Button btnCancelar;
+
+    //Sesion
+    @FXML
+    private Button btnSalir;
+
+    @FXML
+    private void cerrarSesion() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cerrar Sesión");
+        alert.setHeaderText("¿Seguro que quieres cerrar sesión?");
+        alert.setContentText("Se perderán los datos de sesión.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                // Cargar la pantalla de login
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
+                Parent root = loader.load();
+
+                // Obtener la ventana actual
+                Stage stage = (Stage) btnSalir.getScene().getWindow();
+
+                // Configurar nueva escena
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+
+                System.out.println("Sesión cerrada correctamente.");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error al intentar cerrar sesión.");
+            }
+        }
+    }
+
     @FXML
     public void initialize() {
-        /*//Carga los bocadillos asociados al dia
-        cargarBocadillos();
-        //System.out.println("Usuario en initializate"+usuario.getEmail());
-        if(usuario!=null){
-            alumno=UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
-            lblEmail.setText(alumno.getEmail());
-        }else{
-            System.out.println("Alumno no inicializado");
-        }*/
 
     }
     public void setUsuario(Usuario usuario) {
@@ -45,19 +91,28 @@ public class AlumnoController {
         if (usuario != null) {
             alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
             lblEmail.setText(alumno.getEmail());
-            cargarBocadillos();  // Mueve la carga de bocadillos aquí para asegurarte de que el usuario ya está disponible
+            cargarBocadillos();
+
+            // AHORA podemos inicializar correctamente
+            if (comprobarPedidoDia()) {
+                modoPedido();
+            } else {
+                modoNoPedido();
+            }
         }
     }
 
 
     private void cargarBocadillos() {
         BocadilloDAO bocadilloDAO = new BocadilloDAO();
-        List<Bocadillo> bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
+        bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
 
         for (Bocadillo b : bocadillosHoy) {
             if ("Frio".equalsIgnoreCase(b.getTipo())) {
+                bocadilloFrio=b;
                 actualizarBocadilloFrio(b);
             } else if ("Caliente".equalsIgnoreCase(b.getTipo())) {
+                bocadilloCaliente=b;
                 actualizarBocadilloCaliente(b);
             }
         }
@@ -114,4 +169,119 @@ public class AlumnoController {
             }
         }
      */
+    @FXML
+    private void pedirFrio(){
+        if (mostrarAlerta()){
+            //System.out.println("Hermano quieres frio "+bocadilloFrio.getNombre());
+            Date fechaActual = new Date(System.currentTimeMillis());
+            //System.out.println(fechaActual);
+            PedidoBocadillo pedidoFrio=new PedidoBocadillo(alumno,bocadilloFrio,fechaActual,false,bocadilloFrio.getPrecio_base(),null);
+            //System.out.println("Donde estamos"+pedidoFrio);
+            PedidoDAO pedidoDAO=new PedidoDAO();
+            if(pedidoDAO.realizarPedido(pedidoFrio)){
+                modoPedido();
+            }
+        }
+
+    }
+
+    @FXML
+    private void pedirCaliente(){
+        if (mostrarAlerta()){
+            Date fechaActual = new Date(System.currentTimeMillis());
+            //System.out.println(fechaActual);
+            //System.out.println("Hermano quieres Caliente "+bocadilloCaliente.getNombre());
+            PedidoBocadillo pedidoCaliente=new PedidoBocadillo(alumno,bocadilloCaliente,fechaActual,false,bocadilloCaliente.getPrecio_base(),null);
+            //System.out.println("Donde estamos "+pedidoCaliente);
+            PedidoDAO pedidoDAO=new PedidoDAO();
+            if(pedidoDAO.realizarPedido(pedidoCaliente)){
+                modoPedido();
+            }
+        }
+    }
+
+    private Boolean mostrarAlerta() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmación");
+        alert.setHeaderText("¿Estás seguro ?");
+        alert.setContentText("Realizar Pedido");
+
+        // Mostrar y esperar respuesta del usuario
+        Optional<ButtonType> result = alert.showAndWait();
+
+        // Evaluar la respuesta del usuario
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            System.out.println("Usuario confirmó la acción.");
+            return true;
+        } else {
+            System.out.println("Usuario canceló la acción.");
+            return false;
+        }
+    }
+
+    //Mostrar Pedido y Cambiar vista
+    private void modoPedido(){
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        Date fechaActual = new Date(System.currentTimeMillis());
+        PedidoBocadillo pedidoHoy=pedidoDAO.obtenerPedidoDelDia(alumno.getId_alumno(),fechaActual);
+        //TODO btn cancelar poner false cuando se inicializa
+        btnCancelar.setVisible(true);
+        btnFrio.setVisible(false);
+        btnCaliente.setVisible(false);
+
+        //private Label lblNombrePedido, lblFechaLimite, lblRetirado, lblCosto;
+
+        lblNombrePedido.setText(pedidoHoy.getBocadillo().getNombre());
+
+        //Asignarle siempre las 11 de cada día
+        LocalDate hoy = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'a las' hh:mm a");
+        String fechaFormateada = hoy.atTime(11, 0).format(formato);
+        //Pasarle el formate y la fecha atTime
+
+        lblFechaLimite.setText("Fecha Límite: " + fechaFormateada);
+
+        if(pedidoHoy.getRetirado()){
+            lblRetirado.setText("El Bocadillo ha sido retirado");
+        }else{
+            lblRetirado.setText("El Bocadillo aún no ha sido retirado");
+        }
+
+        //Convertimos el texto en String
+        lblCosto.setText(pedidoHoy.getCosto_final().toString());
+    }
+
+    //Comprueba si ya hay un pedido existente
+    private Boolean comprobarPedidoDia(){
+        Date fechaActual = new Date(System.currentTimeMillis());
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        if(pedidoDAO.obtenerPedidoDelDia(alumno.getId_alumno(),fechaActual)!=null){
+            System.out.println("Hemos encontrado el pedido");
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    private void modoNoPedido(){
+        btnCancelar.setVisible(false);
+        btnFrio.setVisible(true);
+        btnCaliente.setVisible(true);
+        //private Label lblNombrePedido, lblFechaLimite, lblRetirado, lblCosto;
+        lblNombrePedido.setText("");
+        lblFechaLimite.setText("");
+        lblRetirado.setText("");
+        lblCosto.setText("");
+    }
+    @FXML
+    private void cancelarPedido(){
+        Date fechaActual = new Date(System.currentTimeMillis());
+        PedidoDAO pedidoDAO=new PedidoDAO();
+        if(pedidoDAO.cancelarPedido(alumno.getId_alumno(),fechaActual)){
+            modoNoPedido();
+        }else{
+            System.out.println("Pedido no cancelado");
+        }
+    }
+
 }
