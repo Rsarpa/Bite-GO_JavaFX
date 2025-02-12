@@ -56,7 +56,7 @@ public class AlumnoController {
         alert.setContentText("Se perderán los datos de sesión.");
 
         Optional<ButtonType> result = alert.showAndWait();
-
+        //Buenas
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
                 // Cargar la pantalla de login
