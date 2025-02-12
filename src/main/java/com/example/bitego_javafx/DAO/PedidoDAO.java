@@ -20,7 +20,7 @@ public class PedidoDAO {
         try(Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             System.out.println("Conexión con la BD");
-            String jpql = "FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado IS NULL";
+            String jpql = "FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = false";
 
             /*if (nombreAlu != null && !nombreAlu.isEmpty()) {
                 jpql = jpql + " AND a.nombre = :nombreAlu";

@@ -1,6 +1,8 @@
 package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.PedidoDAO;
+import com.example.bitego_javafx.Model.Alumno;
+import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.collections.FXCollections;
@@ -21,6 +23,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class CocinaController implements Initializable {
     private Usuario usuario;
@@ -38,21 +41,15 @@ public class CocinaController implements Initializable {
     private TableColumn<PedidoBocadillo, LocalDateTime> colFechaHora;
 
     @FXML
-    private TableColumn<PedidoBocadillo, Boolean> colRetirado;
+    private TableColumn<PedidoBocadillo, String> colNombreAlu;
 
     @FXML
-    private TableColumn<PedidoBocadillo, Double> colCostoFinal;
+    private TableColumn<PedidoBocadillo, String> colCurso;
 
     @FXML
-    private TableColumn<PedidoBocadillo, Integer> colIdDescuento;
-    /*@FXML
-    private TableColumn<PedidoBocadillo, String> nombreAlu;
-
+    private TableColumn <PedidoBocadillo, String> colTipo;
     @FXML
-    private TableColumn<PedidoBocadillo, String> lista_curso;
-
-    @FXML
-    private TableColumn <PedidoBocadillo, String> tipo;*/
+    private TableColumn <PedidoBocadillo, Void> botonPreparar;
 
     @FXML
     private Button cerrarSesion;
@@ -69,6 +66,7 @@ public class CocinaController implements Initializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
+        cargarDatos();
     }
 
     @FXML
@@ -97,24 +95,26 @@ public class CocinaController implements Initializable {
             ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
 
-            //configurar las columnas con los atributos de la clase Pedido
             colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
             colIdBocadillo.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
             colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
-            colRetirado.setCellValueFactory(new PropertyValueFactory<>("retirado"));
-            colCostoFinal.setCellValueFactory(new PropertyValueFactory<>("costo_final"));
-            colIdDescuento.setCellValueFactory(new PropertyValueFactory<>("id_descuento"));
+            AtomicInteger pedidoId = new AtomicInteger();
+            botonPreparar.setCellFactory(param -> new TableCell<>() {
+                private final Button btn = new Button("Check");
 
-            //nombreAlu.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
-            //lista_curso.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
-            //lista_curso.setCellValueFactory(new PropertyValueFactory<>("id_curso"));
-            //tipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
-
-
-        }catch (SQLException e){
+                {
+                    btn.setOnAction(event -> {
+                        // Obtener el pedido de la fila actual
+                        ol.forEach(pedidoBocadillo -> {
+                            pedidoId.set(pedidoBocadillo.getId_pedido());
+                        });
+                        System.out.println("Id del pedido selecionado: " + pedidoId);
+                    });
+                }
+            });
+        }catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
