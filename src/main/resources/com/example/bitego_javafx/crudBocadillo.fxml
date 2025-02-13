@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CrudBocadilloController">
+    <children>
+        <!--Tabla para mostrar bocadillos-->
+        <TableView fx:id="tblBocadillos" layoutX="44.0" layoutY="120.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+            <columns>
+                <TableColumn fx:id="colNombre" prefWidth="75.0" styleClass="table-column" text="Nombre" />
+                <TableColumn fx:id="colTipo" prefWidth="150.0" styleClass="table-column" text="Tipo" />
+                <TableColumn fx:id="colDescrip" prefWidth="200.0" styleClass="table-column" text="Descripción" />
+                <TableColumn fx:id="colPrecio" prefWidth="100.0" styleClass="table-column" text="Precio" />
+            </columns>
+        </TableView>
+
+        <!--Barra de menú para opciones CRUD-->
+        <MenuBar layoutY="1.0" prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
+            <menus>
+                <Menu mnemonicParsing="false" styleClass="menu" text="Bocadillos">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#añadirBocadillo" styleClass="menu-item" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#editarBocadillo" styleClass="menu-item" text="Editar" />
+                        <MenuItem mnemonicParsing="false" onAction="#borrarBocadillo" styleClass="menu-item" text="Borrar" />
+                        <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
+                        <MenuItem mnemonicParsing="false" styleClass="menu-item" text="-" />
+
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <MenuBar layoutX="655.0" layoutY="27.0" prefHeight="30.0" prefWidth="182.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Bocadillos">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Close" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Alumnos">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Delete" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+
+        <!--Campo de búsqueda por nombre-->
+        <TextField fx:id="txtFiltroNombre" layoutX="590.0" layoutY="74.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
+        <Label layoutX="428.0" layoutY="80.0" styleClass="label" text="Nombre del Bocadillo:" />
+
+        <Button layoutX="532.0" layoutY="28.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="115.0" styleClass="logout-button" text="Cerrar Sesión" />
+    </children>
+</AnchorPane>

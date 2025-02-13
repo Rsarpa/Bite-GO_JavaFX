@@ -1,13 +1,11 @@
 package com.example.bitego_javafx.Controller;
 
-import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.DAO.AlumnoDAO;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -16,8 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.input.KeyEvent;
 import java.net.URL;
 import java.util.List;
@@ -125,7 +121,7 @@ public class AdminController implements Initializable {
             tblAlumnos.getScene().getWindow().hide();
 
             if (tipo.equals("Bocadillo")){
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/resourcesAdmin/crudBocadillo.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/crudBocadillo.fxml"));
                 // Parent root = loader.load();
                 Stage mainStage = new Stage();
                 Scene scene = new Scene(loader.load(), 800, 600);
@@ -139,7 +135,7 @@ public class AdminController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/dashboardAdmin.fxml"));
                 // Parent root = loader.load();
                 Stage mainStage = new Stage();
-                Scene scene = new Scene(loader.load(), 320, 240);
+                Scene scene = new Scene(loader.load(), 800, 600);
 
                 mainStage.setTitle("Hello!");
                 mainStage.setScene(scene);

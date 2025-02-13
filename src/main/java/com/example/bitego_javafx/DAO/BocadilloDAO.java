@@ -1,5 +1,6 @@
 package com.example.bitego_javafx.DAO;
 
+import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Util.Conexion;
 import org.hibernate.Session;
@@ -9,6 +10,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class BocadilloDAO {
+
+    public List<Bocadillo> obtenerBocadillos(){
+        List<Bocadillo> bocadillos = null;
+        Transaction transaction = null;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            bocadillos = session.createQuery("FROM Bocadillo", Bocadillo.class).getResultList();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            System.out.println("Error al recuperar la lista de bocadillos");
+        }
+
+        return bocadillos;
+    }
 
     public List<Bocadillo> obtenerBocadillosDelDia() {
         List<Bocadillo> bocadillos = null;
