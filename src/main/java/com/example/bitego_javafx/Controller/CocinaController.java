@@ -5,6 +5,9 @@ import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Model.Usuario;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +18,9 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,7 +40,7 @@ public class CocinaController implements Initializable {
     private TableColumn<PedidoBocadillo, Integer> colIdPedido;
 
     @FXML
-    private TableColumn<PedidoBocadillo, Integer> colIdBocadillo;
+    private TableColumn<PedidoBocadillo, String> colIdBocadillo;
 
     @FXML
     private TableColumn<PedidoBocadillo, LocalDateTime> colFechaHora;
@@ -49,7 +54,7 @@ public class CocinaController implements Initializable {
     @FXML
     private TableColumn <PedidoBocadillo, String> colTipo;
     @FXML
-    private TableColumn <PedidoBocadillo, Void> botonPreparar;
+    private TableColumn <PedidoBocadillo, HBox> botonPreparar;
 
     @FXML
     private Button cerrarSesion;
@@ -95,22 +100,24 @@ public class CocinaController implements Initializable {
             ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
 
+
             colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
-            colIdBocadillo.setCellValueFactory(new PropertyValueFactory<>("id_bocadillo"));
+            colNombreAlu.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getNombre()));
+            colIdBocadillo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getNombre()));
+            colTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getTipo()));
+            colCurso.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getCurso().getNombre_curso()));
             colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
 
-            botonPreparar.setCellFactory(param -> new TableCell<PedidoBocadillo, Void>() {
-                private final Button btn = new Button("Check");
-
-                {
-                    btn.setOnAction(event -> {
-                        PedidoBocadillo pedido = getTableView().getItems().get(getIndex()); // Obtener el pedido de la fila actual
-                        if (pedido != null) {
-                            System.out.println("Id del pedido seleccionado: " + pedido.getId_pedido());
-                        };
-                    });
-                }
+            //boton de retirar pedido
+            botonPreparar.setCellValueFactory(param -> {
+                Button btnCheck = new Button("Check");
+                //todo evento retirar bocadillo
+                //btnCheck.setOnAction(event -> checkearPedido(param.getVaue));
+                HBox hbox = new HBox(btnCheck);
+                hbox.setStyle("-fx-alignment: Center");
+                return new SimpleObjectProperty<>(hbox);
             });
+
         }catch (SQLException e) {
             e.printStackTrace();
         }
@@ -135,7 +142,6 @@ public class CocinaController implements Initializable {
             // Cerrar la ventana actual
             //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             //stage.close();
-            cerrarSesion.getScene().getWindow().hide();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
            // Parent root = loader.load();
