@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="rootPane" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.MovimientosController">
+
+    <!-- Toolbar superior -->
+    <top>
+        <ToolBar fx:id="topBar" styleClass="top-bar">
+            <Button fx:id="btnSolver" onAction="#volverAtras" styleClass="top-button" text="Volver" />
+            <Label styleClass="title-label" text="Historial de Pedidos" />
+         <Label fx:id="lblEmail" />
+        </ToolBar>
+    </top>
+
+    <!-- Panel derecho: Resumen -->
+    <right>
+        <VBox fx:id="sidePane" alignment="TOP_CENTER" spacing="15" styleClass="side-pane">
+            <Label styleClass="section-title" text="Resumen" />
+            <Label text="Número de Pedidos:" />
+            <Label fx:id="lblNumPedidos" styleClass="bocadillo-precio" text="0" />
+            <Label text="Total Gastado:" />
+            <Label fx:id="lblTotalGastado" styleClass="bocadillo-precio" text="0.00 €" />
+         <padding>
+            <Insets left="30.0" right="30.0" top="50.0" />
+         </padding>
+        </VBox>
+    </right>
+
+    <!-- Contenido central: Tabla y filtro -->
+    <center>
+        <VBox fx:id="centerPane" nodeOrientation="LEFT_TO_RIGHT" styleClass="center-pane">
+            <ComboBox fx:id="cboTiempo" prefWidth="150.0" promptText="Rango">
+            <VBox.margin>
+               <Insets bottom="2.0" left="12.0" top="5.0" />
+            </VBox.margin></ComboBox>
+            <TableView fx:id="tablaPedidos">
+                <columns>
+                    <TableColumn fx:id="colIdPedido" text="ID Pedido" />
+                    <TableColumn fx:id="colNombreBocadillo" text="Bocadillo" />
+                    <TableColumn fx:id="colFecha" text="Fecha" />
+                    <TableColumn fx:id="colCosto" text="Costo (€)" />
+                    <TableColumn fx:id="colDescuento" text="Descuento (€)" />
+                </columns>
+            </TableView>
+
+            <!-- Paginación -->
+            <HBox alignment="CENTER" spacing="10">
+                <Button fx:id="btnAnterior" text="Anterior" />
+                <Label fx:id="lblPagina" text="1" />
+                <Button fx:id="btnSiguiente" text="Siguiente" />
+            <padding>
+               <Insets bottom="10.0" top="5.0" />
+            </padding>
+            </HBox>
+         <padding>
+            <Insets left="5.0" />
+         </padding>
+        </VBox>
+    </center>
+</BorderPane>

@@ -3,11 +3,10 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="490.0" prefWidth="851.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
+<AnchorPane prefHeight="490.0" prefWidth="851.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
     <children>
         <!--Tabla para mostrar alumnos-->
-
-        <TableView fx:id="tblAlumnos" layoutX="44.0" layoutY="120.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+        <TableView fx:id="tblAlumnos" layoutX="46.0" layoutY="98.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
             <columns>
                 <TableColumn fx:id="colId" prefWidth="75.0" styleClass="table-column" text="ID" />
                 <TableColumn fx:id="colNombre" prefWidth="150.0" styleClass="table-column" text="Nombre" />
@@ -19,7 +18,7 @@
         </TableView>
 
         <!--Barra de menú para opciones CRUD-->
-        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="938.0" styleClass="menu-bar">
+        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
             <menus>
                 <Menu mnemonicParsing="false" styleClass="menu" text="Alumnos">
                     <items>
@@ -31,26 +30,9 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <MenuBar layoutX="741.0" layoutY="28.0" prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
-            <menus>
-                <Menu mnemonicParsing="false" text="Bocadillos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Alumnos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Delete" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
 
         <!--Campo de búsqueda por nombre-->
-        <TextField fx:id="txtFiltroNombre" layoutX="590.0" layoutY="74.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
-        <Label layoutX="451.0" layoutY="80.0" styleClass="label" text="Nombre del Alumno:" />
-
-        <Button layoutX="622.0" layoutY="29.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="115.0" styleClass="logout-button" text="Cerrar Sesión" />
-
+        <TextField fx:id="txtFiltroNombre" layoutX="587.0" layoutY="56.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
+        <Label layoutX="448.0" layoutY="62.0" styleClass="label" text="Nombre del Alumno:" />
     </children>
 </AnchorPane>

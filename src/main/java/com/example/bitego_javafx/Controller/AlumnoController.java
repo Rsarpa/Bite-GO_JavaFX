@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -79,9 +80,41 @@ public class AlumnoController {
             }
         }
     }
+    public void goHistorial(){
+        FXMLLoader loader=new FXMLLoader((getClass().getResource("/com/example/bitego_javafx/movimientos.fxml")));
+        try {
+            Parent root = loader.load();
+            //Obtiene el controlador de la vista a la que vamos a pasar
+            Object controller = loader.getController();
+            //Llama al method set usuario de Movimentos
+            ((MovimientosController) controller).setUsuario(usuario);
+            Stage stage=(Stage) btnCaliente.getScene().getWindow();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            //Nueva escena
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @FXML
     public void initialize() {
+        boolean alumno_instancia;
+        if (usuario != null) {
+            alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+            lblEmail.setText(alumno.getEmail());
+            cargarBocadillos();
+
+            //Inicializamos antes de que se cree el scene, asi ya todo estará inicializado
+            if (comprobarPedidoDia()) {
+                modoPedido();
+            } else {
+                modoNoPedido();
+            }
+        }
 
     }
 

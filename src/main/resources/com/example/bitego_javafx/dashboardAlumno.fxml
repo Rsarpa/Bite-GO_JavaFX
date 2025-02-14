@@ -12,7 +12,7 @@
          <Label styleClass="title-label" text="BiteGO - Panel del Alumno" />
          <Label fx:id="lblEmail" styleClass="title-label" />
          <Region HBox.hgrow="ALWAYS" />
-         <Button fx:id="btnHistorial" styleClass="top-button" text="Historial" />
+         <Button fx:id="btnHistorial" onAction="#goHistorial" styleClass="top-button" text="Historial" />
          <Button fx:id="btnSalir" onAction="#cerrarSesion" styleClass="logout-button" text="Cerrar Sesión" />
       </HBox>
    </top>

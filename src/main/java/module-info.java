@@ -8,6 +8,7 @@ module com.example.bitego_javafx {
     requires org.hibernate.orm.core;
     requires java.naming;
     requires com.sun.jna.platform;
+    requires java.desktop;
 
     opens com.example.bitego_javafx to javafx.fxml, org.hibernate.orm.core;
     exports com.example.bitego_javafx;
