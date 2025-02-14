@@ -80,25 +80,30 @@ public class AlumnoController {
             }
         }
     }
-    public void goHistorial(){
-        FXMLLoader loader=new FXMLLoader((getClass().getResource("/com/example/bitego_javafx/movimientos.fxml")));
+    public void goHistorial() {
         try {
-            Parent root = loader.load();
-            //Obtiene el controlador de la vista a la que vamos a pasar
-            Object controller = loader.getController();
-            //Llama al method set usuario de Movimentos
-            ((MovimientosController) controller).setUsuario(usuario);
-            Stage stage=(Stage) btnCaliente.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/movimientos.fxml"));
+            Parent root = loader.load(); // Carga una nueva instancia del FXML
 
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            // Obtiene el controlador y establece el usuario
+            MovimientosController controller = loader.getController();
+            controller.setUsuario(usuario);
+
+            // Crea una nueva ventana en lugar de reemplazar la actual
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 1000, 600)); // Puedes ajustar el tamaño de la ventana
+            stage.setTitle("Historial de Pedidos");
             stage.show();
-            //Nueva escena
+
+            // Opcional: Cerrar la ventana actual
+            Stage currentStage = (Stage) btnCaliente.getScene().getWindow();
+            currentStage.close();
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
+
 
     @FXML
     public void initialize() {

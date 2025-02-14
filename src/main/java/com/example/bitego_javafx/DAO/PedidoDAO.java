@@ -9,6 +9,7 @@ import org.hibernate.Transaction;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +123,34 @@ public class PedidoDAO {
         }
         return false;
     }
+
+    public static List<PedidoBocadillo> obtenerPedidosDelAlumno(int id_alumno, int page, int offset, LocalDate fechaFiltro) {
+        List<PedidoBocadillo> lista_pedidos_alumno = null;
+        Transaction transaction = null;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            String jpql = "FROM PedidoBocadillo WHERE alumno.id = :id AND fecha_hora >= :fechaFiltro ORDER BY fecha_hora DESC";
+            lista_pedidos_alumno = session.createQuery(jpql, PedidoBocadillo.class)
+                    .setParameter("id", id_alumno)
+                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
+                    .setFirstResult((page - 1) * offset)
+                    .setMaxResults(offset)
+                    .getResultList();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+
+        return lista_pedidos_alumno;
+    }
+
+
 
 
 
