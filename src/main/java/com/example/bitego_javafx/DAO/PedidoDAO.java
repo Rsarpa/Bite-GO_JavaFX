@@ -149,6 +149,34 @@ public class PedidoDAO {
 
         return lista_pedidos_alumno;
     }
+    public static long obtenerTotalPedidos(int id_alumno, LocalDate fechaFiltro) {
+        long total = 0;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            String jpql = "SELECT COUNT(p) FROM PedidoBocadillo p WHERE p.alumno.id = :id AND p.fecha_hora >= :fechaFiltro";
+            total = session.createQuery(jpql, Long.class)
+                    .setParameter("id", id_alumno)
+                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
+
+    public static double obtenerTotalGasto(int id_alumno, LocalDate fechaFiltro) {
+        Double totalGasto = 0.0;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            String jpql = "SELECT SUM(p.costo_final) FROM PedidoBocadillo p WHERE p.alumno.id = :id AND p.fecha_hora >= :fechaFiltro";
+            totalGasto = session.createQuery(jpql, Double.class)
+                    .setParameter("id", id_alumno)
+                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
+                    .uniqueResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return totalGasto != null ? totalGasto : 0.0;
+    }
+
 
 
 
