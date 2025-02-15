@@ -4,28 +4,17 @@ import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Util.Conexion;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AlumnoDAO {
 
     public List<Alumno> obtenerAlumnos() {
-        List<Alumno> alumnos = null;
-        Transaction transaction = null;
-
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            alumnos = session.createQuery("FROM Alumno", Alumno.class).getResultList();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-            System.out.println("Error al recuperar la lista de alumnos");
+            return session.createQuery("FROM Alumno", Alumno.class).list();
         }
-
-        return alumnos;
     }
 
     public void save(Alumno alumno) {
@@ -76,18 +65,50 @@ public class AlumnoDAO {
         }
     }
 
-    public List<Alumno> getAll() {
+    public List<Alumno> getPaginated(int page, int offset, HashMap<String, String> filtros) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Alumno", Alumno.class).list();
+            StringBuilder hql = new StringBuilder("FROM Alumno a WHERE true");
+
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                }
+            }
+
+            Query<Alumno> query = session.createQuery(hql.toString(), Alumno.class);
+
+            if (filtros != null) {
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                }
+            }
+
+            query.setFirstResult((page - 1) * offset);
+            query.setMaxResults(offset);
+
+            return query.list();
         }
     }
 
-    public List<Alumno> getPaginated(int page, int offset) {
+    public long count(HashMap<String, String> filtros) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Alumno", Alumno.class)
-                    .setFirstResult((page - 1) * offset)
-                    .setMaxResults(offset)
-                    .list();
+            StringBuilder hql = new StringBuilder("SELECT COUNT(a) FROM Alumno a WHERE true");
+
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                }
+            }
+
+            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+
+            if (filtros != null) {
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                }
+            }
+
+            return query.getSingleResult();
         }
     }
 }

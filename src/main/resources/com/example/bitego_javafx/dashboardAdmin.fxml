@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="490.0" prefWidth="851.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
     <children>
         <!--Tabla para mostrar alumnos-->
-        <TableView fx:id="tblAlumnos" layoutX="46.0" layoutY="98.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+        <TableView fx:id="tblAlumnos" layoutX="46.0" layoutY="98.0" prefHeight="320.0" prefWidth="749.0" styleClass="table-view">
             <columns>
                 <TableColumn fx:id="colId" prefWidth="75.0" styleClass="table-column" text="ID" />
                 <TableColumn fx:id="colNombre" prefWidth="150.0" styleClass="table-column" text="Nombre" />
@@ -17,22 +18,32 @@
             </columns>
         </TableView>
 
+        <!-- Paginación personalizada -->
+        <HBox layoutX="320.0" layoutY="430.0" spacing="10">
+            <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="button" text="Anterior" />
+            <TextField fx:id="txtPaginaActual" alignment="CENTER" prefWidth="50.0" styleClass="text-field" text="1" />
+            <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="button" text="Siguiente" />
+        </HBox>
+
         <!--Barra de menú para opciones CRUD-->
         <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
             <menus>
                 <Menu mnemonicParsing="false" styleClass="menu" text="Alumnos">
                     <items>
-                        <MenuItem mnemonicParsing="false" onAction="#añadirAlumno" styleClass="menu-item" text="Añadir" />
+                        <MenuItem mnemonicParsing="false" onAction="#anyadirAlumno" styleClass="menu-item" text="Añadir" />
                         <MenuItem mnemonicParsing="false" onAction="#editarAlumno" styleClass="menu-item" text="Editar" />
                         <MenuItem mnemonicParsing="false" onAction="#borrarAlumno" styleClass="menu-item" text="Borrar" />
-                        <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
 
         <!--Campo de búsqueda por nombre-->
-        <TextField fx:id="txtFiltroNombre" layoutX="587.0" layoutY="56.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
-        <Label layoutX="448.0" layoutY="62.0" styleClass="label" text="Nombre del Alumno:" />
+        <TextField fx:id="txtFiltroNombre" layoutX="448.0" layoutY="56.0" prefHeight="25.0" prefWidth="204.0" styleClass="text-field">
+         <padding>
+            <Insets left="10.0" />
+         </padding></TextField>
+        <Button fx:id="btnFiltrar" layoutX="662.0" layoutY="56.0" onAction="#filtrarPorNombre" styleClass="button" text="Filtrar" />
+        <Label layoutX="310.0" layoutY="62.0" styleClass="label" text="Nombre del Alumno:" />
     </children>
 </AnchorPane>
