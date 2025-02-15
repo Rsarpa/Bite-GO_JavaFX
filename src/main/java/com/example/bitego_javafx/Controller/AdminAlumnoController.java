@@ -6,6 +6,8 @@ import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Curso;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 public class AdminAlumnoController {
 
@@ -19,6 +21,11 @@ public class AdminAlumnoController {
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
     private Alumno alumnoEditando;
     private AdminController adminController;
+
+    public void initialize() {
+        validarEmailTiempoReal();
+        validarDniTiempoReal();
+    }
 
     public void setAdminController(AdminController adminController) {
         this.adminController = adminController;
@@ -72,11 +79,46 @@ public class AdminAlumnoController {
         }
     }
 
-
     private boolean validarCampos() {
         return !txtNombre.getText().isEmpty() && !txtApellidos.getText().isEmpty() &&
                 !txtDni.getText().isEmpty() && !txtLocalidad.getText().isEmpty() &&
                 !txtEmail.getText().isEmpty() && !txtCurso.getText().isEmpty();
+    }
+
+    private void validarEmailTiempoReal() {
+        txtEmail.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches("^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")) { // Patrón básico de email
+                    txtEmail.setStyle("-fx-border-color: green;");
+                    validarHabilitarGuardar();
+                } else {
+                    txtEmail.setStyle("-fx-border-color: red;");
+                    btnGuardar.setDisable(true);
+                }
+            }
+        });
+    }
+
+    private void validarDniTiempoReal() {
+        txtDni.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (newValue.matches("^[0-9]{8}[A-Z]$")) { // 8 números + 1 letra mayúscula
+                    txtDni.setStyle("-fx-border-color: green;");
+                    validarHabilitarGuardar();
+                } else {
+                    txtDni.setStyle("-fx-border-color: red;");
+                    btnGuardar.setDisable(true);
+                }
+            }
+        });
+    }
+
+    private void validarHabilitarGuardar() {
+        if (txtEmail.getStyle().contains("green") && txtDni.getStyle().contains("green")) {
+            btnGuardar.setDisable(false);
+        }
     }
 
     @FXML
