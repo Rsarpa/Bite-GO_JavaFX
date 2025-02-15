@@ -11,12 +11,14 @@ import java.util.List;
 
 public class BocadilloDAO {
 
+    //Recupera todos los Bocadillos Disponibles, útil para el adminsitrador
     public List<Bocadillo> obtenerBocadillos(){
         List<Bocadillo> bocadillos = null;
         Transaction transaction = null;
 
         try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
+            //utilizamos getResultList para obtener una pila de resultados
             bocadillos = session.createQuery("FROM Bocadillo", Bocadillo.class).getResultList();
             transaction.commit();
         } catch (Exception e) {
@@ -30,16 +32,18 @@ public class BocadilloDAO {
         return bocadillos;
     }
 
+    //Obtenemos los bocadillos filtrados por dia
     public List<Bocadillo> obtenerBocadillosDelDia() {
         List<Bocadillo> bocadillos = null;
-        int diaHoy = LocalDate.now().getDayOfWeek().getValue(); // Obtiene el día actual (1=Lunes, 7=Domingo)
+        int diaHoy = LocalDate.now().getDayOfWeek().getValue(); // Obtiene el día actual (1=Lunes, 7=Domingo) (En numero entero)
 
         Transaction transaction = null;
+        //Abrimos la sesion en el try para asegurar que se cierre una vez terminada
         try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             bocadillos = session.createQuery(
                             "FROM Bocadillo WHERE dia_asociado = :diaHoy", Bocadillo.class)
-                    .setParameter("diaHoy", diaHoy)
+                    .setParameter("diaHoy", diaHoy) //Asignamos el parámetro de esta forma para evitar la inyección
                     .getResultList();
             transaction.commit();
         } catch (Exception e) {

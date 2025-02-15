@@ -50,6 +50,7 @@ public class AdminController implements Initializable {
     private int paginaActual = 1;
     private final int registrosPorPagina = 10;
 
+    //Asigna los valores de la tabla dinámicamente
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         colId.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
@@ -62,6 +63,7 @@ public class AdminController implements Initializable {
         cargarAlumnos();
     }
 
+    //Utilizamos un HashMap para aplicar varios filtros si es necesario
     public void cargarAlumnos() {
         HashMap<String, String> filtros = new HashMap<>();
         if (!txtFiltroNombre.getText().isEmpty()) {
