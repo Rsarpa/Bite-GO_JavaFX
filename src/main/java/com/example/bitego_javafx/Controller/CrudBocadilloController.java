@@ -12,16 +12,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -40,9 +38,15 @@ public class CrudBocadilloController implements Initializable {
     private TableColumn<Bocadillo, String> colPrecio;
     @FXML
     private TextField txtFiltroNombre;
+    @FXML
+    private TextField txtPaginaActual;
+    @FXML
+    private Button btnAnterior,btnSiguiente;
 
     private BocadilloDAO bocadilloDAO = new BocadilloDAO();
     private ObservableList<Bocadillo> listarBocadillos = FXCollections.observableArrayList();
+    private int paginaActual = 1;
+    private final int registrosPorPagina = 10;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -57,46 +61,55 @@ public class CrudBocadilloController implements Initializable {
     }
 
     private void mostrarBocadillos(){
-        List<Bocadillo> bocadillos = bocadilloDAO.obtenerBocadillos();
+
+        HashMap<String, String> filtros = new HashMap<>();
+        if (!txtFiltroNombre.getText().isEmpty()){
+            filtros.put("nombre", txtFiltroNombre.getText());
+        }
+
+        List<Bocadillo> bocadillos = bocadilloDAO.getPaginated(paginaActual, registrosPorPagina, filtros); //antes obtenerBocadillos() ahora con HashMap y paginado
         listarBocadillos.setAll(bocadillos);
         tblBocadillos.setItems(listarBocadillos);
+        txtPaginaActual.setText(String.valueOf(paginaActual));
+
+        // Deshabilitar el botón "Anterior" si estamos en la primera página
+        btnAnterior.setDisable(paginaActual == 1);
+
+        // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
+        btnSiguiente.setDisable(bocadillos.size() < registrosPorPagina);
     }
 
     @FXML
     private void filtrarPorNombre(KeyEvent event) {
-        String filtro = txtFiltroNombre.getText();
-        if (filtro == null || filtro.isEmpty()) {
-            tblBocadillos.setItems(listarBocadillos);
-        } else {
-            List<Bocadillo> filtrados = listarBocadillos.stream()
-                    .filter(alumno -> alumno.getNombre().toLowerCase().contains(filtro.toLowerCase()))
-                    .collect(Collectors.toList());
-            tblBocadillos.setItems(FXCollections.observableArrayList(filtrados));
+        paginaActual = 1;
+        mostrarBocadillos();
+    }
+
+    @FXML
+    public void paginaAnterior() {
+        if (paginaActual > 1) {
+            paginaActual--;
+            mostrarBocadillos();
         }
+    }
+
+    public void paginaSiguiente() {
+        paginaActual++;
+        mostrarBocadillos();
     }
 
     @FXML
     private void anyadirBocadillo(){
-
+        //todo
     }
 
     @FXML
     private void editarBocadillo(){
-
+        //todo
     }
 
     @FXML
     private void borrarBocadillo(){
-
-    }
-
-    @FXML
-    private void mostrarInformacion() {
-
-    }
-
-    @FXML
-    private void mostrarInfo(){
 
     }
 
@@ -108,12 +121,12 @@ public class CrudBocadilloController implements Initializable {
 
     public void menuBocadillo(ActionEvent event){
         String tipo="Bocadillo";
-        cerrarVentana(event, tipo);
+        cerrarVentana(event, "Bocadillo");
     }
 
     public void menuAlumno(ActionEvent event){
         String tipo="Alumno";
-        cerrarVentana(event, tipo);
+        cerrarVentana(event, "Alumno");
     }
 
     private void cerrarVentana(ActionEvent event, String tipo){

@@ -4,49 +4,39 @@ import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Util.Conexion;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AlumnoDAO {
 
     public List<Alumno> obtenerAlumnos() {
-        List<Alumno> alumnos = null;
-        Transaction transaction = null;
-
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            alumnos = session.createQuery("FROM Alumno", Alumno.class).getResultList();
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            e.printStackTrace();
-            System.out.println("Error al recuperar la lista de alumnos");
+            return session.createQuery("FROM Alumno", Alumno.class).list();
         }
-
-        return alumnos;
     }
 
     public void save(Alumno alumno) {
-        Transaction transaction = null;
+        Transaction transaction = null;     //Se declara una variable para gestionar la transacción
+         //Se obtiene una sesión de Hibernate, declarada dentro del Try para asegurar que se cierre automáticamente
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(alumno);
-            transaction.commit();
-        } catch (Exception e) {
+            transaction = session.beginTransaction();   //Se inicia la nueva transacción
+            session.persist(alumno);     //Se guarda el objeto alumno en la bd, utilzamos persists por que aún esta en estado transitorio
+            transaction.commit(); //Se confirma la transacción haciendo persistentes los cambios
+        } catch (Exception e) {     //Caputramos la excepción
             if (transaction != null) {
-                transaction.rollback();
+                transaction.rollback();     //Si hay algun error ,se revierte la transacción para evitar datos inconsistentes
             }
             e.printStackTrace();
         }
     }
 
-    public void update(Alumno alumno) {
+    public void update(Alumno alumno) { //Se pasa un objeto alumno
         Transaction transaction = null;
         try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.merge(alumno);
+            session.merge(alumno); //Igual que el persits pero une los cambios a el valor anteriormente dado
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -60,11 +50,11 @@ public class AlumnoDAO {
         Transaction transaction = null;
         try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
-            session.remove(alumno);
-            transaction.commit();
+            session.remove(alumno); // Igua que el persits pero elimina el alumno de la bd
+            transaction.commit(); //Confirma la transacción haciendo persistentes los cambios
         } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();
+                transaction.rollback(); //Si ocurre algún error se revierte la transacción para evitar inconsistencias
             }
             e.printStackTrace();
         }
@@ -76,18 +66,69 @@ public class AlumnoDAO {
         }
     }
 
-    public List<Alumno> getAll() {
+    //Este method obtiene una lista de obtejos alumnos paginados,permitiendo aplicar filtros dinámicos utilizando HashMap
+    public List<Alumno> getPaginated(int page, int offset, HashMap<String, String> filtros) {
+        //Nos aseguramos de que la sesión se cierre utilizando la declaración en el try
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Alumno", Alumno.class).list();
+            /*
+            Se empieza con FROM Alumno a WHERE true
+            para que la construcción de filtros sea más sencilla
+            (ya que true siempre es válido y evita problemas al concatenar condiciones).
+             */
+            StringBuilder hql = new StringBuilder("FROM Alumno a WHERE true"); //Utilizamos StringBuilder para que la consulta más eficiente
+            /*
+            Si filtros no es nulo se recorren sus claves donde key representa los nombres de los atributos de alumno
+            A cada clave se le agrega un filtro LIKE dinámicamente
+             Si filtros contiene { "nombre": "Juan", "curso": "Matemáticas" }
+             Pimera append(key) para el nombre del atributo y segunda append(key) para el valor
+             FROM Alumno a WHERE true
+             AND a.nombre LIKE :nombre
+             AND a.curso LIKE :curso
+             */
+
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                }
+            }
+            //Se convierte de StringBuilder a String y se ejecuta la consulta
+            Query<Alumno> query = session.createQuery(hql.toString(), Alumno.class);
+
+            //Se envuelve con % % para permita coindicencias parciales
+            if (filtros != null) {
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                }
+            }
+
+            query.setFirstResult((page - 1) * offset);
+            //EJ Si page = 1 y offset =10, el primer resultado será (1 - 1) * 10 = 0 (primer resultado).
+            query.setMaxResults(offset);
+            //Asigna el numero máximo de resultados
+
+            return query.list();
         }
     }
 
-    public List<Alumno> getPaginated(int page, int offset) {
+    public long count(HashMap<String, String> filtros) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            return session.createQuery("FROM Alumno", Alumno.class)
-                    .setFirstResult((page - 1) * offset)
-                    .setMaxResults(offset)
-                    .list();
+            StringBuilder hql = new StringBuilder("SELECT COUNT(a) FROM Alumno a WHERE true");
+
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                }
+            }
+
+            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+
+            if (filtros != null) {
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                }
+            }
+
+            return query.getSingleResult();
         }
     }
 }

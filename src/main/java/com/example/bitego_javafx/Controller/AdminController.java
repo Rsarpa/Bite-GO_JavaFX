@@ -3,19 +3,21 @@ package com.example.bitego_javafx.Controller;
 import com.example.bitego_javafx.DAO.AlumnoDAO;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Usuario;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
-import java.io.IOException;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
@@ -38,66 +40,65 @@ public class AdminController implements Initializable {
     private TableColumn<Alumno, String> colEmail;
     @FXML
     private TextField txtFiltroNombre;
+    @FXML
+    private TextField txtPaginaActual;
+    @FXML
+    private Button btnAnterior,btnSiguiente;
 
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
     private ObservableList<Alumno> listaAlumnos = FXCollections.observableArrayList();
+    private int paginaActual = 1;
+    private final int registrosPorPagina = 10;
 
+    //Asigna los valores de la tabla dinámicamente
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Asocio las columnas con las propiedades del objeto
-        this.colId.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
-        this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        this.colApellidos.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
-        this.colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
-        this.colLocalidad.setCellValueFactory(new PropertyValueFactory<>("localidad"));
-        this.colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colId.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colApellidos.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
+        colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
+        colLocalidad.setCellValueFactory(new PropertyValueFactory<>("localidad"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
-        // Cargo los alumnos al iniciar
-        this.mostrarAlumnos();
+        cargarAlumnos();
     }
 
-    private void mostrarAlumnos() {
-        List<Alumno> alumnos = alumnoDAO.obtenerAlumnos();
+    //Utilizamos un HashMap para aplicar varios filtros si es necesario
+    public void cargarAlumnos() {
+        HashMap<String, String> filtros = new HashMap<>();
+        if (!txtFiltroNombre.getText().isEmpty()) {
+            filtros.put("nombre", txtFiltroNombre.getText());
+        }
+
+        List<Alumno> alumnos = alumnoDAO.getPaginated(paginaActual, registrosPorPagina, filtros);
         listaAlumnos.setAll(alumnos);
         tblAlumnos.setItems(listaAlumnos);
+        txtPaginaActual.setText(String.valueOf(paginaActual));
+
+        // Deshabilitar el botón "Anterior" si estamos en la primera página
+        btnAnterior.setDisable(paginaActual == 1);
+
+        // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
+        btnSiguiente.setDisable(alumnos.size() < registrosPorPagina);
     }
 
     @FXML
-    private void filtrarPorNombre(KeyEvent event) {
-        String filtro = txtFiltroNombre.getText();
-        if (filtro == null || filtro.isEmpty()) {
-            tblAlumnos.setItems(listaAlumnos);
-        } else {
-            List<Alumno> filtrados = listaAlumnos.stream()
-                    .filter(alumno -> alumno.getNombre().toLowerCase().contains(filtro.toLowerCase()))
-                    .collect(Collectors.toList());
-            tblAlumnos.setItems(FXCollections.observableArrayList(filtrados));
+    private void filtrarPorNombre(ActionEvent event) {
+        paginaActual = 1;
+        cargarAlumnos();
+    }
+
+    @FXML
+    public void paginaAnterior() {
+        if (paginaActual > 1) {
+            paginaActual--;
+            cargarAlumnos();
         }
     }
 
-    @FXML
-    private void anyadirAlumno() {
-        // Lógica para abrir un formulario de añadir alumno
-    }
-
-    @FXML
-    private void editarAlumno() {
-        // Lógica para editar el alumno seleccionado
-    }
-
-    @FXML
-    private void borrarAlumno() {
-        // Lógica para eliminar el alumno seleccionado
-    }
-
-    @FXML
-    private void mostrarInformacion() {
-        // Lógica para mostrar detalles del alumno seleccionado
-    }
-
-    @FXML
-    private void filtrarPorNombre() {
-        // Lógica para filtrar los alumnos en la tabla
+    public void paginaSiguiente() {
+        paginaActual++;
+        cargarAlumnos();
     }
 
     public void setUsuario(Usuario usuario) {
@@ -105,46 +106,27 @@ public class AdminController implements Initializable {
         System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
     }
 
-    public void menuBocadillo(ActionEvent event){
-        String tipo="Bocadillo";
-        cerrarVentana(event, tipo);
+    public void menuBocadillo(ActionEvent event) {
+        cerrarVentana(event, "Bocadillo");
     }
 
-    public void menuAlumno(ActionEvent event){
-        String tipo="Alumno";
-        cerrarVentana(event, tipo);
+    public void menuAlumno(ActionEvent event) {
+        cerrarVentana(event, "Alumno");
     }
 
-    private void cerrarVentana(ActionEvent event, String tipo){
+    private void cerrarVentana(ActionEvent event, String tipo) {
         try {
-
             // Cerrar la ventana actual
             tblAlumnos.getScene().getWindow().hide();
 
-            if (tipo.equals("Bocadillo")){
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/crudBocadillo.fxml"));
-                // Parent root = loader.load();
-                Stage mainStage = new Stage();
-                Scene scene = new Scene(loader.load(), 800, 600);
-
-                mainStage.setTitle("Hello!");
-                mainStage.setScene(scene);
-                mainStage.show();
-            }
-
-            if (tipo.equals("Alumno")){
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/dashboardAdmin.fxml"));
-                // Parent root = loader.load();
-                Stage mainStage = new Stage();
-                Scene scene = new Scene(loader.load(), 800, 600);
-
-                mainStage.setTitle("Hello!");
-                mainStage.setScene(scene);
-                mainStage.show();
-            }
-
-
-        }catch (IOException e){
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                    tipo.equals("Bocadillo") ? "/com/example/bitego_javafx/crudBocadillo.fxml" : "/com/example/bitego_javafx/dashboardAdmin.fxml"));
+            Stage mainStage = new Stage();
+            Scene scene = new Scene(loader.load(), 800, 600);
+            mainStage.setTitle("Hello!");
+            mainStage.setScene(scene);
+            mainStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -167,5 +149,70 @@ public class AdminController implements Initializable {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void anyadirAlumno() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminAlumno.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(loader.load(), 500, 500);
+            stage.setScene(scene);
+            stage.setTitle("Añadir Alumno");
+
+            AdminAlumnoController controller = loader.getController();
+            controller.setAdminController(this); // Enlazar con AdminController
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void editarAlumno() {
+        Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
+        if (alumnoSeleccionado != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminAlumno.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(loader.load(), 500, 500);
+                stage.setScene(scene);
+                stage.setTitle("Editar Alumno");
+
+                AdminAlumnoController controller = loader.getController();
+                controller.setAdminController(this);
+                controller.cargarDatosAlumno(alumnoSeleccionado); // Pasar datos al formulario
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            mostrarAlerta("Debe seleccionar un alumno para editar.");
+        }
+    }
+
+    @FXML
+    public void borrarAlumno() {
+        Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
+        if (alumnoSeleccionado != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que quieres eliminar este alumno?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Confirmar eliminación");
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alumnoDAO.delete(alumnoSeleccionado);
+                cargarAlumnos(); // Actualizar la lista después de eliminar
+            }
+        } else {
+            mostrarAlerta("Debe seleccionar un alumno para eliminar.");
+        }
+    }
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Atención");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }

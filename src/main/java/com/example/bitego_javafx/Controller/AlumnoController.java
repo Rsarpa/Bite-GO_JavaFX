@@ -12,6 +12,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -83,9 +84,46 @@ public class AlumnoController {
             }
         }
     }
+    public void goHistorial() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/movimientos.fxml"));
+            Parent root = loader.load(); // Carga una nueva instancia del FXML
+
+            // Obtiene el controlador y establece el usuario
+            MovimientosController controller = loader.getController();
+            controller.setUsuario(usuario);
+
+            // Crea una nueva ventana en lugar de reemplazar la actual
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root, 1000, 600)); // Puedes ajustar el tamaño de la ventana
+            stage.setTitle("Historial de Pedidos");
+            stage.show();
+
+            // Opcional: Cerrar la ventana actual
+            Stage currentStage = (Stage) btnCaliente.getScene().getWindow();
+            currentStage.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @FXML
     public void initialize() {
+        boolean alumno_instancia;
+        if (usuario != null) {
+            alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
+            lblEmail.setText(alumno.getEmail());
+            cargarBocadillos();
+
+            //Inicializamos antes de que se cree el scene, asi ya todo estará inicializado
+            if (comprobarPedidoDia()) {
+                modoPedido();
+            } else {
+                modoNoPedido();
+            }
+        }
 
     }
 

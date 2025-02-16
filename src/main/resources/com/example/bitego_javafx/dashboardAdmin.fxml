@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import javafx.geometry.Insets?>
+
 <BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
 
     <!--Barra Superior -->
@@ -25,7 +26,6 @@
                             <MenuItem mnemonicParsing="false" onAction="#anyadirAlumno" styleClass="menu-item" text="Añadir" />
                             <MenuItem mnemonicParsing="false" onAction="#editarAlumno" styleClass="menu-item" text="Editar" />
                             <MenuItem mnemonicParsing="false" onAction="#borrarAlumno" styleClass="menu-item" text="Borrar" />
-                            <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
                         </items>
                     </Menu>
                 </menus>
@@ -74,7 +74,13 @@
                     <TableColumn fx:id="colEmail" text="Email" />
                 </columns>
             </TableView>
+
+            <!-- Paginación personalizada -->
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="button" text="Anterior" />
+                <TextField fx:id="txtPaginaActual" alignment="CENTER" prefWidth="50.0" styleClass="text-field" text="1" />
+                <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="button" text="Siguiente" />
+            </HBox>
         </VBox>
     </center>
 </BorderPane>
-
