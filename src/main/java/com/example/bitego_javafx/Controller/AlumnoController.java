@@ -59,6 +59,10 @@ public class AlumnoController {
 
         if (result.isPresent() && result.get() == ButtonType.OK) {
             try {
+
+                // Cerrar la ventana actual
+                lblNombreFrio.getScene().getWindow().hide();
+
                 // Cargar la pantalla de login
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
                 Parent root = loader.load();

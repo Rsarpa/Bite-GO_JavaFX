@@ -1,33 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="383.0" prefWidth="553.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CocinaController">
-   <children>
-      <Label layoutX="28.0" layoutY="42.0" prefHeight="26.0" prefWidth="120.0" text="Dashboard Cocina">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Separator layoutX="28.0" layoutY="69.0" prefWidth="200.0" />
-      <TableView fx:id="tableView" layoutX="18.0" layoutY="142.0" prefHeight="230.0" prefWidth="528.0">
-        <columns>
-              <TableColumn fx:id="colIdPedido" text="ID Pedido" />
-              <TableColumn fx:id="colNombreAlu" prefWidth="75.0" text="Nombre de alumno" />
-              <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" />
-              <TableColumn fx:id="colTipo" prefWidth="75.0" text="Tipo" />
-              <TableColumn fx:id="colFechaHora" text="Fecha y Hora" />
-              <TableColumn fx:id="colCurso" prefWidth="75.0" text="Curso" />
-              <TableColumn fx:id="botonPreparar" prefWidth="75.0" text="-" />
-        </columns>
-      </TableView>
-      <Button fx:id="cerrarSesion" layoutX="477.0" layoutY="22.0" mnemonicParsing="false" text="Cerrar Sesión" textFill="#da3737" onAction="#cerrarSesion" />
-      <TextField fx:id="nombreFilter" layoutX="28.0" layoutY="82.0" prefHeight="26.0" prefWidth="130.0" promptText="Nombre Alumno" />
-      <TextField fx:id="apellidoFilter" layoutX="203.0" layoutY="82.0" prefHeight="26.0" prefWidth="120.0" promptText="Apellidos" />
-       <ComboBox fx:id="cursoFilter" layoutX="342.0" layoutY="82.0" prefHeight="18.0" prefWidth="102.0" promptText="Curso" />
-       <Button layoutX="495.0" layoutY="83.0" mnemonicParsing="false" onAction="#cargarDatos" text="Buscar" />
+<BorderPane stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CocinaController">
 
-   </children>
-</AnchorPane>
+    <!-- Barra Superior -->
+    <top>
+        <HBox spacing="15" styleClass="top-bar">
+            <Label styleClass="title-label" text="BiteGO - Panel de Cocina" />
+            <Label fx:id="lblEmail" styleClass="title-label" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnSalir" onAction="#cerrarSesion" styleClass="logout-button" text="Cerrar Sesión" />
+        </HBox>
+    </top>
+
+    <!-- Panel de Filtros -->
+    <left>
+        <VBox spacing="15" styleClass="side-pane">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+            <Label styleClass="section-title" text="Filtros de Búsqueda" />
+            <TextField fx:id="nombreFilter" promptText="Nombre Alumno" />
+            <TextField fx:id="apellidoFilter" promptText="Apellidos" />
+            <ComboBox fx:id="cursoFilter" promptText="Curso" />
+            <Button onAction="#cargarDatos" text="Buscar" />
+        </VBox>
+    </left>
+
+    <!-- Panel Central (Tabla de Pedidos) -->
+    <center>
+        <VBox spacing="20" styleClass="center-pane">
+            <Label styleClass="section-title" text="Pedidos en Cocina" />
+            <TableView fx:id="tableView">
+                <columns>
+                    <TableColumn fx:id="colIdPedido" text="ID Pedido" />
+                    <TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />
+                    <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" />
+                    <TableColumn fx:id="colTipo" text="Tipo" />
+                    <TableColumn fx:id="colFechaHora" text="Fecha y Hora" />
+                    <TableColumn fx:id="colCurso" text="Curso" />
+                    <TableColumn fx:id="botonPreparar" text="-" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

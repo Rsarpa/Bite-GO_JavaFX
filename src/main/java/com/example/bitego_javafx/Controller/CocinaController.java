@@ -85,8 +85,8 @@ public class CocinaController implements Initializable {
             });
         }*/
 
-        String nombre = nombreFilter.getText();
-        String apellido = apellidoFilter.getText();
+        String nombre = nombreFilter.getText(); //Obtener nombre filtrado
+        String apellido = apellidoFilter.getText(); //Obtener apellido filtrado
         String curso = cursoFilter.getValue(); // Obtener el curso seleccionado
 
         //System.out.println("curso: " + curso);
@@ -139,9 +139,9 @@ public class CocinaController implements Initializable {
     @FXML
     public void cerrarSesion(ActionEvent event){
         try {
+
             // Cerrar la ventana actual
-            //Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            //stage.close();
+            tableView.getScene().getWindow().hide();
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
            // Parent root = loader.load();

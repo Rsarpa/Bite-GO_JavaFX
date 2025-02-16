@@ -3,54 +3,78 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="490.0" prefWidth="851.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
-    <children>
-        <!--Tabla para mostrar alumnos-->
+<?import javafx.geometry.Insets?>
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
 
-        <TableView fx:id="tblAlumnos" layoutX="44.0" layoutY="120.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
-            <columns>
-                <TableColumn fx:id="colId" prefWidth="75.0" styleClass="table-column" text="ID" />
-                <TableColumn fx:id="colNombre" prefWidth="150.0" styleClass="table-column" text="Nombre" />
-                <TableColumn fx:id="colApellidos" prefWidth="200.0" styleClass="table-column" text="Apellidos" />
-                <TableColumn fx:id="colDni" prefWidth="100.0" styleClass="table-column" text="DNI" />
-                <TableColumn fx:id="colLocalidad" prefWidth="150.0" styleClass="table-column" text="Localidad" />
-                <TableColumn fx:id="colEmail" prefWidth="200.0" styleClass="table-column" text="Email" />
-            </columns>
-        </TableView>
+    <!--Barra Superior -->
+    <top>
+        <VBox spacing="5">
+            <!-- Barra Superior -->
+            <HBox spacing="15" styleClass="top-bar">
+                <Label styleClass="title-label" text="BiteGO - Panel de Administrador" />
+                <Label fx:id="lblEmail" styleClass="title-label" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnSalir" onAction="#cerrarSesion" styleClass="logout-button" text="Cerrar Sesión" />
+            </HBox>
 
-        <!--Barra de menú para opciones CRUD-->
-        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="938.0" styleClass="menu-bar">
-            <menus>
-                <Menu mnemonicParsing="false" styleClass="menu" text="Alumnos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#añadirAlumno" styleClass="menu-item" text="Añadir" />
-                        <MenuItem mnemonicParsing="false" onAction="#editarAlumno" styleClass="menu-item" text="Editar" />
-                        <MenuItem mnemonicParsing="false" onAction="#borrarAlumno" styleClass="menu-item" text="Borrar" />
-                        <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <MenuBar layoutX="741.0" layoutY="28.0" prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
-            <menus>
-                <Menu mnemonicParsing="false" text="Bocadillos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Alumnos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Delete" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+            <!--Barra de menú para opciones CRUD-->
+            <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="938.0" styleClass="menu-bar">
+                <menus>
+                    <Menu mnemonicParsing="false" styleClass="menu" text="Alumnos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#anyadirAlumno" styleClass="menu-item" text="Añadir" />
+                            <MenuItem mnemonicParsing="false" onAction="#editarAlumno" styleClass="menu-item" text="Editar" />
+                            <MenuItem mnemonicParsing="false" onAction="#borrarAlumno" styleClass="menu-item" text="Borrar" />
+                            <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
 
-        <!--Campo de búsqueda por nombre-->
-        <TextField fx:id="txtFiltroNombre" layoutX="590.0" layoutY="74.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
-        <Label layoutX="451.0" layoutY="80.0" styleClass="label" text="Nombre del Alumno:" />
+            <!-- Barra para navegar entre CRUDs -->
+            <MenuBar prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
+                <menus>
+                    <Menu mnemonicParsing="false" text="Bocadillos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Bocadillos"/>
+                        </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Alumnos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Alumnos"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+        </VBox>
+    </top>
 
-        <Button layoutX="622.0" layoutY="29.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="115.0" styleClass="logout-button" text="Cerrar Sesión" />
+    <!--Busqueda por nombre-->
+    <left>
+        <VBox spacing="10" styleClass="side-pane">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+            <Label styleClass="section-title" text="Filtros de Búsqueda" />
+            <TextField fx:id="txtFiltroNombre" onKeyReleased="#filtrarPorNombre" promptText="Nombre de Bocadillo" />
+        </VBox>
+    </left>
 
-    </children>
-</AnchorPane>
+    <!--Panel Central (Tabla Alumnos) -->
+    <center>
+        <VBox spacing="20" styleClass="center-pane">
+            <Label styleClass="section-title" text="Lista de Alumnos" />
+            <TableView fx:id="tblAlumnos" layoutX="44.0" layoutY="120.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" />
+                    <TableColumn fx:id="colNombre" text="Nombre" />
+                    <TableColumn fx:id="colApellidos" text="Apellidos" />
+                    <TableColumn fx:id="colDni" text="DNI" />
+                    <TableColumn fx:id="colLocalidad" text="Localidad" />
+                    <TableColumn fx:id="colEmail" text="Email" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>
+

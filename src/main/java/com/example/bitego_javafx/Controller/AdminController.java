@@ -76,7 +76,7 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    private void añadirAlumno() {
+    private void anyadirAlumno() {
         // Lógica para abrir un formulario de añadir alumno
     }
 
@@ -117,6 +117,7 @@ public class AdminController implements Initializable {
 
     private void cerrarVentana(ActionEvent event, String tipo){
         try {
+
             // Cerrar la ventana actual
             tblAlumnos.getScene().getWindow().hide();
 
@@ -143,6 +144,26 @@ public class AdminController implements Initializable {
             }
 
 
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void cerrarSesion(ActionEvent event){
+        try {
+
+            // Cerrar la ventana actual
+            tblAlumnos.getScene().getWindow().hide();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
+            // Parent root = loader.load();
+            Stage mainStage = new Stage();
+            Scene scene = new Scene(loader.load(), 320, 240);
+
+            mainStage.setTitle("Hello!");
+            mainStage.setScene(scene);
+            mainStage.show();
         }catch (IOException e){
             e.printStackTrace();
         }

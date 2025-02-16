@@ -12,6 +12,51 @@
     -fx-alignment: center-left;
 }
 
+.text-field {
+    -fx-background-color: white;
+    -fx-border-color: #2980B9;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* 📋 Tabla de Alumnos */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #D5DBDB;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+}
+
+.table-column {
+    -fx-alignment: CENTER-LEFT;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* 🏷️ Barra de Menú */
+.menu-bar {
+    -fx-background-color: #2C3E50;
+    -fx-border-radius: 5px;
+}
+
+.menu .label {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.menu-item {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: #2C3E50;
+}
+
+.menu-item:hover {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+}
+
 .title-label {
     -fx-text-fill: white;
     -fx-font-size: 20px;
@@ -38,7 +83,7 @@
     -fx-background-color: #E74C3C; /* Rojo elegante */
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-border-radius: 5px;
+    -fx-border-radiust: 5px;
     -fx-padding: 7px 15px;
 }
 

@@ -2,53 +2,76 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard_admin.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CrudBocadilloController">
-    <children>
-        <!--Tabla para mostrar bocadillos-->
-        <TableView fx:id="tblBocadillos" layoutX="44.0" layoutY="120.0" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
-            <columns>
-                <TableColumn fx:id="colNombre" prefWidth="75.0" styleClass="table-column" text="Nombre" />
-                <TableColumn fx:id="colTipo" prefWidth="150.0" styleClass="table-column" text="Tipo" />
-                <TableColumn fx:id="colDescrip" prefWidth="200.0" styleClass="table-column" text="Descripción" />
-                <TableColumn fx:id="colPrecio" prefWidth="100.0" styleClass="table-column" text="Precio" />
-            </columns>
-        </TableView>
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CrudBocadilloController">
 
-        <!--Barra de menú para opciones CRUD-->
-        <MenuBar layoutY="1.0" prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
-            <menus>
-                <Menu mnemonicParsing="false" styleClass="menu" text="Bocadillos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#añadirBocadillo" styleClass="menu-item" text="Añadir" />
-                        <MenuItem mnemonicParsing="false" onAction="#editarBocadillo" styleClass="menu-item" text="Editar" />
-                        <MenuItem mnemonicParsing="false" onAction="#borrarBocadillo" styleClass="menu-item" text="Borrar" />
-                        <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
-                        <MenuItem mnemonicParsing="false" styleClass="menu-item" text="-" />
+    <!--Barra Superior -->
+    <top>
+        <VBox spacing="5">
+            <!-- Barra Superior -->
+            <HBox spacing="15" styleClass="top-bar">
+                <Label styleClass="title-label" text="BiteGO - Panel de Administrador" />
+                <Label fx:id="lblEmail" styleClass="title-label" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnSalir" onAction="#cerrarSesion" styleClass="logout-button" text="Cerrar Sesión" />
+            </HBox>
 
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <MenuBar layoutX="655.0" layoutY="27.0" prefHeight="30.0" prefWidth="182.0">
-            <menus>
-                <Menu mnemonicParsing="false" text="Bocadillos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Alumnos">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Delete" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
+            <!-- Menú de opciones CRUD -->
+            <MenuBar prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
+                <menus>
+                    <Menu mnemonicParsing="false" styleClass="menu" text="Bocadillos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#anyadirBocadillo" styleClass="menu-item" text="Añadir" />
+                            <MenuItem mnemonicParsing="false" onAction="#editarBocadillo" styleClass="menu-item" text="Editar" />
+                            <MenuItem mnemonicParsing="false" onAction="#borrarBocadillo" styleClass="menu-item" text="Borrar" />
+                            <MenuItem mnemonicParsing="false" onAction="#mostrarInformacion" styleClass="menu-item" text="Mostrar Información" />
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
 
-        <!--Campo de búsqueda por nombre-->
-        <TextField fx:id="txtFiltroNombre" layoutX="590.0" layoutY="74.0" onKeyReleased="#filtrarPorNombre" prefHeight="25.0" prefWidth="204.0" styleClass="text-field" />
-        <Label layoutX="428.0" layoutY="80.0" styleClass="label" text="Nombre del Bocadillo:" />
+            <!-- Barra para navegar entre CRUDs -->
+            <MenuBar prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
+                <menus>
+                    <Menu mnemonicParsing="false" text="Bocadillos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Bocadillos"/>
+                        </items>
+                    </Menu>
+                    <Menu mnemonicParsing="false" text="Alumnos">
+                        <items>
+                            <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Alumnos"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+        </VBox>
+    </top>
 
-        <Button layoutX="532.0" layoutY="28.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="115.0" styleClass="logout-button" text="Cerrar Sesión" />
-    </children>
-</AnchorPane>
+    <!--Busqueda por nombre-->
+    <left>
+        <VBox spacing="10" styleClass="side-pane">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20"/>
+            </padding>
+            <Label styleClass="section-title" text="Filtros de Búsqueda" />
+            <TextField fx:id="txtFiltroNombre" onKeyReleased="#filtrarPorNombre" promptText="Nombre de Bocadillo" />
+        </VBox>
+    </left>
+
+    <!--Panel Central (Tabla Bocadillos) -->
+    <center>
+        <VBox spacing="20" styleClass="center-pane">
+            <Label styleClass="section-title" text="Lista de Bocadillos" />
+            <TableView fx:id="tblBocadillos" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+                <columns>
+                    <TableColumn fx:id="colNombre" text="Nombre" />
+                    <TableColumn fx:id="colTipo" text="Tipo" />
+                    <TableColumn fx:id="colDescrip" text="Descripción" />
+                    <TableColumn fx:id="colPrecio" text="Precio" />
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+</BorderPane>

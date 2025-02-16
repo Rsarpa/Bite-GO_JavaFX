@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -75,7 +76,7 @@ public class CrudBocadilloController implements Initializable {
     }
 
     @FXML
-    private void añadirBocadillo(){
+    private void anyadirBocadillo(){
 
     }
 
@@ -102,6 +103,7 @@ public class CrudBocadilloController implements Initializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         System.out.println("Usuario recibido en Dashboard: " + usuario.getEmail());
+
     }
 
     public void menuBocadillo(ActionEvent event){
@@ -146,4 +148,25 @@ public class CrudBocadilloController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    @FXML
+    public void cerrarSesion(ActionEvent event){
+        try {
+
+            // Cerrar la ventana actual
+            tblBocadillos.getScene().getWindow().hide();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
+            // Parent root = loader.load();
+            Stage mainStage = new Stage();
+            Scene scene = new Scene(loader.load(), 320, 240);
+
+            mainStage.setTitle("Hello!");
+            mainStage.setScene(scene);
+            mainStage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 }
+

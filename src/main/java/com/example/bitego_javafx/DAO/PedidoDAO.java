@@ -28,18 +28,18 @@ public class PedidoDAO {
             System.out.println("Conexión con la BD");
             String jpql = "FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = false";
 
-            /*if (nombreAlu != null && !nombreAlu.isEmpty()) {
-                jpql = jpql + " AND a.nombre = :nombreAlu";
+            /*if (nombreAlu != null || !nombreAlu.isEmpty()) {
+                jpql = jpql + " AND pb.alumno.nombre LIKE :nombreAlu";
             }
-            if (apellidoAlu != null && !apellidoAlu.isEmpty()) {
-                jpql = jpql + " AND a.apellidos = :apellidoAlu";
+            if (apellidoAlu != null || !apellidoAlu.isEmpty()) {
+                jpql = jpql + " AND pb.alumno.apellidos LIKE :apellidoAlu";
             }
-            if (curso != null && !curso.isEmpty()) {
-                jpql = jpql = " AND a.id_curso = :curso";
+            if (curso != null || !curso.isEmpty()) {
+                jpql = jpql + " AND pb.alumno.curso.nombre_curso LIKE :curso";
             }*/
 
             listaPedidos = session.createQuery (jpql, PedidoBocadillo.class)
-                    //.setParameter("nombreAlu", nombreAlu)
+                    //.setParameter("nombreAlu", "%"+nombreAlu+"%")
                     //.setParameter("apellidoAlu", apellidoAlu)
                     //.setParameter("curso", curso)
                     .getResultList();
