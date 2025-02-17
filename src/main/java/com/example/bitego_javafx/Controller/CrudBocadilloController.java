@@ -100,17 +100,58 @@ public class CrudBocadilloController implements Initializable {
 
     @FXML
     private void anyadirBocadillo(){
-        //todo
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminBocadillo.fxml"));
+            Stage stage = new Stage();
+            Scene scene = new Scene(loader.load(), 500, 500);
+            stage.setScene(scene);
+            stage.setTitle("Añadir Bocadillo");
+
+            AdminBocadilloController controller = loader.getController();
+            // Enlazar con AdminController
+            controller.setAdminController(this);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void editarBocadillo(){
-        //todo
+        Bocadillo bocadilloSeleccionado = tblBocadillos.getSelectionModel().getSelectedItem();
+        if (bocadilloSeleccionado != null){
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminBocadillo.fxml"));
+                Stage stage = new Stage();
+                Scene scene = new Scene(loader.load(), 500, 500);
+                stage.setScene(scene);
+                stage.setTitle("Editar Bocadillo");
+
+                AdminBocadilloController controller = loader.getController();
+                controller.setAdminController(this);
+                // Pasar datos al formulario
+                controller.cargarDatosBocadillo(bocadilloSeleccionado);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     private void borrarBocadillo(){
+        //Seleccionar esa linea (objeto bocadillo)
+        Bocadillo bocadilloSeleccionado = tblBocadillos.getSelectionModel().getSelectedItem();
+        if(bocadilloSeleccionado != null){
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro quieres eliminar este bocadillo?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Confirmar eliminación");
+            alert.showAndWait();
 
+            if (alert.getResult() == ButtonType.YES){
+                bocadilloDAO.delete(bocadilloSeleccionado);
+                mostrarBocadillos();
+            }
+        }
     }
 
     public void setUsuario(Usuario usuario) {

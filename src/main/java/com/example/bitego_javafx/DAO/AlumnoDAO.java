@@ -18,15 +18,21 @@ public class AlumnoDAO {
     }
 
     public void save(Alumno alumno) {
-        Transaction transaction = null;     //Se declara una variable para gestionar la transacción
-         //Se obtiene una sesión de Hibernate, declarada dentro del Try para asegurar que se cierre automáticamente
+
+        //Se declara una variable para gestionar la transacción
+        Transaction transaction = null;
+
+        //Se obtiene una sesión de Hibernate, declarada dentro del Try para asegurar que se cierre automáticamente
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();   //Se inicia la nueva transacción
-            session.persist(alumno);     //Se guarda el objeto alumno en la bd, utilzamos persists por que aún esta en estado transitorio
-            transaction.commit(); //Se confirma la transacción haciendo persistentes los cambios
-        } catch (Exception e) {     //Caputramos la excepción
+            //Se inicia la nueva transacción
+            transaction = session.beginTransaction();
+            //Se guarda el objeto alumno en la bd, utilzamos persists por que aún esta en estado transitorio
+            session.persist(alumno);
+            //Se confirma la transacción haciendo persistentes los cambios
+            transaction.commit();
+        } catch (Exception e) {
             if (transaction != null) {
-                transaction.rollback();     //Si hay algun error ,se revierte la transacción para evitar datos inconsistentes
+                transaction.rollback();
             }
             e.printStackTrace();
         }

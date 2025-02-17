@@ -105,6 +105,27 @@ public class PedidoDAO {
         return pedidoHoy;
     }
 
+    public void marcarRetirado(int idPedido){
+        Transaction transaction = null;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            // Obtener el pedido por ID
+            PedidoBocadillo pedido = session.get(PedidoBocadillo.class, idPedido);
+            if (pedido != null) {
+                pedido.setRetirado(true); // Marcar como retirado
+                session.update(pedido);   // Actualizar en la base de datos
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
     //En si actua como un delete , debido a que eliminamos el registro de la BD
     public Boolean cancelarPedido(int id_alumno,Date fecha){
         PedidoBocadillo pedidoHoy=obtenerPedidoDelDia(id_alumno,fecha); //Lo primero que hacemos es obtener el Pedido del Dia

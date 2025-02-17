@@ -77,7 +77,6 @@ public class CocinaController implements Initializable {
     @FXML
     protected void cargarDatos(){
 
-
         // Recorrer el spinner para recoger la selección del usuario
         /*for (MenuItem item : cursoFilter.getItems()) {
             item.setOnAction(event -> {
@@ -110,9 +109,20 @@ public class CocinaController implements Initializable {
 
             //boton de retirar pedido
             botonPreparar.setCellValueFactory(param -> {
+                //instancia para recoger el objeto de esa fila
+                PedidoBocadillo pedidoBocadillo = param.getValue();
                 Button btnCheck = new Button("Check");
                 //todo evento retirar bocadillo
-                //btnCheck.setOnAction(event -> checkearPedido(param.getVaue));
+
+                btnCheck.setOnAction(event -> {
+                    try{
+                        pedido.marcarRetirado(pedidoBocadillo.getId_pedido());
+                        System.out.println("Pedido " + pedidoBocadillo.getId_pedido() + " marcado como retirado.");
+                        cargarDatos();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                });
                 HBox hbox = new HBox(btnCheck);
                 hbox.setStyle("-fx-alignment: Center");
                 return new SimpleObjectProperty<>(hbox);

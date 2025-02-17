@@ -58,6 +58,56 @@ public class BocadilloDAO {
         return bocadillos;
     }
 
+    public void save(Bocadillo bocadillo){
+
+        //Se declara una variable para gestionar la transacción
+        Transaction transaction = null;
+
+        //Se obtiene una sesión de Hibernate, declarada dentro del Try para asegurar que se cierre automáticamente
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            //Se inicia la nueva transacción
+            transaction = session.beginTransaction();
+            //Se guarda el objeto alumno en la bd, utilzamos persists por que aún esta en estado transitorio
+            session.persist(bocadillo);
+            //Se confirma la transacción haciendo persistentes los cambios
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Bocadillo bocadillo) { //Se pasa un objeto alumno
+        Transaction transaction = null;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            //Igual que el persits pero une los cambios a el valor anteriormente dado
+            session.merge(bocadillo);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(Bocadillo bocadillo){
+        Transaction transaction = null;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.remove(bocadillo); // Igua que el persits pero elimina el alumno de la bd
+            transaction.commit(); //Confirma la transacción haciendo persistentes los cambios
+        } catch (Exception e){
+            if (transaction != null) {
+                transaction.rollback(); //Si ocurre algún error se revierte la transacción para evitar inconsistencias
+            }
+            e.printStackTrace();
+        }
+    }
+
     public List<Bocadillo> getPaginated(int page, int offset, HashMap<String, String> filtros){
         try (Session session = Conexion.getSessionFactory().openSession()) {
             StringBuilder hql = new StringBuilder("FROM Bocadillo a WHERE true"); //Utilizamos StringBuilder para que la consulta más eficiente

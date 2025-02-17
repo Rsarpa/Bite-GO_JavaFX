@@ -21,7 +21,7 @@
             <!--Barra de menú para opciones CRUD-->
             <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="938.0" styleClass="menu-bar">
                 <menus>
-                    <Menu mnemonicParsing="false" styleClass="menu" text="Alumnos">
+                    <Menu mnemonicParsing="false" styleClass="menu" text="≡">
                         <items>
                             <MenuItem mnemonicParsing="false" onAction="#anyadirAlumno" styleClass="menu-item" text="Añadir" />
                             <MenuItem mnemonicParsing="false" onAction="#editarAlumno" styleClass="menu-item" text="Editar" />
@@ -56,7 +56,7 @@
                 <Insets bottom="20" left="20" right="20" top="20"/>
             </padding>
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
-            <TextField fx:id="txtFiltroNombre" onKeyReleased="#filtrarPorNombre" promptText="Nombre de Bocadillo" />
+            <TextField fx:id="txtFiltroNombre" onKeyReleased="#filtrarPorNombre" promptText="Nombre del Alumno" />
         </VBox>
     </left>
 

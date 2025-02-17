@@ -161,7 +161,8 @@ public class AdminController implements Initializable {
             stage.setTitle("Añadir Alumno");
 
             AdminAlumnoController controller = loader.getController();
-            controller.setAdminController(this); // Enlazar con AdminController
+            // Enlazar con AdminController
+            controller.setAdminController(this);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -181,7 +182,8 @@ public class AdminController implements Initializable {
 
                 AdminAlumnoController controller = loader.getController();
                 controller.setAdminController(this);
-                controller.cargarDatosAlumno(alumnoSeleccionado); // Pasar datos al formulario
+                // Pasar datos al formulario
+                controller.cargarDatosAlumno(alumnoSeleccionado);
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();

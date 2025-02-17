@@ -20,7 +20,7 @@
             <!-- Menú de opciones CRUD -->
             <MenuBar prefHeight="25.0" prefWidth="838.0" styleClass="menu-bar">
                 <menus>
-                    <Menu mnemonicParsing="false" styleClass="menu" text="Bocadillos">
+                    <Menu mnemonicParsing="false" styleClass="menu" text="≡">
                         <items>
                             <MenuItem mnemonicParsing="false" onAction="#anyadirBocadillo" styleClass="menu-item" text="Añadir" />
                             <MenuItem mnemonicParsing="false" onAction="#editarBocadillo" styleClass="menu-item" text="Editar" />
