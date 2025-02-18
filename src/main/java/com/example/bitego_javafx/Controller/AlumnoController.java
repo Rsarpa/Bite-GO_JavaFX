@@ -72,8 +72,9 @@ public class AlumnoController {
                 Stage stage = (Stage) btnSalir.getScene().getWindow();
 
                 // Configurar nueva escena
-                Scene scene = new Scene(root);
+                Scene scene = new Scene(root, 300, 350);
                 stage.setScene(scene);
+                stage.setMaximized(false);
                 stage.show();
 
                 System.out.println("Sesión cerrada correctamente.");
@@ -95,8 +96,9 @@ public class AlumnoController {
 
             // Crea una nueva ventana en lugar de reemplazar la actual
             Stage stage = new Stage();
-            stage.setScene(new Scene(root, 1000, 600)); // Puedes ajustar el tamaño de la ventana
+            stage.setScene(new Scene(root, 800, 600)); // Puedes ajustar el tamaño de la ventana
             stage.setTitle("Historial de Pedidos");
+            stage.setMaximized(true);
             stage.show();
 
             // Opcional: Cerrar la ventana actual

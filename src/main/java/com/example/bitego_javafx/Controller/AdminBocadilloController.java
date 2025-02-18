@@ -88,8 +88,13 @@ public class AdminBocadilloController implements Initializable {
 
             if (bocadillo == null){
                 bocadilloDAO.save(bocadilloEditado);
+                //llamar a la clase controller devolver valores actualizados y cerrar ventana
+                crudBocadilloController.mostrarBocadillos();
+                cerrarVentana();
             }else {
                 bocadilloDAO.update(bocadilloEditado);
+                crudBocadilloController.mostrarBocadillos();
+                cerrarVentana();
             }
         }else {
             mostrarAlerta("Todos los campos son obligatorios");

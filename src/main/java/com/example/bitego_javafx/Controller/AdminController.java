@@ -77,11 +77,15 @@ public class AdminController implements Initializable {
         //establecerlo en modo vista
         txtPaginaActual.setEditable(false);
 
+        long totalRegistros = alumnoDAO.count(filtros); // Método que cuenta registros en la BD
+        int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
+
         // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
 
         // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
-        btnSiguiente.setDisable(alumnos.size() <= registrosPorPagina);
+        btnSiguiente.setDisable(paginaActual >= totalPaginas);
+
     }
 
     @FXML
@@ -127,6 +131,7 @@ public class AdminController implements Initializable {
             Scene scene = new Scene(loader.load(), 800, 600);
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);
+            mainStage.setMaximized(true);
             mainStage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +148,7 @@ public class AdminController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
             // Parent root = loader.load();
             Stage mainStage = new Stage();
-            Scene scene = new Scene(loader.load(), 320, 240);
+            Scene scene = new Scene(loader.load(), 300, 350);
 
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);

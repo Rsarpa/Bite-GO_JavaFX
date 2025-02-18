@@ -156,4 +156,26 @@ public class BocadilloDAO {
             return query.list();
         }
     }
+
+    public long count(HashMap<String, String> filtros) {
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            StringBuilder hql = new StringBuilder("SELECT COUNT(b) FROM Bocadillo b WHERE true");
+
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    hql.append(" AND b.").append(key).append(" LIKE :").append(key);
+                }
+            }
+
+            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+
+            if (filtros != null) {
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                }
+            }
+
+            return query.getSingleResult();
+        }
+    }
 }

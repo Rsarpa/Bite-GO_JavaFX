@@ -152,7 +152,7 @@ public class CocinaController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
            // Parent root = loader.load();
             Stage mainStage = new Stage();
-            Scene scene = new Scene(loader.load(), 320, 240);
+            Scene scene = new Scene(loader.load(), 350, 300);
 
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);

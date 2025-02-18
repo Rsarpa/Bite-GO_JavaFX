@@ -3,16 +3,11 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.image.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0"
-      xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.bitego_javafx.Controller.LoginController"
-      stylesheets="@resources/styles/login.css">
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" stylesheets="@resources/styles/login.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.LoginController">
 
     <padding>
-        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
     </padding>
 
     <!-- Logo o Icono
@@ -20,18 +15,18 @@
                image="@resources/images/bocata.png"/>
     -->
     <!-- Título -->
-    <Label text="Bite-GO" styleClass="title-label"/>
+    <Label styleClass="title-label" text="Bite&amp;GO" />
 
     <!-- Campo de Correo -->
-    <TextField fx:id="correoField" promptText="Correo Electrónico" styleClass="input-field"/>
+    <TextField fx:id="correoField" promptText="Correo Electrónico" styleClass="input-field" />
 
     <!-- Campo de Contraseña -->
-    <PasswordField fx:id="contrasenaField" promptText="Contraseña" styleClass="input-field"/>
+    <PasswordField fx:id="contrasenaField" promptText="Contraseña" styleClass="input-field" />
 
     <!-- Botón de Iniciar Sesión -->
-    <Button fx:id="loginButton" onAction="#onLoginButtonClick" text="Iniciar Sesión" styleClass="login-button"/>
+    <Button fx:id="loginButton" onAction="#onLoginButtonClick" styleClass="login-button" text="Iniciar Sesión" />
 
     <!-- Mensaje de Error -->
-    <Label fx:id="welcomeText" textFill="#d71212" styleClass="error-message"/>
+    <Label fx:id="welcomeText" styleClass="error-message" textFill="#d71212" />
 
 </VBox>

@@ -60,7 +60,7 @@ public class CrudBocadilloController implements Initializable {
         this.mostrarBocadillos();
     }
 
-    private void mostrarBocadillos(){
+    public void mostrarBocadillos(){
 
         HashMap<String, String> filtros = new HashMap<>();
         if (!txtFiltroNombre.getText().isEmpty()){
@@ -74,11 +74,15 @@ public class CrudBocadilloController implements Initializable {
         //establecerlo en modo vista
         txtPaginaActual.setEditable(false);
 
+        long totalRegistros = bocadilloDAO.count(filtros); // Método que cuenta registros en la BD
+        int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
+
+
         // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
 
         // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
-        btnSiguiente.setDisable(bocadillos.size() <= registrosPorPagina);
+        btnSiguiente.setDisable(paginaActual >= totalPaginas);
     }
 
     @FXML
@@ -109,8 +113,8 @@ public class CrudBocadilloController implements Initializable {
             stage.setScene(scene);
             stage.setTitle("Añadir Bocadillo");
 
-            AdminBocadilloController controller = loader.getController();
             // Enlazar con AdminController
+            AdminBocadilloController controller = loader.getController();
             controller.setAdminController(this);
             stage.show();
         } catch (IOException e) {
@@ -129,6 +133,7 @@ public class CrudBocadilloController implements Initializable {
                 stage.setScene(scene);
                 stage.setTitle("Editar Bocadillo");
 
+                // Enlazar con AdminController
                 AdminBocadilloController controller = loader.getController();
                 controller.setAdminController(this);
                 // Pasar datos al formulario
@@ -189,6 +194,7 @@ public class CrudBocadilloController implements Initializable {
 
                 mainStage.setTitle("Hello!");
                 mainStage.setScene(scene);
+                mainStage.setMaximized(true);
                 mainStage.show();
             }
 
@@ -200,6 +206,7 @@ public class CrudBocadilloController implements Initializable {
 
                 mainStage.setTitle("Hello!");
                 mainStage.setScene(scene);
+                mainStage.setMaximized(true);
                 mainStage.show();
             }
 
@@ -219,7 +226,7 @@ public class CrudBocadilloController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
             // Parent root = loader.load();
             Stage mainStage = new Stage();
-            Scene scene = new Scene(loader.load(), 320, 240);
+            Scene scene = new Scene(loader.load(), 300, 350);
 
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);
