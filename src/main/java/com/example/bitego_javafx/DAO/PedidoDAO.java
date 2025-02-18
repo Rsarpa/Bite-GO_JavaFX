@@ -37,7 +37,7 @@ public class PedidoDAO {
                     }if (key.equals("apellido")){
                         jpql.append(" AND pb.alumno.apellidos LIKE :").append(key);
                     }if(key.equals("curso")){
-                        jpql.append(" AND pb.alumno.id_curso LIKE :").append(key);
+                        jpql.append(" AND pb.alumno.curso.nombre_curso LIKE :").append(key);
                     }
                 }
             }

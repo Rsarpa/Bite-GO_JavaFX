@@ -98,11 +98,11 @@ public class CocinaController implements Initializable {
 
 
             colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
-            colNombreAlu.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getNombre()));
+            //colNombreAlu.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getNombre()));
             colIdBocadillo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getNombre()));
             colTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getTipo()));
-            colCurso.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getCurso().getNombre_curso()));
-            colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
+            //colFechaHora.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
+            //colCurso.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getCurso().getNombre_curso()));
 
             //boton de retirar pedido
             botonPreparar.setCellValueFactory(param -> {

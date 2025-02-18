@@ -37,11 +37,11 @@
             <TableView fx:id="tableView">
                 <columns>
                     <TableColumn fx:id="colIdPedido" text="ID Pedido" />
-                    <TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />
+                    <!--<TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />-->
                     <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" />
                     <TableColumn fx:id="colTipo" text="Tipo" />
-                    <TableColumn fx:id="colFechaHora" text="Fecha y Hora" />
-                    <TableColumn fx:id="colCurso" text="Curso" />
+                    <!--<TableColumn fx:id="colFechaHora" text="Fecha y Hora" />-->
+                    <!--<TableColumn fx:id="colCurso" text="Curso" />-->
                     <TableColumn fx:id="botonPreparar" text="-" />
                 </columns>
             </TableView>
