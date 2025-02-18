@@ -31,20 +31,10 @@
             </MenuBar>
 
             <!-- Barra para navegar entre CRUDs -->
-            <MenuBar prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
-                <menus>
-                    <Menu mnemonicParsing="false" text="Bocadillos">
-                        <items>
-                            <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Bocadillos"/>
-                        </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Alumnos">
-                        <items>
-                            <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Alumnos"/>
-                        </items>
-                    </Menu>
-                </menus>
-            </MenuBar>
+            <HBox spacing="10"  style="-fx-padding: 10px; -fx-margin: 15px;">
+                <Button onAction="#menuBocadillo" styleClass="button-menu" text="Bocadillos" />
+                <Button onAction="#menuAlumno" styleClass="button-menu" text="Alumnos" />
+            </HBox>
         </VBox>
     </top>
 

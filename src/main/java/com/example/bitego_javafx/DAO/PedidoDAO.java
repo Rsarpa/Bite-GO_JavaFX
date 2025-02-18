@@ -4,6 +4,7 @@ import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.PedidoBocadillo;
 import com.example.bitego_javafx.Util.Conexion;
 import com.sun.jna.platform.win32.OaIdl;
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -11,49 +12,48 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PedidoDAO {
 
-    public PedidoDAO() {
-    }
+    public PedidoDAO() {}
 
     //Lista todos los bocadillos , Utilizado en Cocina
-    public List<PedidoBocadillo> listarPedidos(String nombreAlu, String apellidoAlu, String curso) throws SQLException {
+    public List<PedidoBocadillo> listarPedidos(HashMap<String, String> filtros){
 
-        //todo pendiente
         List<PedidoBocadillo> listaPedidos = new ArrayList<>();
         Transaction transaction = null;
 
         try(Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             System.out.println("Conexión con la BD");
-            String jpql = "FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = false";
+            StringBuilder jpql = new StringBuilder("FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = false");
 
-            /*if (nombreAlu != null || !nombreAlu.isEmpty()) {
-                jpql = jpql + " AND pb.alumno.nombre LIKE :nombreAlu";
+            if (filtros != null){
+                for (String key : filtros.keySet()){
+                    if (key.equals("nombre")){
+                        jpql.append(" AND pb.alumno.nombre LIKE :").append(key);
+                    }if (key.equals("apellido")){
+                        jpql.append(" AND pb.alumno.apellidos LIKE :").append(key);
+                    }if(key.equals("curso")){
+                        jpql.append(" AND pb.alumno.id_curso LIKE :").append(key);
+                    }
+                }
             }
-            if (apellidoAlu != null || !apellidoAlu.isEmpty()) {
-                jpql = jpql + " AND pb.alumno.apellidos LIKE :apellidoAlu";
-            }
-            if (curso != null || !curso.isEmpty()) {
-                jpql = jpql + " AND pb.alumno.curso.nombre_curso LIKE :curso";
-            }*/
 
-            listaPedidos = session.createQuery (jpql, PedidoBocadillo.class)
-                    //.setParameter("nombreAlu", "%"+nombreAlu+"%")
-                    //.setParameter("apellidoAlu", apellidoAlu)
-                    //.setParameter("curso", curso)
-                    .getResultList();
+            Query<PedidoBocadillo> query = session.createQuery(jpql.toString(), PedidoBocadillo.class);
 
 
-        }catch (Exception e){
-            if (transaction != null){
-                transaction.rollback();
-            }
-            e.printStackTrace();
+            // Asignar valores a los parámetros de la consulta
+            if (filtros != null)
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(),"%"+filtro.getValue()+"%");
+                }
+
+            return query.list();
+
         }
-        return listaPedidos;
     }
 
     public Boolean realizarPedido(PedidoBocadillo pedido) {

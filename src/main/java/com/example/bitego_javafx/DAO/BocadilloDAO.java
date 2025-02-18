@@ -2,6 +2,7 @@ package com.example.bitego_javafx.DAO;
 
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
+import com.example.bitego_javafx.Model.Curso;
 import com.example.bitego_javafx.Util.Conexion;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -56,6 +57,27 @@ public class BocadilloDAO {
             System.out.println("Error al recuperar los bocadillos del día");
         }
         return bocadillos;
+    }
+
+    public Bocadillo existeBocadillo(String nombre){
+        Transaction transaction = null;
+        Bocadillo bocadillo = null;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction(); // Iniciar la transacción
+
+            Query<Bocadillo> query = session.createQuery("FROM Bocadillo WHERE nombre = :nombre", Bocadillo.class);
+            query.setParameter("nombre", nombre);
+
+            bocadillo = query.uniqueResult(); // Utilizamos uniqueResult para asegurarnos de que devuelva un unico resultado y generar una consistencia
+            transaction.commit(); // Confirmamos la transaccion
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback(); // Revertimos si no ha sido success para evitar inconsistencia en la transaccióm
+            }
+            e.printStackTrace();
+        }
+        return bocadillo;
     }
 
     public void save(Bocadillo bocadillo){

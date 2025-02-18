@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
 <BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.AdminController">
 
@@ -32,20 +31,10 @@
             </MenuBar>
 
             <!-- Barra para navegar entre CRUDs -->
-            <MenuBar prefHeight="30.0" prefWidth="183.0" styleClass="menu-bar">
-                <menus>
-                    <Menu mnemonicParsing="false" text="Bocadillos">
-                        <items>
-                            <MenuItem mnemonicParsing="false" onAction="#menuBocadillo" text="Bocadillos"/>
-                        </items>
-                    </Menu>
-                    <Menu mnemonicParsing="false" text="Alumnos">
-                        <items>
-                            <MenuItem mnemonicParsing="false" onAction="#menuAlumno" text="Alumnos"/>
-                        </items>
-                    </Menu>
-                </menus>
-            </MenuBar>
+            <HBox spacing="10"  style="-fx-padding: 10px; -fx-margin: 15px;">
+                <Button onAction="#menuBocadillo" styleClass="button-menu" text="Bocadillos" />
+                <Button onAction="#menuAlumno" styleClass="button-menu" text="Alumnos" />
+            </HBox>
         </VBox>
     </top>
 
@@ -53,7 +42,7 @@
     <left>
         <VBox spacing="10" styleClass="side-pane">
             <padding>
-                <Insets bottom="20" left="20" right="20" top="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
             <TextField fx:id="txtFiltroNombre" onKeyReleased="#filtrarPorNombre" promptText="Nombre del Alumno" />
@@ -76,7 +65,7 @@
             </TableView>
 
             <!-- Paginación personalizada -->
-            <HBox spacing="10" alignment="CENTER">
+            <HBox alignment="CENTER" spacing="10">
                 <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="button" text="Anterior" />
                 <TextField fx:id="txtPaginaActual" alignment="CENTER" prefWidth="50.0" styleClass="text-field" text="1" />
                 <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="button" text="Siguiente" />

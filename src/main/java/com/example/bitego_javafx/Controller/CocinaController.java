@@ -27,6 +27,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -55,6 +56,8 @@ public class CocinaController implements Initializable {
     private TableColumn <PedidoBocadillo, String> colTipo;
     @FXML
     private TableColumn <PedidoBocadillo, HBox> botonPreparar;
+    private HashMap<String, String> filtros = new HashMap<>();
+
 
     @FXML
     private Button cerrarSesion;
@@ -77,25 +80,19 @@ public class CocinaController implements Initializable {
     @FXML
     protected void cargarDatos(){
 
-        // Recorrer el spinner para recoger la selección del usuario
-        /*for (MenuItem item : cursoFilter.getItems()) {
-            item.setOnAction(event -> {
-                cursoFilter.setText(item.getText()); // Mostrar selección en el botón
-            });
-        }*/
+        filtros.clear();
 
-        String nombre = nombreFilter.getText(); //Obtener nombre filtrado
-        String apellido = apellidoFilter.getText(); //Obtener apellido filtrado
-        String curso = cursoFilter.getValue(); // Obtener el curso seleccionado
-
-        //System.out.println("curso: " + curso);
+        if (!nombreFilter.getText().isEmpty()) filtros.put("nombre", nombreFilter.getText());
+        if (!apellidoFilter.getText().isEmpty()) filtros.put("apellido", apellidoFilter.getText());
+        if (cursoFilter.getValue()!=null) filtros.put("curso", (String) cursoFilter.getValue());
 
 
         try {
+
             PedidoDAO pedido = new PedidoDAO();
 
             //Recoger resultado del metodo en List
-            List<PedidoBocadillo> pedidoList = pedido.listarPedidos(nombre, apellido, curso);
+            List<PedidoBocadillo> pedidoList = pedido.listarPedidos(filtros);
             ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
 
@@ -112,7 +109,6 @@ public class CocinaController implements Initializable {
                 //instancia para recoger el objeto de esa fila
                 PedidoBocadillo pedidoBocadillo = param.getValue();
                 Button btnCheck = new Button("Check");
-                //todo evento retirar bocadillo
 
                 btnCheck.setOnAction(event -> {
                     try{
@@ -128,7 +124,7 @@ public class CocinaController implements Initializable {
                 return new SimpleObjectProperty<>(hbox);
             });
 
-        }catch (SQLException e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }

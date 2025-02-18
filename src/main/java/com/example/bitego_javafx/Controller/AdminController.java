@@ -43,7 +43,7 @@ public class AdminController implements Initializable {
     @FXML
     private TextField txtPaginaActual;
     @FXML
-    private Button btnAnterior,btnSiguiente;
+    private Button btnAnterior, btnSiguiente;
 
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
     private ObservableList<Alumno> listaAlumnos = FXCollections.observableArrayList();
@@ -74,12 +74,14 @@ public class AdminController implements Initializable {
         listaAlumnos.setAll(alumnos);
         tblAlumnos.setItems(listaAlumnos);
         txtPaginaActual.setText(String.valueOf(paginaActual));
+        //establecerlo en modo vista
+        txtPaginaActual.setEditable(false);
 
         // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
 
         // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
-        btnSiguiente.setDisable(alumnos.size() < registrosPorPagina);
+        btnSiguiente.setDisable(alumnos.size() <= registrosPorPagina);
     }
 
     @FXML

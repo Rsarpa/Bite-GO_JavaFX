@@ -71,12 +71,14 @@ public class CrudBocadilloController implements Initializable {
         listarBocadillos.setAll(bocadillos);
         tblBocadillos.setItems(listarBocadillos);
         txtPaginaActual.setText(String.valueOf(paginaActual));
+        //establecerlo en modo vista
+        txtPaginaActual.setEditable(false);
 
         // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
 
         // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
-        btnSiguiente.setDisable(bocadillos.size() < registrosPorPagina);
+        btnSiguiente.setDisable(bocadillos.size() <= registrosPorPagina);
     }
 
     @FXML
@@ -135,6 +137,8 @@ public class CrudBocadilloController implements Initializable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            mostrarAlerta("Debe seleccionar un bocadillo para editar.");
         }
     }
 
@@ -151,6 +155,8 @@ public class CrudBocadilloController implements Initializable {
                 bocadilloDAO.delete(bocadilloSeleccionado);
                 mostrarBocadillos();
             }
+        }else {
+            mostrarAlerta("Debe seleccionar un bocadillo para eliminar.");
         }
     }
 
@@ -221,6 +227,14 @@ public class CrudBocadilloController implements Initializable {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Atención");
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
 

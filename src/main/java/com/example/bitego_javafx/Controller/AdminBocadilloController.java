@@ -2,13 +2,25 @@ package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.BocadilloDAO;
 import com.example.bitego_javafx.Model.Bocadillo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
-public class AdminBocadilloController {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class AdminBocadilloController implements Initializable {
 
     @FXML
-    private TextField txtNombre, txtTipo, txtDescrip, txtPrecio, txtDiaAsoc;
+    private TextField txtNombre, txtDescrip, txtPrecio;
+    @FXML
+    private ComboBox<String> tipoBox;
+    @FXML
+    private ComboBox<Integer> diaBox;
     @FXML
     private Button btnGuardar;
 
@@ -17,6 +29,26 @@ public class AdminBocadilloController {
     private CrudBocadilloController crudBocadilloController;
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        List<String> list = new ArrayList<>();
+        list.add("Frio");
+        list.add("Caliente");
+        ObservableList ol = FXCollections.observableList(list);
+        tipoBox.getItems().clear();
+        tipoBox.setItems(ol);
+
+        List <Integer> list1 = new ArrayList<>();
+        list1.add(1);
+        list1.add(2);
+        list1.add(3);
+        list1.add(4);
+        list1.add(5);
+        ObservableList ol1 = FXCollections.observableList(list1);
+        diaBox.getItems().clear();
+        diaBox.setItems(ol1);
+    }
+
     public void setAdminController(CrudBocadilloController cru){
         this.crudBocadilloController = cru;
     }
@@ -24,12 +56,10 @@ public class AdminBocadilloController {
     public void cargarDatosBocadillo(Bocadillo bocadillo){
         this.bocadilloEditado = bocadillo;
         txtNombre.setText(bocadillo.getNombre());
-        txtTipo.setText(bocadillo.getTipo());
+        tipoBox.setValue(bocadillo.getTipo());
         txtDescrip.setText(bocadillo.getDescripcion());
         txtPrecio.setText(bocadillo.getPrecio_base().toString());
-
-        int dia_asoc = bocadillo.getDia_asociado();
-        txtDiaAsoc.setText(Integer.toString(dia_asoc));
+        diaBox.setValue(bocadillo.getDia_asociado());
     }
 
     @FXML
@@ -40,33 +70,36 @@ public class AdminBocadilloController {
             }
 
             bocadilloEditado.setNombre(txtNombre.getText());
-            bocadilloEditado.setTipo(txtTipo.getText());
+            bocadilloEditado.setTipo(tipoBox.getValue());
             bocadilloEditado.setDescripcion(txtDescrip.getText());
 
-            //controlar el tipo de valor del imput
+            //controlar el tipo de valor del input
             try{
                 bocadilloEditado.setPrecio_base(Float.parseFloat(txtPrecio.getText()));
             }catch (NumberFormatException e){
                 System.out.println("Error: El texto no es un número válido. Tipo Float");
             }
 
-            try {
-                bocadilloEditado.setDia_asociado(Integer.parseInt(txtDiaAsoc.getText()));
-            }catch (NumberFormatException e){
-                System.out.println("Error: El texto no es un número válido. Tipo integer");
-            }
+            bocadilloEditado.setDia_asociado(diaBox.getValue());
 
-            //GUARDAR NUEVO BOCADILLO
-            bocadilloDAO.save(bocadilloEditado);
+            //si es un bocadillo nuevo darlo de alta, de lo contrario se editará
+            String nombreBocadillo = txtNombre.getText().trim();
+            Bocadillo bocadillo = bocadilloDAO.existeBocadillo(nombreBocadillo);
+
+            if (bocadillo == null){
+                bocadilloDAO.save(bocadilloEditado);
+            }else {
+                bocadilloDAO.update(bocadilloEditado);
+            }
         }else {
             mostrarAlerta("Todos los campos son obligatorios");
         }
     }
 
     private boolean validarCampos() {
-        return !txtNombre.getText().isEmpty() && !txtTipo.getText().isEmpty() &&
+        return !txtNombre.getText().isEmpty() && !tipoBox.getValue().isEmpty() &&
                 !txtDescrip.getText().isEmpty() && !txtPrecio.getText().isEmpty() &&
-                !txtDiaAsoc.getText().isEmpty();
+                diaBox.getValue()>=1 || diaBox.getValue()<=5;
     }
 
     @FXML

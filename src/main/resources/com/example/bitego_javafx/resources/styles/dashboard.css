@@ -39,6 +39,7 @@
 .menu-bar {
     -fx-background-color: #2C3E50;
     -fx-border-radius: 5px;
+    -fx-text-fill: white;
 }
 
 .menu .label {
@@ -55,6 +56,25 @@
 .menu-item:hover {
     -fx-background-color: #2980B9;
     -fx-text-fill: white;
+}
+
+/* Botones estilo menú */
+.button-menu {
+    -fx-background-color: #2C3E50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+}
+
+.button-menu:hover {
+    -fx-background-color: #2980B9;
+}
+
+.button-menu:pressed {
+    -fx-background-color: #1F2D3D;
 }
 
 .title-label {

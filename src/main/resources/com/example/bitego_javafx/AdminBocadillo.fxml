@@ -24,7 +24,7 @@
         <TextField fx:id="txtNombre" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="text-field" />
 
         <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="1" styleClass="label" />
-        <TextField fx:id="txtTipo" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="text-field" />
+        <ComboBox fx:id="tipoBox" promptText="Seleccione Tipo" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="text-field" />
 
         <Label text="Descripción:" GridPane.columnIndex="0" GridPane.rowIndex="2" styleClass="label" />
         <TextField fx:id="txtDescrip" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="text-field" />
@@ -33,7 +33,7 @@
         <TextField fx:id="txtPrecio" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="text-field" />
 
         <Label text="Dia Asociado - Lunes a Viernes (1-5):" GridPane.columnIndex="0" GridPane.rowIndex="4" styleClass="label" />
-        <TextField fx:id="txtDiaAsoc" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="text-field" />
+        <ComboBox fx:id="diaBox" promptText="Seleccione Dia" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="text-field" />
 
 
         <VBox.margin>
