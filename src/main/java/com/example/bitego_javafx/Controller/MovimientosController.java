@@ -186,7 +186,11 @@ public class MovimientosController implements Initializable {
             controller.setUsuario(usuario);
 
             Stage stage = (Stage) lblNumPedidos.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 800));
+            Scene scene = new Scene(root, 1200, 800);
+            stage.setScene(scene);
+            stage.setIconified(true); // Minimizar
+            stage.setMaximized(true); // Maximizar después
+            stage.setIconified(false); // Restaurar
             stage.setTitle("Dashboard Alumno");
             stage.show();
         } catch (IOException e) {

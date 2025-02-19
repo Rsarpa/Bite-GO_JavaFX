@@ -202,6 +202,7 @@ public class CrudBocadilloController implements Initializable {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/dashboardAdmin.fxml"));
                 // Parent root = loader.load();
                 Stage mainStage = new Stage();
+
                 Scene scene = new Scene(loader.load(), 800, 600);
 
                 mainStage.setTitle("Hello!");
@@ -227,7 +228,6 @@ public class CrudBocadilloController implements Initializable {
             // Parent root = loader.load();
             Stage mainStage = new Stage();
             Scene scene = new Scene(loader.load(), 300, 350);
-
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);
             mainStage.show();

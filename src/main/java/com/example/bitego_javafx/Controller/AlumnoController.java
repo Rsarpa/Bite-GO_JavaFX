@@ -287,6 +287,7 @@ public class AlumnoController {
 
         if(pedidoHoy.getRetirado()){
             lblRetirado.setText("El Bocadillo ha sido retirado");
+            btnCancelar.setDisable(true);
         }else{
             lblRetirado.setText("El Bocadillo aún no ha sido retirado");
         }
