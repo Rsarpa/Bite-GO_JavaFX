@@ -5,6 +5,7 @@ import com.example.bitego_javafx.DAO.BocadilloDAO;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.Usuario;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,9 +34,10 @@ public class CrudBocadilloController implements Initializable {
     @FXML
     private TableColumn<Bocadillo, String> colTipo;
     @FXML
-    private TableColumn<Bocadillo, Integer> colDescrip;
+    private TableColumn<Bocadillo, String> colDescrip;
     @FXML
     private TableColumn<Bocadillo, String> colPrecio;
+
     @FXML
     private TextField txtFiltroNombre;
     @FXML
@@ -54,39 +56,51 @@ public class CrudBocadilloController implements Initializable {
         this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         this.colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         this.colDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        this.colPrecio.setCellValueFactory(new PropertyValueFactory<>("precio_base"));
+
+        this.colPrecio.setCellValueFactory(cellData -> {
+            Bocadillo bocadillo = cellData.getValue();
+            Float precio = bocadillo.getPrecio_base();
+
+            // Verificamos si el precio es null antes de formatearlo
+            String precioStr = (precio != null) ? String.format("%.2f €", precio) : "0.00 €";
+            return new SimpleStringProperty(precioStr);
+        });
+
+
 
         // Cargo los bocadillos al iniciar
         this.mostrarBocadillos();
     }
 
-    public void mostrarBocadillos(){
+    public void mostrarBocadillos() {
+        String filtroNombre = txtFiltroNombre.getText();
+        String nombreFiltrado = (filtroNombre != null && !filtroNombre.trim().isEmpty()) ? filtroNombre.trim() : null;
 
-        HashMap<String, String> filtros = new HashMap<>();
-        if (!txtFiltroNombre.getText().isEmpty()){
-            filtros.put("nombre", txtFiltroNombre.getText());
-        }
+        List<Bocadillo> bocadillos = bocadilloDAO.getPaginated(paginaActual, registrosPorPagina, nombreFiltrado);
 
-        List<Bocadillo> bocadillos = bocadilloDAO.getPaginated(paginaActual, registrosPorPagina, filtros); //antes obtenerBocadillos() ahora con HashMap y paginado
+        // Asegurar que ningún bocadillo tenga precio null
+        bocadillos.forEach(b -> {
+            if (b.getPrecio_base() == null) {
+                b.setPrecio_base(0.0f);
+            }
+        });
+
         listarBocadillos.setAll(bocadillos);
         tblBocadillos.setItems(listarBocadillos);
         txtPaginaActual.setText(String.valueOf(paginaActual));
-        //establecerlo en modo vista
         txtPaginaActual.setEditable(false);
 
-        long totalRegistros = bocadilloDAO.count(filtros); // Método que cuenta registros en la BD
+        long totalRegistros = bocadilloDAO.count(nombreFiltrado);
         int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
 
-
-        // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
-
-        // Deshabilitar el botón "Siguiente" si la cantidad de resultados es menor al máximo por página
         btnSiguiente.setDisable(paginaActual >= totalPaginas);
     }
 
+
+
     @FXML
-    private void filtrarPorNombre(KeyEvent event) {
+    private void filtrarPorNombre(ActionEvent event) {
         paginaActual = 1;
         mostrarBocadillos();
     }

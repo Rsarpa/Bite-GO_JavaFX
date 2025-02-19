@@ -130,52 +130,57 @@ public class BocadilloDAO {
         }
     }
 
-    public List<Bocadillo> getPaginated(int page, int offset, HashMap<String, String> filtros){
+    public List<Bocadillo> getPaginated(int page, int offset, String nombreFiltro) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("FROM Bocadillo a WHERE true"); //Utilizamos StringBuilder para que la consulta más eficiente
+            StringBuilder hql = new StringBuilder("FROM Bocadillo b WHERE true"); // Asegura que la consulta siempre sea válida
 
-            if (filtros != null) {
-                for (String key : filtros.keySet()) {
-                    hql.append(" AND b.").append(key).append(" LIKE :").append(key);
-                }
+            if (nombreFiltro != null && !nombreFiltro.isEmpty()) {
+                hql.append(" AND LOWER(b.nombre) LIKE LOWER(:nombreFiltro)");
             }
 
             Query<Bocadillo> query = session.createQuery(hql.toString(), Bocadillo.class);
 
-            //Se envuelve con % % para permita coindicencias parciales
-            if (filtros != null) {
-                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
-                }
+            if (nombreFiltro != null && !nombreFiltro.isEmpty()) {
+                query.setParameter("nombreFiltro", "%" + nombreFiltro + "%");
             }
 
             query.setFirstResult((page - 1) * offset);
-            //EJ Si page = 1 y offset =10, el primer resultado será (1 - 1) * 10 = 0 (primer resultado).
             query.setMaxResults(offset);
 
-            return query.list();
+            List<Bocadillo> resultado = query.list();
+            System.out.println("📋 Bocadillos encontrados: " + resultado);
+
+            return resultado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(" Error en la consulta de bocadillos.");
+            return null;
         }
     }
 
-    public long count(HashMap<String, String> filtros) {
+    public long count(String nombreFiltro) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            StringBuilder hql = new StringBuilder("SELECT COUNT(b) FROM Bocadillo b WHERE true");
+            StringBuilder hql = new StringBuilder("SELECT COUNT(b) FROM Bocadillo b WHERE 1=1");
 
-            if (filtros != null) {
-                for (String key : filtros.keySet()) {
-                    hql.append(" AND b.").append(key).append(" LIKE :").append(key);
-                }
+            boolean tieneFiltro = nombreFiltro != null && !nombreFiltro.trim().isEmpty();
+            if (tieneFiltro) {
+                hql.append(" AND LOWER(b.nombre) LIKE LOWER(:nombreFiltro)");
             }
 
             Query<Long> query = session.createQuery(hql.toString(), Long.class);
 
-            if (filtros != null) {
-                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
-                }
+            if (tieneFiltro) {
+                query.setParameter("nombreFiltro", "%" + nombreFiltro + "%");
             }
 
             return query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
         }
     }
+
+
+
+
 }
