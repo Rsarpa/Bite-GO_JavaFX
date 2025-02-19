@@ -10,7 +10,10 @@
     <top>
         <ToolBar fx:id="topBar" styleClass="top-bar">
             <Button fx:id="btnSolver" onAction="#volverAtras" styleClass="top-button" text="Volver" />
-            <Label styleClass="title-label" text="Historial de Pedidos" />
+            <Label styleClass="title-label" text="Historial de Pedidos">
+            <padding>
+               <Insets left="20.0" />
+            </padding></Label>
             <Label fx:id="lblEmail" textFill="WHITE" />
         </ToolBar>
     </top>
@@ -31,10 +34,12 @@
 
     <!-- Contenido central: Tabla y filtro -->
     <center>
+
         <VBox fx:id="centerPane" nodeOrientation="LEFT_TO_RIGHT" styleClass="center-pane">
+
             <ComboBox fx:id="cbFiltroTiempo" prefWidth="150.0" promptText="Rango">
                 <VBox.margin>
-                    <Insets bottom="2.0" left="12.0" top="5.0" />
+                    <Insets bottom="10.0" top="5.0" />
                 </VBox.margin>
             </ComboBox>
             <TableView fx:id="tablaPedidos">
@@ -46,6 +51,22 @@
                     <TableColumn fx:id="colDescuento" text="Descuento (€)" />
                 </columns>
             </TableView>
+            <HBox spacing="10">
+                <DatePicker fx:id="dpFechaInicio" promptText="Fecha Inicio">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin></DatePicker>
+                <DatePicker fx:id="dpFechaFin" promptText="Fecha Fin">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin></DatePicker>
+                <Button fx:id="btnFiltrarFecha" text="Filtrar">
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin></Button>
+
+            </HBox>
+
 
             <!-- Paginación -->
             <HBox alignment="CENTER" spacing="10">

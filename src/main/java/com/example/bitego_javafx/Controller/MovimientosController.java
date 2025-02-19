@@ -39,6 +39,10 @@ public class MovimientosController implements Initializable {
     @FXML
     private ComboBox<String> cbFiltroTiempo;
     @FXML
+    private DatePicker dpFechaInicio, dpFechaFin;
+    @FXML
+    private Button btnFiltrarFecha;
+    @FXML
     private Label lblNumPedidos, lblTotalGastado, lblEmail;
     @FXML
     private Button btnAnterior, btnSiguiente;
@@ -57,10 +61,15 @@ public class MovimientosController implements Initializable {
     private int totalPages = 1;
     private long totalPedidos;
 
+    private LocalDate fechaFiltro = null;
+    private LocalDate fechaInicio = null;
+    private LocalDate fechaFin = null;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarTabla();
         configurarFiltroTiempo();
+        configurarFiltroFechas();
         btnAnterior.setDisable(true);
     }
 
@@ -80,7 +89,25 @@ public class MovimientosController implements Initializable {
     private void configurarFiltroTiempo() {
         cbFiltroTiempo.getItems().addAll("Mostrar 1 Mes", "Mostrar 3 Meses", "Mostrar 6 Meses", "Mostrar 1 Año");
         cbFiltroTiempo.getSelectionModel().select(0);
-        cbFiltroTiempo.setOnAction(event -> resetPaginacion());
+        cbFiltroTiempo.setOnAction(event -> {
+            fechaInicio = null;
+            fechaFin = null;
+            fechaFiltro = calcularFechaFiltro();
+            resetPaginacion();
+        });
+    }
+
+    private void configurarFiltroFechas() {
+        btnFiltrarFecha.setOnAction(event -> {
+            if (dpFechaInicio.getValue() != null && dpFechaFin.getValue() != null) {
+                fechaFiltro = null;
+                fechaInicio = dpFechaInicio.getValue();
+                fechaFin = dpFechaFin.getValue();
+                resetPaginacion();
+            } else {
+                mostrarAlerta("Debes seleccionar ambas fechas para filtrar.");
+            }
+        });
     }
 
     public void setUsuario(Usuario usuario) {
@@ -99,16 +126,15 @@ public class MovimientosController implements Initializable {
 
     private void cargarPedidos() {
         if (alumno != null) {
-            LocalDate fechaFiltro = calcularFechaFiltro();
-            List<PedidoBocadillo> pedidos = PedidoDAO.obtenerPedidosDelAlumno(alumno.getId_alumno(), currentPage, OFFSET, fechaFiltro);
+            List<PedidoBocadillo> pedidos = PedidoDAO.obtenerPedidosDelAlumno(alumno.getId_alumno(), currentPage, OFFSET, fechaFiltro, fechaInicio, fechaFin);
             tablaPedidos.getItems().clear();
             tablaPedidos.getItems().addAll(pedidos);
 
-            totalPedidos = PedidoDAO.obtenerTotalPedidos(alumno.getId_alumno(), fechaFiltro);
+            totalPedidos = PedidoDAO.obtenerTotalPedidos(alumno.getId_alumno(), fechaFiltro, fechaInicio, fechaFin);
             totalPages = (int) Math.ceil((double) totalPedidos / OFFSET);
 
             lblNumPedidos.setText(String.format("Pedidos mostrados: %d de %d", pedidos.size(), totalPedidos));
-            lblTotalGastado.setText(String.format("Total Gastado: %.2f€", calcularTotalGasto(fechaFiltro)));
+            lblTotalGastado.setText(String.format("Total Gastado: %.2f€", calcularTotalGasto()));
 
             actualizarBotonesPaginacion();
         }
@@ -125,8 +151,8 @@ public class MovimientosController implements Initializable {
         }
     }
 
-    private double calcularTotalGasto(LocalDate fechaFiltro) {
-        return PedidoDAO.obtenerTotalGasto(alumno.getId_alumno(), fechaFiltro);
+    private double calcularTotalGasto() {
+        return PedidoDAO.obtenerTotalGasto(alumno.getId_alumno(), fechaFiltro, fechaInicio, fechaFin);
     }
 
     private void actualizarBotonesPaginacion() {
@@ -160,11 +186,19 @@ public class MovimientosController implements Initializable {
             controller.setUsuario(usuario);
 
             Stage stage = (Stage) lblNumPedidos.getScene().getWindow();
-            stage.setScene(new Scene(root, 1200, 800)); // Tamaño de la ventana
+            stage.setScene(new Scene(root, 1200, 800));
             stage.setTitle("Dashboard Alumno");
             stage.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void mostrarAlerta(String mensaje) {
+        Alert alerta = new Alert(Alert.AlertType.WARNING);
+        alerta.setTitle("Aviso");
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+        alerta.showAndWait();
     }
 }

@@ -209,58 +209,84 @@ public class PedidoDAO {
     Obtenemos los pedidos del alumno teniendo en cuenta el ComboBox para filtrar por los tiempos
     Pedidos de antes de: 1MES 3 MESES 6 MESES 1 AÑO
      */
-    public static List<PedidoBocadillo> obtenerPedidosDelAlumno(int id_alumno, int page, int offset, LocalDate fechaFiltro) {
+    public static List<PedidoBocadillo> obtenerPedidosDelAlumno(int id_alumno, int page, int offset, LocalDate fechaFiltro, LocalDate fechaInicio, LocalDate fechaFin) {
         List<PedidoBocadillo> lista_pedidos_alumno = null;
-        Transaction transaction = null;
-
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            transaction = session.beginTransaction();
-
-            String jpql = "FROM PedidoBocadillo WHERE alumno.id = :id AND fecha_hora >= :fechaFiltro ORDER BY fecha_hora DESC";
-            lista_pedidos_alumno = session.createQuery(jpql, PedidoBocadillo.class)
-                    .setParameter("id", id_alumno)
-                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
-                    .setFirstResult((page - 1) * offset)
-                    .setMaxResults(offset)
-                    .getResultList();
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null && transaction.isActive()) {
-                transaction.rollback();
+            String jpql = "FROM PedidoBocadillo WHERE alumno.id = :id AND fecha_hora >= :fechaFiltro";
+            if (fechaInicio != null && fechaFin != null) {
+                jpql += " AND fecha_hora BETWEEN :fechaInicio AND :fechaFin";
             }
-            e.printStackTrace();
-        }
-
-        return lista_pedidos_alumno;
-    }
-    public static long obtenerTotalPedidos(int id_alumno, LocalDate fechaFiltro) {
-        long total = 0;
-        try (Session session = Conexion.getSessionFactory().openSession()) {
-            String jpql = "SELECT COUNT(p) FROM PedidoBocadillo p WHERE p.alumno.id = :id AND p.fecha_hora >= :fechaFiltro";
-            total = session.createQuery(jpql, Long.class)
+            Query<PedidoBocadillo> query = session.createQuery(jpql, PedidoBocadillo.class)
                     .setParameter("id", id_alumno)
-                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
-                    .uniqueResult();
+                    .setParameter("fechaFiltro", fechaFiltro != null ? Date.valueOf(fechaFiltro) : Date.valueOf(LocalDate.now().minusYears(10)));
+            if (fechaInicio != null && fechaFin != null) {
+                query.setParameter("fechaInicio", Date.valueOf(fechaInicio));
+                query.setParameter("fechaFin", Date.valueOf(fechaFin));
+            }
+            return query.setFirstResult((page - 1) * offset).setMaxResults(offset).list();
+        }
+    }
+
+    public static long obtenerTotalPedidos(int id_alumno, LocalDate fechaFiltro, LocalDate fechaInicio, LocalDate fechaFin) {
+        long total = 0;
+
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            String jpql = "SELECT COUNT(p) FROM PedidoBocadillo p WHERE p.alumno.id = :id";
+
+            if (fechaInicio != null && fechaFin != null) {
+                jpql += " AND p.fecha_hora BETWEEN :fechaInicio AND :fechaFin";
+            } else if (fechaFiltro != null) {
+                jpql += " AND p.fecha_hora >= :fechaFiltro";
+            }
+
+            Query<Long> query = session.createQuery(jpql, Long.class)
+                    .setParameter("id", id_alumno);
+
+            if (fechaInicio != null && fechaFin != null) {
+                query.setParameter("fechaInicio", java.sql.Date.valueOf(fechaInicio));
+                query.setParameter("fechaFin", java.sql.Date.valueOf(fechaFin));
+            } else if (fechaFiltro != null) {
+                query.setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro));
+            }
+
+            total = query.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return total;
     }
 
-    public static double obtenerTotalGasto(int id_alumno, LocalDate fechaFiltro) {
+    public static double obtenerTotalGasto(int id_alumno, LocalDate fechaFiltro, LocalDate fechaInicio, LocalDate fechaFin) {
         Double totalGasto = 0.0;
+
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            String jpql = "SELECT SUM(p.costo_final) FROM PedidoBocadillo p WHERE p.alumno.id = :id AND p.fecha_hora >= :fechaFiltro";
-            totalGasto = session.createQuery(jpql, Double.class)
-                    .setParameter("id", id_alumno)
-                    .setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro))
-                    .uniqueResult();
+            String jpql = "SELECT SUM(p.costo_final) FROM PedidoBocadillo p WHERE p.alumno.id = :id";
+
+            if (fechaInicio != null && fechaFin != null) {
+                jpql += " AND p.fecha_hora BETWEEN :fechaInicio AND :fechaFin";
+            } else if (fechaFiltro != null) {
+                jpql += " AND p.fecha_hora >= :fechaFiltro";
+            }
+
+            Query<Double> query = session.createQuery(jpql, Double.class)
+                    .setParameter("id", id_alumno);
+
+            if (fechaInicio != null && fechaFin != null) {
+                query.setParameter("fechaInicio", java.sql.Date.valueOf(fechaInicio));
+                query.setParameter("fechaFin", java.sql.Date.valueOf(fechaFin));
+            } else if (fechaFiltro != null) {
+                query.setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro));
+            }
+
+            totalGasto = query.uniqueResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return totalGasto != null ? totalGasto : 0.0;
     }
+
 
 
 
