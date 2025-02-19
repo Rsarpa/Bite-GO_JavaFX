@@ -42,7 +42,7 @@
                     <Insets bottom="10.0" top="5.0" />
                 </VBox.margin>
             </ComboBox>
-            <TableView fx:id="tablaPedidos">
+            <TableView fx:id="tablaPedidos" minWidth="300" maxWidth="600">
                 <columns>
                     <TableColumn fx:id="colIdPedido" text="ID Pedido" />
                     <TableColumn fx:id="colNombreBocadillo" text="Bocadillo" />

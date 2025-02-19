@@ -12,7 +12,7 @@
             <Label styleClass="title-label" text="BiteGO - Panel de Cocina" />
             <Label fx:id="lblEmail" styleClass="title-label" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnMostrarRetirados" onAction="#alternarPedidosRetirados" text="Mostrar Pedidos Retirados" />
+            <Button fx:id="btnMostrarRetirados" onAction="#alternarPedidosRetirados" styleClass="top-button" text="Mostrar Pedidos Retirados" />
             <Button fx:id="btnSalir" onAction="#cerrarSesion" styleClass="logout-button" text="Cerrar Sesión" />
         </HBox>
     </top>
@@ -26,8 +26,8 @@
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
             <TextField fx:id="nombreFilter" promptText="Nombre Alumno" />
             <TextField fx:id="apellidoFilter" promptText="Apellidos" />
-            <ComboBox fx:id="cursoFilter" promptText="Curso" />
-            <Button onAction="#cargarDatos" text="Buscar" />
+            <ComboBox fx:id="cursoFilter" promptText="Curso" styleClass="text-field" />
+            <Button onAction="#cargarDatos" styleClass="top-button" text="Buscar" />
         </VBox>
     </left>
 
@@ -35,15 +35,15 @@
     <center>
         <VBox spacing="20" styleClass="center-pane">
             <Label styleClass="section-title" text="Pedidos en Cocina" />
-            <TableView fx:id="tableView">
+            <TableView fx:id="tableView" minWidth="300" maxWidth="600">
                 <columns>
-                    <TableColumn fx:id="colIdPedido" text="ID Pedido" />
+                    <TableColumn fx:id="colIdPedido" text="ID Pedido" minWidth="100" />
                     <!--<TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />-->
-                    <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" />
+                    <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" minWidth="200"/>
                     <TableColumn fx:id="colTipo" text="Tipo" />
                     <!--<TableColumn fx:id="colFechaHora" text="Fecha y Hora" />-->
                     <!--<TableColumn fx:id="colCurso" text="Curso" />-->
-                    <TableColumn fx:id="botonPreparar" text="-" />
+                    <TableColumn fx:id="botonPreparar" text="-" minWidth="60" />
                 </columns>
             </TableView>
         </VBox>

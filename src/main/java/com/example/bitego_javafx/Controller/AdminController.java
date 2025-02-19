@@ -1,6 +1,7 @@
 package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.AlumnoDAO;
+import com.example.bitego_javafx.DAO.UsuarioDAO;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.collections.FXCollections;
@@ -47,6 +48,7 @@ public class AdminController implements Initializable {
     private Button btnAnterior, btnSiguiente;
 
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
+    private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private ObservableList<Alumno> listaAlumnos = FXCollections.observableArrayList();
     private int paginaActual = 1;
     private final int registrosPorPagina = 10;
@@ -236,8 +238,9 @@ public class AdminController implements Initializable {
     }
 
     @FXML
-    public void borrarAlumno() {
+    public void borrarAlumno(){
         Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
+        String email = alumnoSeleccionado.getEmail();
         if (alumnoSeleccionado != null) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que quieres eliminar este alumno?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Confirmar eliminación");
@@ -245,6 +248,11 @@ public class AdminController implements Initializable {
 
             if (alert.getResult() == ButtonType.YES) {
                 alumnoDAO.delete(alumnoSeleccionado);
+                try {
+                    usuarioDAO.delete(email);
+                }catch (Exception e){
+                    mostrarAlerta("Este usuario no se puede eliminar, tiene un montón de dependencias");
+                }
                 cargarAlumnos(); // Actualizar la lista después de eliminar
             }
         } else {

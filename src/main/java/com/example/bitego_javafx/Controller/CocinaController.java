@@ -46,6 +46,15 @@ public class CocinaController implements Initializable {
     @FXML
     private Button btnMostrarRetirados;
 
+    @FXML
+    private TextField nombreFilter;
+
+    @FXML
+    private TextField apellidoFilter;
+
+    @FXML
+    private ComboBox<String> cursoFilter;
+
     private HashMap<String, String> filtros = new HashMap<>();
 
     public void setUsuario(Usuario usuario) {
@@ -57,6 +66,12 @@ public class CocinaController implements Initializable {
     @FXML
     protected void cargarDatos() {
         filtros.clear();
+        filtros.clear();
+
+        if (!nombreFilter.getText().isEmpty()) filtros.put("nombre", nombreFilter.getText());
+        if (!apellidoFilter.getText().isEmpty()) filtros.put("apellido", apellidoFilter.getText());
+        if (cursoFilter.getValue()!=null) filtros.put("curso", (String) cursoFilter.getValue());
+
         PedidoDAO pedidoDAO = new PedidoDAO();
 
         try {
@@ -81,6 +96,8 @@ public class CocinaController implements Initializable {
                 PedidoBocadillo pedidoBocadillo = param.getValue();
                 Button actionButton = new Button(mostrandoRetirados ? "Desmarcar" : "Check");
 
+                botonPreparar.setMinWidth(100);
+                botonPreparar.setMaxWidth(120);
                 actionButton.setOnAction(event -> {
                     try {
                         if (mostrandoRetirados) {
@@ -113,7 +130,16 @@ public class CocinaController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        List<String> list = new ArrayList<>();
+        list.add("1ºESO");
+        list.add("2ºESO");
+        list.add("3ºESO");
+        list.add("4ºESO");
+        ObservableList ol = FXCollections.observableList(list);
+        cursoFilter.getItems().clear();
+        cursoFilter.setItems(ol);
+    }
 
     @FXML
     public void cerrarSesion(ActionEvent event) {

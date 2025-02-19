@@ -46,7 +46,7 @@
             </padding>
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
             <TextField fx:id="txtFiltroNombre" promptText="Nombre de Bocadillo" />
-         <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#filtrarPorNombre" text="Filtrar" />
+            <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#filtrarPorNombre" styleClass="top-button" text="Filtrar" />
         </VBox>
     </left>
 
@@ -54,7 +54,7 @@
     <center>
         <VBox spacing="20" styleClass="center-pane">
             <Label styleClass="section-title" text="Lista de Bocadillos" />
-            <TableView fx:id="tblBocadillos" prefHeight="356.0" prefWidth="749.0" styleClass="table-view">
+            <TableView fx:id="tblBocadillos" minWidth="300" maxWidth="900" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="colNombre" text="Nombre" />
                     <TableColumn fx:id="colTipo" text="Tipo" />
@@ -65,9 +65,9 @@
 
             <!-- Paginación personalizada -->
             <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="button" text="Anterior" />
+                <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="top-button" text="Anterior" />
                 <TextField fx:id="txtPaginaActual" alignment="CENTER" prefWidth="50.0" styleClass="text-field" text="1" />
-                <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="button" text="Siguiente" />
+                <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="top-button" text="Siguiente" />
             </HBox>
         </VBox>
     </center>
