@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CocinaController">
+<BorderPane stylesheets="@resources/styles/dashboard.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.CocinaController">
 
     <!-- Barra Superior -->
     <top>
@@ -35,16 +35,19 @@
     <center>
         <VBox spacing="20" styleClass="center-pane">
             <Label styleClass="section-title" text="Pedidos en Cocina" />
-            <TableView fx:id="tableView" minWidth="300" maxWidth="600">
+            <TableView fx:id="tableView" maxWidth="800.0" minWidth="550.0">
                 <columns>
-                    <TableColumn fx:id="colIdPedido" text="ID Pedido" minWidth="100" />
+                    <TableColumn fx:id="colIdPedido" minWidth="100" text="ID Pedido" />
                     <!--<TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />-->
-                    <TableColumn fx:id="colIdBocadillo" text="ID Bocadillo" minWidth="200"/>
+                    <TableColumn fx:id="colIdBocadillo" minWidth="200" text="ID Bocadillo" />
                     <TableColumn fx:id="colTipo" text="Tipo" />
                     <!--<TableColumn fx:id="colFechaHora" text="Fecha y Hora" />-->
                     <!--<TableColumn fx:id="colCurso" text="Curso" />-->
-                    <TableColumn fx:id="botonPreparar" text="-" minWidth="60" />
+                    <TableColumn fx:id="botonPreparar" minWidth="60" text="-" />
                 </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
             </TableView>
         </VBox>
     </center>

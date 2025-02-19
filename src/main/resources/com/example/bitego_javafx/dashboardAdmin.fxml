@@ -54,7 +54,7 @@
     <center>
         <VBox spacing="20" styleClass="center-pane">
             <Label styleClass="section-title" text="Lista de Alumnos" />
-            <TableView fx:id="tblAlumnos" layoutX="44.0" layoutY="120.0" minWidth="400" maxWidth="700" styleClass="table-view">
+            <TableView fx:id="tblAlumnos" layoutX="44.0" layoutY="120.0" maxWidth="800.0" minWidth="550.0" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" />
                     <TableColumn fx:id="colNombre" text="Nombre" />
@@ -63,6 +63,9 @@
                     <TableColumn fx:id="colLocalidad" text="Localidad" />
                     <TableColumn fx:id="colEmail" text="Email" />
                 </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
             </TableView>
 
             <!-- Paginación personalizada -->
