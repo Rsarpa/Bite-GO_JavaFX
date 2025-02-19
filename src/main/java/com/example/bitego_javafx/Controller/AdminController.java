@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
@@ -61,7 +62,41 @@ public class AdminController implements Initializable {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 
         cargarAlumnos();
+        // Capturar eventos de teclado de la tabla
+        tblAlumnos.setOnKeyPressed(this::manejarAtajosTabla);
+
+        // Esperar hasta que la escena esté disponible para registrar los atajos globales
+        tblAlumnos.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.setOnKeyPressed(this::manejarAtajosGlobales);
+            }
+        });
     }
+
+    // Evento global (Ctrl + N) en toda la ventana
+    private void manejarAtajosGlobales(KeyEvent event) {
+        if (event.isControlDown() && event.getCode() == KeyCode.N) {
+            anyadirAlumno(); // Ctrl + N funciona en cualquier parte
+        }
+    }
+
+    // Evento en la tabla (Ctrl + E, Ctrl + D) SOLO si hay un elemento seleccionado
+    private void manejarAtajosTabla(KeyEvent event) {
+        if (event.isControlDown()) {
+            Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
+
+            if (alumnoSeleccionado != null) {
+                if (event.getCode() == KeyCode.E) {
+                    editarAlumno(); // Ctrl + E para editar
+                } else if (event.getCode() == KeyCode.D) {
+                    borrarAlumno(); // Ctrl + D para borrar
+                }
+            } else {
+                mostrarAlerta("Debe seleccionar un alumno para esta acción.");
+            }
+        }
+    }
+
 
     //Utilizamos un HashMap para aplicar varios filtros si es necesario
     public void cargarAlumnos() {
