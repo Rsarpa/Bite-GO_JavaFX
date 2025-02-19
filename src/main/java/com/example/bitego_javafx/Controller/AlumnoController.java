@@ -72,7 +72,7 @@ public class AlumnoController {
                 Stage stage = (Stage) btnSalir.getScene().getWindow();
 
                 // Configurar nueva escena
-                Scene scene = new Scene(root, 300, 350);
+                Scene scene = new Scene(root, 800, 450);
                 stage.setScene(scene);
                 stage.setMaximized(false);
                 stage.show();

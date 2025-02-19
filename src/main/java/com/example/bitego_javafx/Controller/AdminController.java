@@ -183,7 +183,7 @@ public class AdminController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/login.fxml"));
             // Parent root = loader.load();
             Stage mainStage = new Stage();
-            Scene scene = new Scene(loader.load(), 300, 350);
+            Scene scene = new Scene(loader.load(), 800, 450);
 
             mainStage.setTitle("Hello!");
             mainStage.setScene(scene);

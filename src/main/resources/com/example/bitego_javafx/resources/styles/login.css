@@ -4,11 +4,35 @@
     -fx-font-family: 'Arial', sans-serif;
 }
 
+/* 🌟 Sección Izquierda */
+.left-pane {
+    -fx-background-color: #2C3E50;
+    -fx-padding: 40px;
+    -fx-alignment: center;
+}
+
+.slogan-label {
+    -fx-text-fill: #ecf0f1;
+    -fx-font-size: 16px;
+    -fx-font-style: italic;
+    -fx-text-alignment: center;
+}
+
 /* 🔷 Estilo del Título */
 .title-label {
-    -fx-text-fill: #2C3E50;
-    -fx-font-size: 24px;
+    -fx-text-fill: #2980B9;
+    -fx-font-size: 26px;
     -fx-font-weight: bold;
+}
+
+/* 🟩 Contenedor del Login */
+.login-pane {
+    -fx-padding: 50px;
+    -fx-alignment: center;
+}
+
+.input-container {
+    -fx-spacing: 10px;
 }
 
 /* 🟩 Campos de Entrada */
@@ -23,13 +47,11 @@
     -fx-transition: all 0.3s ease;
 }
 
-/* Cambia el borde cuando el campo está en foco */
 .input-field:focused {
     -fx-border-color: #2980B9;
     -fx-border-width: 2px;
 }
 
-/* 🌟 Hover en el campo de entrada */
 .input-field:hover {
     -fx-border-color: #5D6D7E;
 }
@@ -46,11 +68,8 @@
     -fx-cursor: hand;
 }
 
-/* Efecto al pasar el mouse */
 .login-button:hover {
     -fx-background-color: #1F618D;
-     -fx-cursor: hand;
-
 }
 
 /* 🚨 Mensajes de Error */

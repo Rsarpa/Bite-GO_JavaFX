@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="400.0" prefWidth="350.0" spacing="20.0" stylesheets="@resources/styles/login.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.LoginController">
+<BorderPane prefHeight="500" prefWidth="800" stylesheets="@resources/styles/login.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.bitego_javafx.Controller.LoginController">
 
-    <padding>
-        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
-    </padding>
+    <!-- Sección Izquierda (Logo y Lema) -->
+    <left>
+        <VBox alignment="CENTER" prefHeight="500" prefWidth="300" spacing="20" styleClass="left-pane">
 
-    <!-- Logo o Icono
-    <ImageView fx:id="logoImage" fitHeight="80" fitWidth="80" pickOnBounds="true" preserveRatio="true"
-               image="@resources/images/bocata.png"/>
-    -->
-    <!-- Título -->
-    <Label styleClass="title-label" text="Bite&amp;GO" />
+            <Label styleClass="slogan-label" text="Cómete el día" />
+        </VBox>
+    </left>
 
-    <!-- Campo de Correo -->
-    <TextField fx:id="correoField" promptText="Correo Electrónico" styleClass="input-field" />
-
-    <!-- Campo de Contraseña -->
-    <PasswordField fx:id="contrasenaField" promptText="Contraseña" styleClass="input-field" />
-
-    <!-- Botón de Iniciar Sesión -->
-    <Button fx:id="loginButton" onAction="#onLoginButtonClick" styleClass="login-button" text="Iniciar Sesión" />
-
-    <!-- Mensaje de Error -->
-    <Label fx:id="welcomeText" styleClass="error-message" textFill="#d71212" />
-
-</VBox>
+    <!-- Sección Central (Login) -->
+    <center>
+        <VBox alignment="CENTER" prefHeight="500" prefWidth="500" spacing="15" styleClass="login-pane">
+            <Label styleClass="title-label" text="Bite&amp;GO" />
+            <HBox alignment="CENTER" styleClass="input-container">
+                <TextField fx:id="correoField" alignment="CENTER" promptText="Correo Electrónico" styleClass="input-field" />
+            </HBox>
+            <HBox alignment="CENTER" styleClass="input-container">
+                <PasswordField fx:id="contrasenaField" alignment="CENTER" promptText="Contraseña" styleClass="input-field" />
+            </HBox>
+            <Button fx:id="loginButton" onAction="#onLoginButtonClick" styleClass="login-button" text="Iniciar Sesión" />
+            <Label fx:id="welcomeText" styleClass="error-message" textFill="#d71212" />
+        </VBox>
+    </center>
+</BorderPane>
