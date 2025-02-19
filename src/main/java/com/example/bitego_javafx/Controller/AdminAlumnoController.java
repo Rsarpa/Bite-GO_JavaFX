@@ -14,7 +14,9 @@ import javafx.beans.value.ObservableValue;
 public class AdminAlumnoController {
 
     @FXML
-    private TextField txtNombre, txtApellidos, txtDni, txtLocalidad, txtEmail, txtContrasena,txtCurso, txtMotivoBaja;
+    private TextField txtNombre, txtApellidos, txtDni, txtLocalidad, txtEmail,txtCurso, txtMotivoBaja;
+    @FXML
+    private PasswordField txtContrasena;
     @FXML
     private CheckBox chkAbonado;
     @FXML

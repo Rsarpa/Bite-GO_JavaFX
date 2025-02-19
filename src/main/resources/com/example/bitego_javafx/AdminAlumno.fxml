@@ -35,7 +35,7 @@
         <TextField fx:id="txtEmail" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="text-field" />
 
         <Label text="Contraseña:" GridPane.columnIndex="0" GridPane.rowIndex="5" styleClass="label" />
-        <TextField fx:id="txtContrasena" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="text-field" />
+        <PasswordField fx:id="txtContrasena" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="text-field" />
 
         <Label text="Curso:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="label" />
         <TextField fx:id="txtCurso" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="text-field" />
