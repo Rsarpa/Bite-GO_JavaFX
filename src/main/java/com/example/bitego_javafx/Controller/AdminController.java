@@ -240,8 +240,10 @@ public class AdminController implements Initializable {
     @FXML
     public void borrarAlumno(){
         Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
-        String email = alumnoSeleccionado.getEmail();
-        if (alumnoSeleccionado != null) {
+
+        try {
+            String email = alumnoSeleccionado.getEmail();
+
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "¿Seguro que quieres eliminar este alumno?", ButtonType.YES, ButtonType.NO);
             alert.setTitle("Confirmar eliminación");
             alert.showAndWait();
@@ -255,9 +257,10 @@ public class AdminController implements Initializable {
                 }
                 cargarAlumnos(); // Actualizar la lista después de eliminar
             }
-        } else {
+        }catch (Exception e){
             mostrarAlerta("Debe seleccionar un alumno para eliminar.");
         }
+
     }
 
     private void mostrarAlerta(String mensaje) {
