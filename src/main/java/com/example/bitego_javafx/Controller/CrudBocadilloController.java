@@ -104,7 +104,7 @@ public class CrudBocadilloController implements Initializable {
         paginaActual = 1;
         mostrarBocadillos();
     }
-
+//
     @FXML
     public void paginaAnterior() {
         if (paginaActual > 1) {
