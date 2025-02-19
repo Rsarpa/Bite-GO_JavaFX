@@ -56,6 +56,43 @@ public class PedidoDAO {
         }
     }
 
+    //Lista todos los bocadillos , Utilizado en Cocina
+    public List<PedidoBocadillo> listarPedidosRetirados(HashMap<String, String> filtros){
+
+        List<PedidoBocadillo> listaPedidos = new ArrayList<>();
+        Transaction transaction = null;
+
+        try(Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            System.out.println("Conexión con la BD");
+            StringBuilder jpql = new StringBuilder("FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = true");
+
+            if (filtros != null){
+                for (String key : filtros.keySet()){
+                    if (key.equals("nombre")){
+                        jpql.append(" AND pb.alumno.nombre LIKE :").append(key);
+                    }if (key.equals("apellido")){
+                        jpql.append(" AND pb.alumno.apellidos LIKE :").append(key);
+                    }if(key.equals("curso")){
+                        jpql.append(" AND pb.alumno.curso.nombre_curso LIKE :").append(key);
+                    }
+                }
+            }
+
+            Query<PedidoBocadillo> query = session.createQuery(jpql.toString(), PedidoBocadillo.class);
+
+
+            // Asignar valores a los parámetros de la consulta
+            if (filtros != null)
+                for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
+                    query.setParameter(filtro.getKey(),"%"+filtro.getValue()+"%");
+                }
+
+            return query.list();
+
+        }
+    }
+
     public Boolean realizarPedido(PedidoBocadillo pedido) {
         Transaction transaction = null; //Inicializa la transacción
         //System.out.println("Entra a realizar pedido");
@@ -125,6 +162,28 @@ public class PedidoDAO {
             e.printStackTrace();
         }
     }
+
+    public void marcarNoRetirado(int idPedido) {
+        Transaction transaction = null;
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+
+            PedidoBocadillo pedido = session.get(PedidoBocadillo.class, idPedido);
+            if (pedido != null) {
+                pedido.setRetirado(false); // Marcar como no retirado
+                session.update(pedido);
+            }
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
+    }
+
+
 
     //En si actua como un delete , debido a que eliminamos el registro de la BD
     public Boolean cancelarPedido(int id_alumno,Date fecha){
