@@ -54,13 +54,17 @@
     <center>
         <VBox spacing="20" styleClass="center-pane">
             <Label styleClass="section-title" text="Lista de Bocadillos" />
-            <TableView fx:id="tblBocadillos" minWidth="300" maxWidth="900" styleClass="table-view">
+            <TableView fx:id="tblBocadillos" maxWidth="900" minHeight="350.0" minWidth="600.0" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="colNombre" text="Nombre" />
                     <TableColumn fx:id="colTipo" text="Tipo" />
                     <TableColumn fx:id="colDescrip" text="Descripción" />
-                    <TableColumn fx:id="colPrecio" text="Precio" />
+                    <TableColumn fx:id="colPrecio" minWidth="0.0" prefWidth="43.0" text="Precio" />
+               <TableColumn fx:id="colAlergenos" minWidth="40.0" prefWidth="140.0" text="Alérgenos" />
                 </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
             </TableView>
 
             <!-- Paginación personalizada -->

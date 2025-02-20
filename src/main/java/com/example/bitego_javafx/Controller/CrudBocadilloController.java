@@ -2,6 +2,7 @@ package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.AlumnoDAO;
 import com.example.bitego_javafx.DAO.BocadilloDAO;
+import com.example.bitego_javafx.Model.Alergeno;
 import com.example.bitego_javafx.Model.Alumno;
 import com.example.bitego_javafx.Model.Bocadillo;
 import com.example.bitego_javafx.Model.Usuario;
@@ -37,6 +38,8 @@ public class CrudBocadilloController implements Initializable {
     private TableColumn<Bocadillo, String> colDescrip;
     @FXML
     private TableColumn<Bocadillo, String> colPrecio;
+    @FXML
+    private TableColumn<Bocadillo,String> colAlergenos;
 
     @FXML
     private TextField txtFiltroNombre;
@@ -46,6 +49,7 @@ public class CrudBocadilloController implements Initializable {
     private Button btnAnterior,btnSiguiente;
 
     private BocadilloDAO bocadilloDAO = new BocadilloDAO();
+    //Lo recogemos en un ArrayList por que son 14 bocadillos.
     private ObservableList<Bocadillo> listarBocadillos = FXCollections.observableArrayList();
     private int paginaActual = 1;
     private final int registrosPorPagina = 10;
@@ -56,6 +60,14 @@ public class CrudBocadilloController implements Initializable {
         this.colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         this.colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         this.colDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+
+        colAlergenos.setCellValueFactory(cellData -> {
+            Bocadillo bocadillo = cellData.getValue();
+            return new SimpleStringProperty(obtenerListaAlergenos(bocadillo));
+        });
+
+
+
 
         this.colPrecio.setCellValueFactory(cellData -> {
             Bocadillo bocadillo = cellData.getValue();
@@ -71,6 +83,19 @@ public class CrudBocadilloController implements Initializable {
         // Cargo los bocadillos al iniciar
         this.mostrarBocadillos();
     }
+
+    private String obtenerListaAlergenos(Bocadillo bocadillo) {
+        if (bocadillo != null && bocadillo.getAlergenos() != null && !bocadillo.getAlergenos().isEmpty()) {
+            StringBuilder alergenos = new StringBuilder();
+            for (Alergeno a : bocadillo.getAlergenos()) {
+                alergenos.append(a.getNombre()).append(", ");
+            }
+            return alergenos.substring(0, alergenos.length() - 2); // Eliminar la última coma y espacio
+        }
+        return "Ninguno";
+    }
+
+
 
     public void mostrarBocadillos() {
         String filtroNombre = txtFiltroNombre.getText();

@@ -35,10 +35,6 @@ public class Bocadillo {
         return alergenos;
     }
 
-    public void setAlergenos(Set<Alergeno> alergenos) {
-        this.alergenos = alergenos;
-    }
-
     // Relación OneToMany con Pedido (un Bocadillo puede estar en muchos pedidos)
     @OneToMany(mappedBy = "bocadillo")
     private Set<PedidoBocadillo> pedidos;
