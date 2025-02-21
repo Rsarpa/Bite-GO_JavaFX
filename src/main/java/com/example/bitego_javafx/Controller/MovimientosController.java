@@ -37,13 +37,11 @@ public class MovimientosController implements Initializable {
     @FXML
     private TableColumn<PedidoBocadillo, Double> colDescuento;
     @FXML
-    private ComboBox<String> cbFiltroTiempo;
-    @FXML
     private DatePicker dpFechaInicio, dpFechaFin;
     @FXML
     private Button btnFiltrarFecha;
     @FXML
-    private Label lblNumPedidos, lblTotalGastado, lblEmail;
+    private Label  lblTotalGastado, lblEmail;
     @FXML
     private Button btnAnterior, btnSiguiente;
     @FXML
@@ -68,7 +66,6 @@ public class MovimientosController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarTabla();
-        configurarFiltroTiempo();
         configurarFiltroFechas();
         btnAnterior.setDisable(true);
     }
@@ -84,17 +81,6 @@ public class MovimientosController implements Initializable {
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fecha_hora"));
         colCosto.setCellValueFactory(new PropertyValueFactory<>("costo_final"));
         colDescuento.setCellValueFactory(new PropertyValueFactory<>("id_descuento"));
-    }
-
-    private void configurarFiltroTiempo() {
-        cbFiltroTiempo.getItems().addAll("Mostrar 1 Mes", "Mostrar 3 Meses", "Mostrar 6 Meses", "Mostrar 1 Año");
-        cbFiltroTiempo.getSelectionModel().select(0);
-        cbFiltroTiempo.setOnAction(event -> {
-            fechaInicio = null;
-            fechaFin = null;
-            fechaFiltro = calcularFechaFiltro();
-            resetPaginacion();
-        });
     }
 
     private void configurarFiltroFechas() {
@@ -114,8 +100,12 @@ public class MovimientosController implements Initializable {
         this.usuario = usuario;
         if (usuario != null) {
             alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
-            lblEmail.setText(alumno.getEmail());
-            resetPaginacion();
+            if (alumno != null) {
+                lblEmail.setText(alumno.getEmail());
+                resetPaginacion();
+            } else {
+                mostrarAlerta("No se encontró el alumno asociado a este usuario.");
+            }
         }
     }
 
@@ -133,21 +123,10 @@ public class MovimientosController implements Initializable {
             totalPedidos = PedidoDAO.obtenerTotalPedidos(alumno.getId_alumno(), fechaFiltro, fechaInicio, fechaFin);
             totalPages = (int) Math.ceil((double) totalPedidos / OFFSET);
 
-            lblNumPedidos.setText(String.format("Pedidos mostrados: %d de %d", pedidos.size(), totalPedidos));
+            //lblNumPedidos.setText(String.format("Pedidos mostrados: %d de %d", pedidos.size(), totalPedidos));
             lblTotalGastado.setText(String.format("Total Gastado: %.2f€", calcularTotalGasto()));
 
             actualizarBotonesPaginacion();
-        }
-    }
-
-    private LocalDate calcularFechaFiltro() {
-        String filtroSeleccionado = cbFiltroTiempo.getValue();
-        LocalDate fechaActual = LocalDate.now();
-        switch (filtroSeleccionado) {
-            case "Mostrar 3 Meses": return fechaActual.minusMonths(3);
-            case "Mostrar 6 Meses": return fechaActual.minusMonths(6);
-            case "Mostrar 1 Año": return fechaActual.minusYears(1);
-            default: return fechaActual.minusMonths(1);
         }
     }
 
@@ -185,7 +164,7 @@ public class MovimientosController implements Initializable {
             AlumnoController controller = loader.getController();
             controller.setUsuario(usuario);
 
-            Stage stage = (Stage) lblNumPedidos.getScene().getWindow();
+            Stage stage = (Stage) lblTotalGastado.getScene().getWindow();
             Scene scene = new Scene(root, 1200, 800);
             stage.setScene(scene);
             stage.setIconified(true); // Minimizar

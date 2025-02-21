@@ -10,33 +10,38 @@ import org.hibernate.Transaction;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class PedidoDAO {
 
-    public PedidoDAO() {}
+    public PedidoDAO() {
+    }
 
     //Lista todos los bocadillos , Utilizado en Cocina
-    public List<PedidoBocadillo> listarPedidos(HashMap<String, String> filtros){
+    public List<PedidoBocadillo> listarPedidos(HashMap<String, String> filtros) {
 
         List<PedidoBocadillo> listaPedidos = new ArrayList<>();
         Transaction transaction = null;
 
-        try(Session session = Conexion.getSessionFactory().openSession()) {
+        try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             System.out.println("Conexión con la BD");
             StringBuilder jpql = new StringBuilder("FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = false");
 
-            if (filtros != null){
-                for (String key : filtros.keySet()){
-                    if (key.equals("nombre")){
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    if (key.equals("nombre")) {
                         jpql.append(" AND pb.alumno.nombre LIKE :").append(key);
-                    }if (key.equals("apellido")){
+                    }
+                    if (key.equals("apellido")) {
                         jpql.append(" AND pb.alumno.apellidos LIKE :").append(key);
-                    }if(key.equals("curso")){
+                    }
+                    if (key.equals("curso")) {
                         jpql.append(" AND pb.alumno.curso.nombre_curso LIKE :").append(key);
                     }
                 }
@@ -48,7 +53,7 @@ public class PedidoDAO {
             // Asignar valores a los parámetros de la consulta
             if (filtros != null)
                 for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(),"%"+filtro.getValue()+"%");
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
                 }
 
             return query.list();
@@ -57,23 +62,25 @@ public class PedidoDAO {
     }
 
     //Lista todos los bocadillos , Utilizado en Cocina
-    public List<PedidoBocadillo> listarPedidosRetirados(HashMap<String, String> filtros){
+    public List<PedidoBocadillo> listarPedidosRetirados(HashMap<String, String> filtros) {
 
         List<PedidoBocadillo> listaPedidos = new ArrayList<>();
         Transaction transaction = null;
 
-        try(Session session = Conexion.getSessionFactory().openSession()) {
+        try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             System.out.println("Conexión con la BD");
             StringBuilder jpql = new StringBuilder("FROM PedidoBocadillo pb WHERE FUNCTION('DATE', pb.fecha_hora) = CURRENT_DATE AND pb.retirado = true");
 
-            if (filtros != null){
-                for (String key : filtros.keySet()){
-                    if (key.equals("nombre")){
+            if (filtros != null) {
+                for (String key : filtros.keySet()) {
+                    if (key.equals("nombre")) {
                         jpql.append(" AND pb.alumno.nombre LIKE :").append(key);
-                    }if (key.equals("apellido")){
+                    }
+                    if (key.equals("apellido")) {
                         jpql.append(" AND pb.alumno.apellidos LIKE :").append(key);
-                    }if(key.equals("curso")){
+                    }
+                    if (key.equals("curso")) {
                         jpql.append(" AND pb.alumno.curso.nombre_curso LIKE :").append(key);
                     }
                 }
@@ -85,7 +92,7 @@ public class PedidoDAO {
             // Asignar valores a los parámetros de la consulta
             if (filtros != null)
                 for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(),"%"+filtro.getValue()+"%");
+                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
                 }
 
             return query.list();
@@ -142,7 +149,7 @@ public class PedidoDAO {
         return pedidoHoy;
     }
 
-    public void marcarRetirado(int idPedido){
+    public void marcarRetirado(int idPedido) {
         Transaction transaction = null;
         try (Session session = Conexion.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
@@ -184,18 +191,17 @@ public class PedidoDAO {
     }
 
 
-
     //En si actua como un delete , debido a que eliminamos el registro de la BD
-    public Boolean cancelarPedido(int id_alumno,Date fecha){
-        PedidoBocadillo pedidoHoy=obtenerPedidoDelDia(id_alumno,fecha); //Lo primero que hacemos es obtener el Pedido del Dia
+    public Boolean cancelarPedido(int id_alumno, Date fecha) {
+        PedidoBocadillo pedidoHoy = obtenerPedidoDelDia(id_alumno, fecha); //Lo primero que hacemos es obtener el Pedido del Dia
         Transaction transaction = null;
-        try (Session session=Conexion.getSessionFactory().openSession()){ //Iniciamos la transacción en el try
+        try (Session session = Conexion.getSessionFactory().openSession()) { //Iniciamos la transacción en el try
             transaction = session.beginTransaction();
             session.remove(pedidoHoy); //Eliminamos el registro de la bd,utilizamos remove para eliminar antes del commit
             transaction.commit();
             System.out.println("Pedido eliminado correctamente");
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback(); //Volvemos atras si existe algun error para evitar la inconsistencia
             }
@@ -210,19 +216,26 @@ public class PedidoDAO {
     Pedidos de antes de: 1MES 3 MESES 6 MESES 1 AÑO
      */
     public static List<PedidoBocadillo> obtenerPedidosDelAlumno(int id_alumno, int page, int offset, LocalDate fechaFiltro, LocalDate fechaInicio, LocalDate fechaFin) {
-        List<PedidoBocadillo> lista_pedidos_alumno = null;
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            String jpql = "FROM PedidoBocadillo WHERE alumno.id = :id AND fecha_hora >= :fechaFiltro";
+            String jpql = "FROM PedidoBocadillo WHERE alumno.id = :id";
+
             if (fechaInicio != null && fechaFin != null) {
                 jpql += " AND fecha_hora BETWEEN :fechaInicio AND :fechaFin";
+            } else if (fechaFiltro != null) {
+                jpql += " AND fecha_hora BETWEEN :fechaFiltroInicio AND :fechaFiltroFin";
             }
+
             Query<PedidoBocadillo> query = session.createQuery(jpql, PedidoBocadillo.class)
-                    .setParameter("id", id_alumno)
-                    .setParameter("fechaFiltro", fechaFiltro != null ? Date.valueOf(fechaFiltro) : Date.valueOf(LocalDate.now().minusYears(10)));
+                    .setParameter("id", id_alumno);
+
             if (fechaInicio != null && fechaFin != null) {
-                query.setParameter("fechaInicio", Date.valueOf(fechaInicio));
-                query.setParameter("fechaFin", Date.valueOf(fechaFin));
+                query.setParameter("fechaInicio", Timestamp.valueOf(fechaInicio.atStartOfDay()));
+                query.setParameter("fechaFin", Timestamp.valueOf(fechaFin.atTime(LocalTime.MAX)));
+            } else if (fechaFiltro != null) {
+                query.setParameter("fechaFiltroInicio", Timestamp.valueOf(fechaFiltro.atStartOfDay()));
+                query.setParameter("fechaFiltroFin", Timestamp.valueOf(fechaFiltro.atTime(LocalTime.MAX)));
             }
+
             return query.setFirstResult((page - 1) * offset).setMaxResults(offset).list();
         }
     }
@@ -236,17 +249,18 @@ public class PedidoDAO {
             if (fechaInicio != null && fechaFin != null) {
                 jpql += " AND p.fecha_hora BETWEEN :fechaInicio AND :fechaFin";
             } else if (fechaFiltro != null) {
-                jpql += " AND p.fecha_hora >= :fechaFiltro";
+                jpql += " AND p.fecha_hora BETWEEN :fechaFiltroInicio AND :fechaFiltroFin";
             }
 
             Query<Long> query = session.createQuery(jpql, Long.class)
                     .setParameter("id", id_alumno);
 
             if (fechaInicio != null && fechaFin != null) {
-                query.setParameter("fechaInicio", java.sql.Date.valueOf(fechaInicio));
-                query.setParameter("fechaFin", java.sql.Date.valueOf(fechaFin));
+                query.setParameter("fechaInicio", Timestamp.valueOf(fechaInicio.atStartOfDay()));
+                query.setParameter("fechaFin", Timestamp.valueOf(fechaFin.atTime(LocalTime.MAX)));
             } else if (fechaFiltro != null) {
-                query.setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro));
+                query.setParameter("fechaFiltroInicio", Timestamp.valueOf(fechaFiltro.atStartOfDay()));
+                query.setParameter("fechaFiltroFin", Timestamp.valueOf(fechaFiltro.atTime(LocalTime.MAX)));
             }
 
             total = query.uniqueResult();
@@ -266,17 +280,18 @@ public class PedidoDAO {
             if (fechaInicio != null && fechaFin != null) {
                 jpql += " AND p.fecha_hora BETWEEN :fechaInicio AND :fechaFin";
             } else if (fechaFiltro != null) {
-                jpql += " AND p.fecha_hora >= :fechaFiltro";
+                jpql += " AND p.fecha_hora BETWEEN :fechaFiltroInicio AND :fechaFiltroFin";
             }
 
             Query<Double> query = session.createQuery(jpql, Double.class)
                     .setParameter("id", id_alumno);
 
             if (fechaInicio != null && fechaFin != null) {
-                query.setParameter("fechaInicio", java.sql.Date.valueOf(fechaInicio));
-                query.setParameter("fechaFin", java.sql.Date.valueOf(fechaFin));
+                query.setParameter("fechaInicio", Timestamp.valueOf(fechaInicio.atStartOfDay()));
+                query.setParameter("fechaFin", Timestamp.valueOf(fechaFin.atTime(LocalTime.MAX)));
             } else if (fechaFiltro != null) {
-                query.setParameter("fechaFiltro", java.sql.Date.valueOf(fechaFiltro));
+                query.setParameter("fechaFiltroInicio", Timestamp.valueOf(fechaFiltro.atStartOfDay()));
+                query.setParameter("fechaFiltroFin", Timestamp.valueOf(fechaFiltro.atTime(LocalTime.MAX)));
             }
 
             totalGasto = query.uniqueResult();
@@ -286,12 +301,4 @@ public class PedidoDAO {
 
         return totalGasto != null ? totalGasto : 0.0;
     }
-
-
-
-
-
-
-
-
 }

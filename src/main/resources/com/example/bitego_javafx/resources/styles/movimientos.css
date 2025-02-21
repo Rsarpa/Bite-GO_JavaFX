@@ -82,3 +82,45 @@
 .button:hover {
     -fx-background-color: #2980B9;
 }
+
+/* Resumen Panel */
+.side-pane {
+    -fx-background-color: #ECF0F1;
+    -fx-padding: 20px;
+    -fx-border-color: #BDC3C7;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 4);
+}
+
+/* Texto del título del resumen */
+.section-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Información de pedidos */
+.info-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #34495E;
+}
+
+/* Destacado del "Total Gastado" */
+.highlight-label-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2C3E50;
+}
+
+/* Número total gastado destacado */
+.highlight-label {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #E74C3C; /* Color rojo profesional */
+    -fx-background-color: #FADBD8;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 10px;
+    -fx-alignment: center;
+}
+
