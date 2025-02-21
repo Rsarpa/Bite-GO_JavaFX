@@ -63,9 +63,10 @@ public class CrudBocadilloController implements Initializable {
         this.colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         this.colDescrip.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
 
+        //Con el getValue obtenemos el bocadillo y posteriormente recuperamos la lista de alergenos de bocadillo
         colAlergenos.setCellValueFactory(cellData -> {
             Bocadillo bocadillo = cellData.getValue();
-            return new SimpleStringProperty(obtenerListaAlergenos(bocadillo));
+            return new SimpleStringProperty(bocadillo.getAlergenos().toString());
         });
         this.colDIa.setCellValueFactory(new PropertyValueFactory<>("dia_asociado"));
 
@@ -83,6 +84,7 @@ public class CrudBocadilloController implements Initializable {
         // Cargo los bocadillos al iniciar
         this.mostrarBocadillos();
     }
+    /*
 
     private String obtenerListaAlergenos(Bocadillo bocadillo) {
         if (bocadillo != null && bocadillo.getAlergenos() != null && !bocadillo.getAlergenos().isEmpty()) {
@@ -93,7 +95,7 @@ public class CrudBocadilloController implements Initializable {
             return alergenos.substring(0, alergenos.length() - 2); // Eliminar la última coma y espacio
         }
         return "Ninguno";
-    }
+    }*/
 
 
 

@@ -45,17 +45,14 @@ public class AdminBocadilloController implements Initializable {
         listAlergenos.setItems(alergenosSeleccionados);
     }
 
-    /**
-     * Carga todos los alérgenos en el ComboBox
-     */
+    //Cargamos todos los alergenos de la DB en el ComboBox
     private void cargarAlergenos() {
         listaAlergenos.setAll(alergenoDAO.obtenerTodosAlergenos());
         cmbAlergenos.setItems(listaAlergenos);
     }
 
-    /**
-     * Agrega un alérgeno seleccionado a la lista de alérgenos del bocadillo
-     */
+
+    //Agregar alergeno a el ListView de alergenos
     @FXML
     private void agregarAlergeno() {
         Alergeno seleccionado = cmbAlergenos.getValue();
@@ -66,9 +63,7 @@ public class AdminBocadilloController implements Initializable {
         }
     }
 
-    /**
-     * Elimina un alérgeno seleccionado de la lista de alérgenos del bocadillo
-     */
+    //Eliminar un alergeno seleccionado en la lista de alérgenos
     @FXML
     private void eliminarAlergeno() {
         Alergeno seleccionado = listAlergenos.getSelectionModel().getSelectedItem();
@@ -79,9 +74,7 @@ public class AdminBocadilloController implements Initializable {
         }
     }
 
-    /**
-     * Carga los datos del bocadillo para edición y marca los alérgenos seleccionados
-     */
+    //Cargar los datos del bocadillo acción editar
     public void cargarDatosBocadillo(Bocadillo bocadillo) {
         this.bocadilloEditado = bocadillo;
         txtNombre.setText(bocadillo.getNombre());
@@ -94,9 +87,8 @@ public class AdminBocadilloController implements Initializable {
         alergenosSeleccionados.setAll(bocadillo.getAlergenos());
     }
 
-    /**
-     * Guarda o edita un bocadillo en la base de datos
-     */
+
+    //Guardar los cambios del bocadillo
     @FXML
     private void guardarBocadillo() {
         if (validarCampos()) {
@@ -138,9 +130,7 @@ public class AdminBocadilloController implements Initializable {
         }
     }
 
-    /**
-     * Valida que todos los campos estén completos
-     */
+    //TODO Service validar que todos los campos obligatorios estén incluidos
     private boolean validarCampos() {
         return !txtNombre.getText().isEmpty() &&
                 tipoBox.getValue() != null &&
@@ -149,17 +139,13 @@ public class AdminBocadilloController implements Initializable {
                 diaBox.getValue() != null;
     }
 
-    /**
-     * Cierra la ventana actual
-     */
+    //Cierra la ventana actual
     @FXML
     private void cerrarVentana() {
         btnGuardar.getScene().getWindow().hide();
     }
 
-    /**
-     * Muestra una alerta con un mensaje
-     */
+    //Mostramos alerta
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Atención");
@@ -168,10 +154,8 @@ public class AdminBocadilloController implements Initializable {
         alert.showAndWait();
     }
 
-    /**
-     * Asigna el controlador de CrudBocadilloController
-     */
-    public void setAdminController(CrudBocadilloController cru) {
-        this.crudBocadilloController = cru;
+    //Asignamos el admincontroler desde CrudBocadilloController
+    public void setAdminController(CrudBocadilloController controller) {
+        this.crudBocadilloController = controller;
     }
 }

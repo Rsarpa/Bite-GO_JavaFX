@@ -46,6 +46,7 @@
             </padding>
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
             <TextField fx:id="txtFiltroNombre" promptText="Nombre del Alumno" />
+         <ComboBox fx:id="cmbFiltroCurso" prefWidth="150.0" promptText="Selecciona Curso" />
          <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#filtrarPorNombre" styleClass="top-button" text="Filtrar" />
         </VBox>
     </left>
@@ -62,7 +63,7 @@
                     <TableColumn fx:id="colDni" text="DNI" />
                     <TableColumn fx:id="colLocalidad" text="Localidad" />
                     <TableColumn fx:id="colEmail" text="Email" />
-               <TableColumn prefWidth="75.0" text="Curso" />
+               <TableColumn fx:id="colCurso" prefWidth="75.0" text="Curso" />
                 </columns>
             <columnResizePolicy>
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -71,72 +71,75 @@ public class AlumnoDAO {
             return session.get(Alumno.class, id);
         }
     }
-    //offset maximo de resultados por página
-    //Este method obtiene una lista de obtejos alumnos paginados,permitiendo aplicar filtros utilizando HashMap
     public List<Alumno> getPaginated(int page, int offset, HashMap<String, String> filtros) {
-        //Nos aseguramos de que la sesión se cierre utilizando la declaración en el try
         try (Session session = Conexion.getSessionFactory().openSession()) {
-            /*
-            Se empieza con FROM Alumno a WHERE true
-            para que la construcción de filtros sea más sencilla
-            (ya que true siempre es válido y evita problemas al concatenar condiciones).
-             */
-            StringBuilder hql = new StringBuilder("FROM Alumno a WHERE true"); //Utilizamos StringBuilder para que la consulta más eficiente
-            /*
-            Si filtros no es nulo se recorren sus claves donde key representa los nombres de los atributos de alumno
-            A cada clave se le agrega un filtro LIKE dinámicamente
-             Si filtros contiene { "nombre": "Juan", "curso": "Matemáticas" }
-             Pimera append(key) para el nombre del atributo y segunda append(key) para el valor
-             FROM Alumno a WHERE true
-             AND a.nombre LIKE :nombre
-             AND a.curso LIKE :curso
-             */
+            StringBuilder hql = new StringBuilder("FROM Alumno a WHERE true");
 
+            //Filtros
             if (filtros != null) {
                 for (String key : filtros.keySet()) {
-                    //En LIKE : falta asignarle para evitar la inyección
-                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                    //Caso especial para Curso
+                    if (key.equals("idCurso")) { // Si el filtro es por ID del curso
+                        hql.append(" AND a.curso.id_curso = :idCurso"); // Comparación directa
+                    } else {
+                        hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                    }
                 }
             }
-            //Se convierte de StringBuilder a String y se ejecuta la consulta
+
             Query<Alumno> query = session.createQuery(hql.toString(), Alumno.class);
 
-            //Se envuelve con % % para permita coindicencias parciales
+            //Valores
             if (filtros != null) {
                 for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                    //Caso especial para el Curso
+                    if (filtro.getKey().equals("idCurso")) {
+                        query.setParameter("idCurso", Integer.parseInt(filtro.getValue())); // Convertir a número
+                    } else {
+                        query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                    }
                 }
             }
 
             query.setFirstResult((page - 1) * offset);
-            //EJ Si page = 1 y offset =10, el primer resultado será (1 - 1) * 10 = 0 (primer resultado).
             query.setMaxResults(offset);
-            //Asigna el numero máximo de resultados
 
             return query.list();
         }
     }
 
-    //Lo mismo pero devuelve el numero de resultados obtenidos , con el objetivo de calcular la paginación
+
     public long count(HashMap<String, String> filtros) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
             StringBuilder hql = new StringBuilder("SELECT COUNT(a) FROM Alumno a WHERE true");
 
+            //Filtros
             if (filtros != null) {
                 for (String key : filtros.keySet()) {
-                    hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                    //Caso especial para el Curso
+                    if (key.equals("idCurso")) {
+                        hql.append(" AND a.curso.id_curso = :idCurso");
+                    } else {
+                        hql.append(" AND a.").append(key).append(" LIKE :").append(key);
+                    }
                 }
             }
 
             Query<Long> query = session.createQuery(hql.toString(), Long.class);
-
+            //Valor
             if (filtros != null) {
                 for (HashMap.Entry<String, String> filtro : filtros.entrySet()) {
-                    query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                    //Caso especial para el Curso
+                    if (filtro.getKey().equals("idCurso")) {
+                        query.setParameter("idCurso", Integer.parseInt(filtro.getValue()));
+                    } else {
+                        query.setParameter(filtro.getKey(), "%" + filtro.getValue() + "%");
+                    }
                 }
             }
 
             return query.getSingleResult();
         }
     }
+
 }

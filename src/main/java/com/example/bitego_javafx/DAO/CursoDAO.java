@@ -9,6 +9,9 @@ import org.hibernate.query.Query;
 import java.util.List;
 
 public class CursoDAO {
+    public CursoDAO() {
+    }
+
     // METHOD utilizado para asignar de manera sencilla el curso en el CRUD, a partir del nombre obtenemos el objeto Curso
     public static Curso getByNombre(String nombre) {
         Transaction transaction = null;

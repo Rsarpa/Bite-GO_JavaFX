@@ -24,26 +24,26 @@ public class AdminAlumnoController {
     @FXML
     private Button btnGuardar, btnCancelar;
     @FXML
-    private ComboBox<Curso> cbCurso; // ✅ Se reemplaza txtCurso por cbCurso (ComboBox)
+    private ComboBox<Curso> cbCurso;
 
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
     private CursoDAO cursoDAO = new CursoDAO();
     private Usuario usuario = new Usuario();
-    private Alumno alumnoEditando;
+    private Alumno alumno_editado;
     private AdminController adminController;
 
     public void initialize() {
         validarEmailTiempoReal();
         validarDniTiempoReal();
-        cargarCursos(); // ✅ Se llama a la función para llenar el ComboBox con cursos
+        cargarCursos(); //Se rellena el ComboBox
     }
 
     public void setAdminController(AdminController adminController) {
         this.adminController = adminController;
     }
 
-    // ✅ Nuevo método para cargar cursos en el ComboBox
+    //Carga los cursos en el comboBoc
     private void cargarCursos() {
         List<Curso> cursos = cursoDAO.obtenerTodos();
         ObservableList<Curso> listaCursos = FXCollections.observableArrayList(cursos);
@@ -51,7 +51,7 @@ public class AdminAlumnoController {
     }
 
     public void cargarDatosAlumno(Alumno alumno) {
-        this.alumnoEditando = alumno;
+        this.alumno_editado = alumno;
         usuario = usuarioDAO.cargarUsuario(alumno.getEmail());
 
         txtNombre.setText(alumno.getNombre());
@@ -63,7 +63,10 @@ public class AdminAlumnoController {
         txtMotivoBaja.setText(alumno.getMotivo_baja());
         chkAbonado.setSelected(alumno.isAbonado());
 
-        // ✅ Seleccionar el curso del alumno en el ComboBox
+        /*
+        Seleccionamos el curso por defecto si estamos entrando este editar
+        Por defecto aparecerá seleccione un Curso
+         */
         if (alumno.getCurso() != null) {
             cbCurso.getSelectionModel().select(alumno.getCurso());
         }
@@ -72,33 +75,33 @@ public class AdminAlumnoController {
     @FXML
     private void guardarAlumno() {
         if (validarCampos()) {
-            if (alumnoEditando == null) {
-                alumnoEditando = new Alumno();
+            if (alumno_editado == null) {
+                alumno_editado = new Alumno();
                 usuario = new Usuario();
             }
 
-            alumnoEditando.setNombre(txtNombre.getText());
-            alumnoEditando.setApellidos(txtApellidos.getText());
-            alumnoEditando.setDni(txtDni.getText());
-            alumnoEditando.setLocalidad(txtLocalidad.getText());
-            alumnoEditando.setEmail(txtEmail.getText());
+            alumno_editado.setNombre(txtNombre.getText());
+            alumno_editado.setApellidos(txtApellidos.getText());
+            alumno_editado.setDni(txtDni.getText());
+            alumno_editado.setLocalidad(txtLocalidad.getText());
+            alumno_editado.setEmail(txtEmail.getText());
             usuario.setEmail(txtEmail.getText());
             usuario.setRol("Alumno");
             usuario.setContrasenya(txtContrasena.getText());
-            alumnoEditando.setMotivo_baja(txtMotivoBaja.getText());
-            alumnoEditando.setAbonado(chkAbonado.isSelected());
+            alumno_editado.setMotivo_baja(txtMotivoBaja.getText());
+            alumno_editado.setAbonado(chkAbonado.isSelected());
 
-            // ✅ Obtener el curso seleccionado en el ComboBox
+            //Obtenemos el curso por el comboBox
             Curso cursoSeleccionado = cbCurso.getSelectionModel().getSelectedItem();
 
             if (cursoSeleccionado != null) {
-                alumnoEditando.setCurso(cursoSeleccionado);
+                alumno_editado.setCurso(cursoSeleccionado);
 
-                if (alumnoEditando.getId_alumno() == 0) {
-                    alumnoDAO.save(alumnoEditando);
+                if (alumno_editado.getId_alumno() == 0) {
+                    alumnoDAO.save(alumno_editado);
                     usuarioDAO.save(usuario);
                 } else {
-                    alumnoDAO.update(alumnoEditando);
+                    alumnoDAO.update(alumno_editado);
                     usuarioDAO.update(usuario);
                 }
 
@@ -119,6 +122,7 @@ public class AdminAlumnoController {
                 cbCurso.getSelectionModel().getSelectedItem() != null;
     }
 
+    //TODO Validaciones añadir a SERVICE
     private void validarEmailTiempoReal() {
         txtEmail.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.matches("^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")) {
@@ -131,6 +135,7 @@ public class AdminAlumnoController {
         });
     }
 
+    //TODO Validaciones añadir a SERVICE
     private void validarDniTiempoReal() {
         txtDni.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.matches("^[0-9]{8}[A-Z]$")) {
@@ -143,6 +148,7 @@ public class AdminAlumnoController {
         });
     }
 
+    //TODO Validaciones añadir a SERVICE
     private void validarHabilitarGuardar() {
         if (txtEmail.getStyle().contains("green") && txtDni.getStyle().contains("green")) {
             btnGuardar.setDisable(false);

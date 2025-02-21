@@ -1,11 +1,9 @@
 package com.example.bitego_javafx.Controller;
 
 import com.example.bitego_javafx.DAO.AlumnoDAO;
+import com.example.bitego_javafx.DAO.CursoDAO;
 import com.example.bitego_javafx.DAO.UsuarioDAO;
-import com.example.bitego_javafx.Model.Alumno;
-import com.example.bitego_javafx.Model.Bocadillo;
-import com.example.bitego_javafx.Model.Curso;
-import com.example.bitego_javafx.Model.Usuario;
+import com.example.bitego_javafx.Model.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,7 +23,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 public class AdminController implements Initializable {
     private Usuario usuario;
@@ -52,14 +49,23 @@ public class AdminController implements Initializable {
     private TextField txtPaginaActual;
     @FXML
     private Button btnAnterior, btnSiguiente;
+    @FXML
+    private ComboBox cmbFiltroCurso;
 
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
+    private CursoDAO cursoDAO=new CursoDAO();
     private ObservableList<Alumno> listaAlumnos = FXCollections.observableArrayList();
     private int paginaActual = 1;
     private final int registrosPorPagina = 15;
 
+    private ObservableList<Curso> listaCursos = FXCollections.observableArrayList();
 
+    //Cargamos todos los alergenos de la DB en el ComboBox
+    private void cargarCursos() {
+        listaCursos.setAll(cursoDAO.obtenerTodos());
+        cmbFiltroCurso.setItems(listaCursos);
+    }
 
 
     //Asigna los valores de la tabla dinámicamente
@@ -80,6 +86,7 @@ public class AdminController implements Initializable {
         });
 
         cargarAlumnos();
+        cargarCursos();
         //ATAJOS DE TECLADO
 
         // Capturar eventos de teclado de la tabla
@@ -91,6 +98,7 @@ public class AdminController implements Initializable {
                 newScene.setOnKeyPressed(this::manejarAtajosGlobales);
             }
         });
+
     }
 
     // Evento global (Ctrl + N) en toda la ventana
@@ -127,6 +135,13 @@ public class AdminController implements Initializable {
             filtros.put("nombre", txtFiltroNombre.getText());
         }
 
+        if (!cmbFiltroCurso.getSelectionModel().isEmpty()){
+            Curso cursoSeleccionado = (Curso) cmbFiltroCurso.getSelectionModel().getSelectedItem();
+            String idCurso = String.valueOf(cursoSeleccionado.getId_curso());
+            filtros.put("idCurso", idCurso);
+
+        }
+
         List<Alumno> alumnos = alumnoDAO.getPaginated(paginaActual, registrosPorPagina, filtros);
         listaAlumnos.setAll(alumnos);
         //Asignamos los elementos a cada columna de la tabla ya configurada
@@ -135,7 +150,8 @@ public class AdminController implements Initializable {
         //establecerlo en modo vista
         txtPaginaActual.setEditable(false);
 
-        long totalRegistros = alumnoDAO.count(filtros); // Método que cuenta registros en la BD
+        //Calculo para obtener la paginación
+        long totalRegistros = alumnoDAO.count(filtros); // MétHodo que cuenta registros en la BD
         int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
 
 
@@ -239,6 +255,7 @@ public class AdminController implements Initializable {
 
     @FXML
     public void editarAlumno() {
+        //Recuperar el alumno seleccionado con el puntero de la tabla
         Alumno alumnoSeleccionado = tblAlumnos.getSelectionModel().getSelectedItem();
         if (alumnoSeleccionado != null) {
             try {
