@@ -3,7 +3,10 @@ package com.example.bitego_javafx.Controller;
 import com.example.bitego_javafx.DAO.AlumnoDAO;
 import com.example.bitego_javafx.DAO.UsuarioDAO;
 import com.example.bitego_javafx.Model.Alumno;
+import com.example.bitego_javafx.Model.Bocadillo;
+import com.example.bitego_javafx.Model.Curso;
 import com.example.bitego_javafx.Model.Usuario;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -40,6 +43,9 @@ public class AdminController implements Initializable {
     private TableColumn<Alumno, String> colLocalidad;
     @FXML
     private TableColumn<Alumno, String> colEmail;
+
+    @FXML
+    private TableColumn<Alumno, String> colCurso;
     @FXML
     private TextField txtFiltroNombre;
     @FXML
@@ -51,7 +57,7 @@ public class AdminController implements Initializable {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private ObservableList<Alumno> listaAlumnos = FXCollections.observableArrayList();
     private int paginaActual = 1;
-    private final int registrosPorPagina = 10;
+    private final int registrosPorPagina = 15;
 
 
 
@@ -65,6 +71,12 @@ public class AdminController implements Initializable {
         colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
         colLocalidad.setCellValueFactory(new PropertyValueFactory<>("localidad"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colCurso.setCellValueFactory(cellData -> {
+            Alumno alumno = cellData.getValue();
+            String curso = alumno.getCurso().toString();
+            return new SimpleStringProperty(curso);
+        });
+
 
         cargarAlumnos();
         // Capturar eventos de teclado de la tabla

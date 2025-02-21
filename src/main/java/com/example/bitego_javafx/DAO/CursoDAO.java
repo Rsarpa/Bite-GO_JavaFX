@@ -6,6 +6,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 public class CursoDAO {
     // METHOD utilizado para asignar de manera sencilla el curso en el CRUD, a partir del nombre obtenemos el objeto Curso
     public static Curso getByNombre(String nombre) {
@@ -30,4 +32,11 @@ public class CursoDAO {
 
         return curso;
     }
+
+    public List<Curso> obtenerTodos() {
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            return session.createQuery("FROM Curso", Curso.class).list();
+        }
+    }
+
 }

@@ -89,7 +89,7 @@ public class LoginController {
             if (controller instanceof AlumnoController && usuario.getRol().equals("Alumno")) {
                 ((AlumnoController) controller).setUsuario(usuario);
             } else if (controller instanceof AdminController && usuario.getRol().equals("Administrador")) {
-                ((AdminController) controller).setUsuario(usuario);
+                ((AdminController) controller). setUsuario(usuario);
             } else if (controller instanceof CocinaController && usuario.getRol().equals("Cocina")) {
                 ((CocinaController) controller).setUsuario(usuario);
             }

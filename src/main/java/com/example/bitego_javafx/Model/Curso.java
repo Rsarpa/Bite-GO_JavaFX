@@ -51,4 +51,9 @@ public class Curso {
     public void setAnyo(Year anyo) {
         this.anyo = anyo;
     }
+
+    @Override
+    public String toString() {
+        return nombre_curso;
+    }
 }

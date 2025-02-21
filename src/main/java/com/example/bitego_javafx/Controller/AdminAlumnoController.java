@@ -8,21 +8,27 @@ import com.example.bitego_javafx.Model.Curso;
 import com.example.bitego_javafx.Model.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util.List;
 
 public class AdminAlumnoController {
 
     @FXML
-    private TextField txtNombre, txtApellidos, txtDni, txtLocalidad, txtEmail,txtCurso, txtMotivoBaja;
+    private TextField txtNombre, txtApellidos, txtDni, txtLocalidad, txtEmail, txtMotivoBaja;
     @FXML
     private PasswordField txtContrasena;
     @FXML
     private CheckBox chkAbonado;
     @FXML
     private Button btnGuardar, btnCancelar;
+    @FXML
+    private ComboBox<Curso> cbCurso; // ✅ Se reemplaza txtCurso por cbCurso (ComboBox)
+
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private AlumnoDAO alumnoDAO = new AlumnoDAO();
+    private CursoDAO cursoDAO = new CursoDAO();
     private Usuario usuario = new Usuario();
     private Alumno alumnoEditando;
     private AdminController adminController;
@@ -30,10 +36,18 @@ public class AdminAlumnoController {
     public void initialize() {
         validarEmailTiempoReal();
         validarDniTiempoReal();
+        cargarCursos(); // ✅ Se llama a la función para llenar el ComboBox con cursos
     }
 
     public void setAdminController(AdminController adminController) {
         this.adminController = adminController;
+    }
+
+    // ✅ Nuevo método para cargar cursos en el ComboBox
+    private void cargarCursos() {
+        List<Curso> cursos = cursoDAO.obtenerTodos();
+        ObservableList<Curso> listaCursos = FXCollections.observableArrayList(cursos);
+        cbCurso.setItems(listaCursos);
     }
 
     public void cargarDatosAlumno(Alumno alumno) {
@@ -46,15 +60,19 @@ public class AdminAlumnoController {
         txtLocalidad.setText(alumno.getLocalidad());
         txtEmail.setText(alumno.getEmail());
         txtContrasena.setText(usuario.getContrasenya());
-        txtCurso.setText(alumno.getCurso().getNombre_curso());
         txtMotivoBaja.setText(alumno.getMotivo_baja());
         chkAbonado.setSelected(alumno.isAbonado());
+
+        // ✅ Seleccionar el curso del alumno en el ComboBox
+        if (alumno.getCurso() != null) {
+            cbCurso.getSelectionModel().select(alumno.getCurso());
+        }
     }
 
     @FXML
     private void guardarAlumno() {
         if (validarCampos()) {
-            if (alumnoEditando == null) { // Si es un nuevo alumno
+            if (alumnoEditando == null) {
                 alumnoEditando = new Alumno();
                 usuario = new Usuario();
             }
@@ -70,23 +88,24 @@ public class AdminAlumnoController {
             alumnoEditando.setMotivo_baja(txtMotivoBaja.getText());
             alumnoEditando.setAbonado(chkAbonado.isSelected());
 
-            // Buscar el curso por nombre_curso
-            String nombreCurso = txtCurso.getText().trim();
-            Curso curso = CursoDAO.getByNombre(nombreCurso);
+            // ✅ Obtener el curso seleccionado en el ComboBox
+            Curso cursoSeleccionado = cbCurso.getSelectionModel().getSelectedItem();
 
-            if (curso != null) {
-                alumnoEditando.setCurso(curso);
+            if (cursoSeleccionado != null) {
+                alumnoEditando.setCurso(cursoSeleccionado);
+
                 if (alumnoEditando.getId_alumno() == 0) {
-                    alumnoDAO.save(alumnoEditando); // Guardar nuevo alumno
+                    alumnoDAO.save(alumnoEditando);
                     usuarioDAO.save(usuario);
                 } else {
-                    alumnoDAO.update(alumnoEditando); // Actualizar alumno
+                    alumnoDAO.update(alumnoEditando);
                     usuarioDAO.update(usuario);
                 }
+
                 adminController.cargarAlumnos();
                 cerrarVentana();
             } else {
-                mostrarAlerta("El curso ingresado no existe.");
+                mostrarAlerta("Debes seleccionar un curso.");
             }
         } else {
             mostrarAlerta("Todos los campos son obligatorios.");
@@ -96,35 +115,30 @@ public class AdminAlumnoController {
     private boolean validarCampos() {
         return !txtNombre.getText().isEmpty() && !txtApellidos.getText().isEmpty() &&
                 !txtDni.getText().isEmpty() && !txtLocalidad.getText().isEmpty() &&
-                !txtEmail.getText().isEmpty() && !txtContrasena.getText().isEmpty() && !txtCurso.getText().isEmpty();
+                !txtEmail.getText().isEmpty() && !txtContrasena.getText().isEmpty() &&
+                cbCurso.getSelectionModel().getSelectedItem() != null;
     }
 
     private void validarEmailTiempoReal() {
-        txtEmail.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.matches("^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")) { // Patrón básico de email
-                    txtEmail.setStyle("-fx-border-color: green;");
-                    validarHabilitarGuardar();
-                } else {
-                    txtEmail.setStyle("-fx-border-color: red;");
-                    btnGuardar.setDisable(true);
-                }
+        txtEmail.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.matches("^[^@]+@[^@]+\\.[a-zA-Z]{2,}$")) {
+                txtEmail.setStyle("-fx-border-color: green;");
+                validarHabilitarGuardar();
+            } else {
+                txtEmail.setStyle("-fx-border-color: red;");
+                btnGuardar.setDisable(true);
             }
         });
     }
 
     private void validarDniTiempoReal() {
-        txtDni.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if (newValue.matches("^[0-9]{8}[A-Z]$")) { // 8 números + 1 letra mayúscula
-                    txtDni.setStyle("-fx-border-color: green;");
-                    validarHabilitarGuardar();
-                } else {
-                    txtDni.setStyle("-fx-border-color: red;");
-                    btnGuardar.setDisable(true);
-                }
+        txtDni.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.matches("^[0-9]{8}[A-Z]$")) {
+                txtDni.setStyle("-fx-border-color: green;");
+                validarHabilitarGuardar();
+            } else {
+                txtDni.setStyle("-fx-border-color: red;");
+                btnGuardar.setDisable(true);
             }
         });
     }
