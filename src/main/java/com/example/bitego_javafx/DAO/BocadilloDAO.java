@@ -15,7 +15,7 @@ import java.util.List;
 public class BocadilloDAO {
 
     //Recupera todos los Bocadillos Disponibles, útil para el adminsitrador
-    public List<Bocadillo> obtenerBocadillos(){
+    /*public List<Bocadillo> obtenerBocadillos(){
         List<Bocadillo> bocadillos = null;
         Transaction transaction = null;
 
@@ -33,7 +33,7 @@ public class BocadilloDAO {
         }
 
         return bocadillos;
-    }
+    }*/
 
     //Obtenemos los bocadillos filtrados por dia
     public List<Bocadillo> obtenerBocadillosDelDia() {

@@ -85,23 +85,24 @@ public class AlumnoController {
             }
         }
     }
+    //Méthod para acceder a la pantalla movimientos
     public void goHistorial() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/movimientos.fxml"));
             Parent root = loader.load(); // Carga una nueva instancia del FXML
 
-            // Obtiene el controlador y establece el usuario
+            // Obtiene el controlador a partir del loader y establece el usuario
             MovimientosController controller = loader.getController();
             controller.setUsuario(usuario);
 
-            // Crea una nueva ventana en lugar de reemplazar la actual
+            // Crea una nueva ventana , aunque deberiamos de reemplazar la actual
             Stage stage = new Stage();
             stage.setScene(new Scene(root, 800, 600)); // Puedes ajustar el tamaño de la ventana
             stage.setTitle("Historial de Pedidos");
             stage.setMaximized(true);
             stage.show();
 
-            // Opcional: Cerrar la ventana actual
+            // Cerramos la ventana actual
             Stage currentStage = (Stage) btnCaliente.getScene().getWindow();
             currentStage.close();
 
@@ -113,13 +114,14 @@ public class AlumnoController {
 
     @FXML
     public void initialize() {
-        boolean alumno_instancia;
         if (usuario != null) {
+            //Instanciado usuario con el setUsuario
             alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
             lblEmail.setText(alumno.getEmail());
+            //Cargamos los bocadillos cuando se inicializa la ventana
             cargarBocadillos();
 
-            //Inicializamos antes de que se cree el scene, asi ya todo estará inicializado
+            //Inicializamos antes de que se cree el scene, asi ya all estará inicializado
             if (comprobarPedidoDia()) {
                 modoPedido();
             } else {
@@ -136,9 +138,10 @@ public class AlumnoController {
         if (usuario != null) {
             alumno = UsuarioDAO.obtenerAlumnoPorEmail(usuario.getEmail());
             lblEmail.setText(alumno.getEmail());
+            //Cargamos los bocadillos antes de inicializar la ventana, habría que ver con cual quedarnos
             cargarBocadillos();
 
-            //Inicializamos antes de que se cree el scene, asi ya todo estará inicializado
+            //Inicializamos antes de que se cree el scene, asi ya all estará inicializado
             if (comprobarPedidoDia()) {
                 modoPedido();
             } else {
@@ -148,6 +151,7 @@ public class AlumnoController {
     }
 
     private void cargarBocadillos() {
+        //Cargamos los bocadillos del dia
         BocadilloDAO bocadilloDAO = new BocadilloDAO();
         bocadillosHoy = bocadilloDAO.obtenerBocadillosDelDia();
 
@@ -266,18 +270,17 @@ public class AlumnoController {
     //Mostrar Pedido y Cambiar vista
     private void modoPedido(){
         PedidoDAO pedidoDAO=new PedidoDAO();
-        Date fechaActual = new Date(System.currentTimeMillis());
+        Date fechaActual = new Date(System.currentTimeMillis()); //Obtiene la fecha actual en milisegundos xd
         PedidoBocadillo pedidoHoy=pedidoDAO.obtenerPedidoDelDia(alumno.getId_alumno(),fechaActual);
         //TODO btn cancelar poner false cuando se inicializa
         btnCancelar.setVisible(true);
+        //Poner invisibles los botones para cancelar un pedido
         btnFrio.setVisible(false);
         btnCaliente.setVisible(false);
 
-        //private Label lblNombrePedido, lblFechaLimite, lblRetirado, lblCosto;
-
         lblNombrePedido.setText(pedidoHoy.getBocadillo().getNombre());
 
-        //Asignarle siempre las 11 de cada día
+        //Asignarle siempre las 11 de cada día es fecha límite para cancelar
         LocalDate hoy = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("EEEE, dd 'de' MMMM 'a las' hh:mm a");
         String fechaFormateada = hoy.atTime(11, 0).format(formato);
@@ -287,6 +290,7 @@ public class AlumnoController {
 
         if(pedidoHoy.getRetirado()){
             lblRetirado.setText("El Bocadillo ha sido retirado");
+            //Si el pedido ha sido retirado ponemos en disable el btnCancelar el pedido
             btnCancelar.setDisable(true);
         }else{
             lblRetirado.setText("El Bocadillo aún no ha sido retirado");
@@ -309,6 +313,8 @@ public class AlumnoController {
     }
 
     private void modoNoPedido(){
+        //Vuelve a la versión inicial de la vista y resetea los lbl del Resumen
+
         btnCancelar.setVisible(false);
         btnFrio.setVisible(true);
         btnCaliente.setVisible(true);

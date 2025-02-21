@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AlumnoDAO {
-
+    /*
     public List<Alumno> obtenerAlumnos() {
         try (Session session = Conexion.getSessionFactory().openSession()) {
             return session.createQuery("FROM Alumno", Alumno.class).list();
         }
-    }
+    }*/
 
     public void save(Alumno alumno) {
 
@@ -71,8 +71,8 @@ public class AlumnoDAO {
             return session.get(Alumno.class, id);
         }
     }
-
-    //Este method obtiene una lista de obtejos alumnos paginados,permitiendo aplicar filtros dinámicos utilizando HashMap
+    //offset maximo de resultados por página
+    //Este method obtiene una lista de obtejos alumnos paginados,permitiendo aplicar filtros utilizando HashMap
     public List<Alumno> getPaginated(int page, int offset, HashMap<String, String> filtros) {
         //Nos aseguramos de que la sesión se cierre utilizando la declaración en el try
         try (Session session = Conexion.getSessionFactory().openSession()) {
@@ -94,6 +94,7 @@ public class AlumnoDAO {
 
             if (filtros != null) {
                 for (String key : filtros.keySet()) {
+                    //En LIKE : falta asignarle para evitar la inyección
                     hql.append(" AND a.").append(key).append(" LIKE :").append(key);
                 }
             }
@@ -116,6 +117,7 @@ public class AlumnoDAO {
         }
     }
 
+    //Lo mismo pero devuelve el numero de resultados obtenidos , con el objetivo de calcular la paginación
     public long count(HashMap<String, String> filtros) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
             StringBuilder hql = new StringBuilder("SELECT COUNT(a) FROM Alumno a WHERE true");

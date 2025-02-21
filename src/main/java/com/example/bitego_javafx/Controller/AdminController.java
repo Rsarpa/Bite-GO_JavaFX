@@ -65,20 +65,23 @@ public class AdminController implements Initializable {
     //Asigna los valores de la tabla dinámicamente
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //Aqui no utilizamos configurar tabla sino que ya empezamos configurando como se van a añadir valores a las tablas
         colId.setCellValueFactory(new PropertyValueFactory<>("id_alumno"));
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colApellidos.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
         colDni.setCellValueFactory(new PropertyValueFactory<>("dni"));
         colLocalidad.setCellValueFactory(new PropertyValueFactory<>("localidad"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        //Utilizamos getValue para obtener el obtejo ALumno y de el recuperar el getCurso() devolverá el toString de la clase Curso
         colCurso.setCellValueFactory(cellData -> {
             Alumno alumno = cellData.getValue();
             String curso = alumno.getCurso().toString();
             return new SimpleStringProperty(curso);
         });
 
-
         cargarAlumnos();
+        //ATAJOS DE TECLADO
+
         // Capturar eventos de teclado de la tabla
         tblAlumnos.setOnKeyPressed(this::manejarAtajosTabla);
 
@@ -117,6 +120,8 @@ public class AdminController implements Initializable {
 
     //Utilizamos un HashMap para aplicar varios filtros si es necesario
     public void cargarAlumnos() {
+        //Facilidad para añadir filtros a la aplicación
+
         HashMap<String, String> filtros = new HashMap<>();
         if (!txtFiltroNombre.getText().isEmpty()) {
             filtros.put("nombre", txtFiltroNombre.getText());
@@ -124,6 +129,7 @@ public class AdminController implements Initializable {
 
         List<Alumno> alumnos = alumnoDAO.getPaginated(paginaActual, registrosPorPagina, filtros);
         listaAlumnos.setAll(alumnos);
+        //Asignamos los elementos a cada columna de la tabla ya configurada
         tblAlumnos.setItems(listaAlumnos);
         txtPaginaActual.setText(String.valueOf(paginaActual));
         //establecerlo en modo vista
@@ -131,6 +137,7 @@ public class AdminController implements Initializable {
 
         long totalRegistros = alumnoDAO.count(filtros); // Método que cuenta registros en la BD
         int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
+
 
         // Deshabilitar el botón "Anterior" si estamos en la primera página
         btnAnterior.setDisable(paginaActual == 1);
@@ -140,6 +147,7 @@ public class AdminController implements Initializable {
 
     }
 
+    //Cada vez que se llama a pagina anterior o página  siguiente se cargan los alumnos para refrescar y se comprueba el total de paginas
     @FXML
     private void filtrarPorNombre(ActionEvent event) {
         paginaActual = 1;
@@ -219,8 +227,9 @@ public class AdminController implements Initializable {
             stage.setScene(scene);
             stage.setTitle("Añadir Alumno");
 
+            //IMPORTANTISIMO PARA LOGRAR LA PERSISTENCIA EN TIEMPO REAL
             AdminAlumnoController controller = loader.getController();
-            // Enlazar con AdminController
+            // Enlazar con AdminController para llamar a cargarAlumnos y que se refresque cuando se pulsa en guardar
             controller.setAdminController(this);
             stage.show();
         } catch (IOException e) {
@@ -238,10 +247,10 @@ public class AdminController implements Initializable {
                 Scene scene = new Scene(loader.load(), 500, 500);
                 stage.setScene(scene);
                 stage.setTitle("Editar Alumno");
-
+                //IMPORTANTISIMO PARA LOGRAR LA PERSISTENCIA EN TIEMPO REAL
                 AdminAlumnoController controller = loader.getController();
                 controller.setAdminController(this);
-                // Pasar datos al formulario
+                // Pasar datos al formulario llamando al controller de la ventana que vamos a cargar
                 controller.cargarDatosAlumno(alumnoSeleccionado);
                 stage.show();
             } catch (IOException e) {

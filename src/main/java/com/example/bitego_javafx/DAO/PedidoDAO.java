@@ -197,7 +197,7 @@ public class PedidoDAO {
         Transaction transaction = null;
         try (Session session = Conexion.getSessionFactory().openSession()) { //Iniciamos la transacción en el try
             transaction = session.beginTransaction();
-            session.remove(pedidoHoy); //Eliminamos el registro de la bd,utilizamos remove para eliminar antes del commit
+            session.remove(pedidoHoy); //Eliminamos el registro de la bd, utilizamos remove para eliminar antes del commit
             transaction.commit();
             System.out.println("Pedido eliminado correctamente");
             return true;
@@ -257,9 +257,12 @@ public class PedidoDAO {
 
             if (fechaInicio != null && fechaFin != null) {
                 query.setParameter("fechaInicio", Timestamp.valueOf(fechaInicio.atStartOfDay()));
+                //LocalTime.MAX se utiliza para que todas las horas y minutos del dia sean válidas para esta fecha
                 query.setParameter("fechaFin", Timestamp.valueOf(fechaFin.atTime(LocalTime.MAX)));
             } else if (fechaFiltro != null) {
                 query.setParameter("fechaFiltroInicio", Timestamp.valueOf(fechaFiltro.atStartOfDay()));
+                //LocalTime.MAX se utiliza para que todas las horas y minutos del dia sean válidas para esta fecha
+                //Es decir representa el ultimo instante posible en un dia 23:59:59
                 query.setParameter("fechaFiltroFin", Timestamp.valueOf(fechaFiltro.atTime(LocalTime.MAX)));
             }
 

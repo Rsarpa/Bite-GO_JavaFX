@@ -67,11 +67,15 @@ public class MovimientosController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         configurarTabla();
         configurarFiltroFechas();
+        //Ponemos el btnAnterior disable debido a que nos encontramos en la primera página
         btnAnterior.setDisable(true);
     }
 
+    //La configuración de la tabla se utiliza para asignar los valores a la tabla, para que cuando se haga un add sobre ella se añadan automaticamente
     private void configurarTabla() {
+        //Asignamos el valor del pedido
         colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
+        //Utilizamos getValue para obtener el pedido y recuperar el nombre del bocadillo
         colNombreBocadillo.setCellValueFactory(cellData -> {
             PedidoBocadillo pedido = cellData.getValue();
             return new SimpleStringProperty(
@@ -109,6 +113,7 @@ public class MovimientosController implements Initializable {
         }
     }
 
+    //Inicializamos en la pagina uno
     private void resetPaginacion() {
         currentPage = 1;
         cargarPedidos();
@@ -124,6 +129,8 @@ public class MovimientosController implements Initializable {
             totalPages = (int) Math.ceil((double) totalPedidos / OFFSET);
 
             //lblNumPedidos.setText(String.format("Pedidos mostrados: %d de %d", pedidos.size(), totalPedidos));
+
+            //Asignamos el total gastado en el resumen
             lblTotalGastado.setText(String.format("Total Gastado: %.2f€", calcularTotalGasto()));
 
             actualizarBotonesPaginacion();
@@ -131,10 +138,12 @@ public class MovimientosController implements Initializable {
     }
 
     private double calcularTotalGasto() {
+        //Obtenemos el total de gasto
         return PedidoDAO.obtenerTotalGasto(alumno.getId_alumno(), fechaFiltro, fechaInicio, fechaFin);
     }
 
     private void actualizarBotonesPaginacion() {
+        //Cada vez que cargamos pedido actualizamos la paginacion
         txtPagina.setText(String.valueOf(currentPage));
         btnAnterior.setDisable(currentPage == 1);
         btnSiguiente.setDisable(currentPage >= totalPages);
@@ -142,6 +151,7 @@ public class MovimientosController implements Initializable {
 
     @FXML
     public void siguientePagina() {
+        //Cada vez que aumentamos una página deberemos de cargar pedidos
         if (currentPage < totalPages) {
             currentPage++;
             cargarPedidos();
@@ -150,6 +160,7 @@ public class MovimientosController implements Initializable {
 
     @FXML
     public void anteriorPagina() {
+        //Lo mismo para página anterior
         if (currentPage > 1) {
             currentPage--;
             cargarPedidos();
@@ -162,6 +173,7 @@ public class MovimientosController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/dashboardAlumno.fxml"));
             Parent root = loader.load();
             AlumnoController controller = loader.getController();
+            //De esta manera permitimos la persistencia, debido a que sino pusieramos el setUsuario no veriamos nada relacionado con la sesion acutual
             controller.setUsuario(usuario);
 
             Stage stage = (Stage) lblTotalGastado.getScene().getWindow();

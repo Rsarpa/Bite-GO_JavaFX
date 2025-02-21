@@ -12,6 +12,7 @@ public class UsuarioDAO {
     public UsuarioDAO() {}
 
     public static Alumno obtenerAlumnoPorEmail(String email) {
+        //Inicializamos las variables
         Transaction transaction = null;
         Alumno alumno = null;
 

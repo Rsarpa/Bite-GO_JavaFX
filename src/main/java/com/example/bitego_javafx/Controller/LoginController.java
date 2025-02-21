@@ -36,6 +36,7 @@ public class LoginController {
     private void onLoginButtonClick(ActionEvent event) throws SQLException {
 
         //welcomeText.setText("Welcome to JavaFX Application!");
+
         // Obtener los datos de los campos
         String email = correoField.getText();
         String contrasenya = contrasenaField.getText();
