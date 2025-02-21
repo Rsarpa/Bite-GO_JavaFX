@@ -60,4 +60,8 @@ public class Alergeno {
     public String getIcono() { return icono; }
     public void setIcono(String icono) { this.icono = icono; }
 
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

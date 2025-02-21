@@ -1,6 +1,8 @@
 package com.example.bitego_javafx.Controller;
 
+import com.example.bitego_javafx.DAO.AlergenoDAO;
 import com.example.bitego_javafx.DAO.BocadilloDAO;
+import com.example.bitego_javafx.Model.Alergeno;
 import com.example.bitego_javafx.Model.Bocadillo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,9 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdminBocadilloController implements Initializable {
 
@@ -22,50 +23,84 @@ public class AdminBocadilloController implements Initializable {
     @FXML
     private ComboBox<Integer> diaBox;
     @FXML
-    private Button btnGuardar;
+    private ComboBox<Alergeno> cmbAlergenos;
+    @FXML
+    private ListView<Alergeno> listAlergenos;
+    @FXML
+    private Button btnGuardar, btnAgregarAlergeno, btnEliminarAlergeno;
 
-    private BocadilloDAO bocadilloDAO = new BocadilloDAO();
+    private final BocadilloDAO bocadilloDAO = new BocadilloDAO();
+    private final AlergenoDAO alergenoDAO = new AlergenoDAO();
     private Bocadillo bocadilloEditado;
     private CrudBocadilloController crudBocadilloController;
-
+    private ObservableList<Alergeno> listaAlergenos = FXCollections.observableArrayList();
+    private ObservableList<Alergeno> alergenosSeleccionados = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        List<String> list = new ArrayList<>();
-        list.add("Frio");
-        list.add("Caliente");
-        ObservableList ol = FXCollections.observableList(list);
-        tipoBox.getItems().clear();
-        tipoBox.setItems(ol);
+        tipoBox.setItems(FXCollections.observableArrayList("Frio", "Caliente"));
+        diaBox.setItems(FXCollections.observableArrayList(1, 2, 3, 4, 5));
 
-        List <Integer> list1 = new ArrayList<>();
-        list1.add(1);
-        list1.add(2);
-        list1.add(3);
-        list1.add(4);
-        list1.add(5);
-        ObservableList ol1 = FXCollections.observableList(list1);
-        diaBox.getItems().clear();
-        diaBox.setItems(ol1);
+        cargarAlergenos();
+        listAlergenos.setItems(alergenosSeleccionados);
     }
 
-    public void setAdminController(CrudBocadilloController cru){
-        this.crudBocadilloController = cru;
+    /**
+     * Carga todos los alérgenos en el ComboBox
+     */
+    private void cargarAlergenos() {
+        listaAlergenos.setAll(alergenoDAO.obtenerTodosAlergenos());
+        cmbAlergenos.setItems(listaAlergenos);
     }
 
-    public void cargarDatosBocadillo(Bocadillo bocadillo){
+    /**
+     * Agrega un alérgeno seleccionado a la lista de alérgenos del bocadillo
+     */
+    @FXML
+    private void agregarAlergeno() {
+        Alergeno seleccionado = cmbAlergenos.getValue();
+        if (seleccionado != null && !alergenosSeleccionados.contains(seleccionado)) {
+            alergenosSeleccionados.add(seleccionado);
+        } else {
+            mostrarAlerta("Seleccione un alérgeno válido o que no haya sido añadido.");
+        }
+    }
+
+    /**
+     * Elimina un alérgeno seleccionado de la lista de alérgenos del bocadillo
+     */
+    @FXML
+    private void eliminarAlergeno() {
+        Alergeno seleccionado = listAlergenos.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            alergenosSeleccionados.remove(seleccionado);
+        } else {
+            mostrarAlerta("Seleccione un alérgeno para eliminar.");
+        }
+    }
+
+    /**
+     * Carga los datos del bocadillo para edición y marca los alérgenos seleccionados
+     */
+    public void cargarDatosBocadillo(Bocadillo bocadillo) {
         this.bocadilloEditado = bocadillo;
         txtNombre.setText(bocadillo.getNombre());
         tipoBox.setValue(bocadillo.getTipo());
         txtDescrip.setText(bocadillo.getDescripcion());
-        txtPrecio.setText(bocadillo.getPrecio_base().toString());
+        txtPrecio.setText(String.valueOf(bocadillo.getPrecio_base()));
         diaBox.setValue(bocadillo.getDia_asociado());
+
+        // Cargar los alérgenos que ya están asociados
+        alergenosSeleccionados.setAll(bocadillo.getAlergenos());
     }
 
+    /**
+     * Guarda o edita un bocadillo en la base de datos
+     */
     @FXML
-    private void guardarBocadillo(){
-        if (validarCampos()){
-            if (bocadilloEditado == null){
+    private void guardarBocadillo() {
+        if (validarCampos()) {
+            if (bocadilloEditado == null) {
                 bocadilloEditado = new Bocadillo();
             }
 
@@ -73,50 +108,70 @@ public class AdminBocadilloController implements Initializable {
             bocadilloEditado.setTipo(tipoBox.getValue());
             bocadilloEditado.setDescripcion(txtDescrip.getText());
 
-            //controlar el tipo de valor del input
-            try{
+            try {
                 bocadilloEditado.setPrecio_base(Float.parseFloat(txtPrecio.getText()));
-            }catch (NumberFormatException e){
-                System.out.println("Error: El texto no es un número válido. Tipo Float");
+            } catch (NumberFormatException e) {
+                mostrarAlerta("Error: El precio debe ser un número válido.");
+                return;
             }
 
+            if (diaBox.getValue() == null) {
+                mostrarAlerta("Error: Debes seleccionar un día.");
+                return;
+            }
             bocadilloEditado.setDia_asociado(diaBox.getValue());
 
-            //si es un bocadillo nuevo darlo de alta, de lo contrario se editará
-            String nombreBocadillo = txtNombre.getText().trim();
-            Bocadillo bocadillo = bocadilloDAO.existeBocadillo(nombreBocadillo);
+            // Asignar los alérgenos seleccionados
+            bocadilloEditado.setAlergenos(new HashSet<>(alergenosSeleccionados));
 
-            if (bocadillo == null){
+            // Guardar en la BD
+            if (bocadilloDAO.existeBocadillo(txtNombre.getText()) == null) {
                 bocadilloDAO.save(bocadilloEditado);
-                //llamar a la clase controller devolver valores actualizados y cerrar ventana
-                crudBocadilloController.mostrarBocadillos();
-                cerrarVentana();
-            }else {
+            } else {
                 bocadilloDAO.update(bocadilloEditado);
-                crudBocadilloController.mostrarBocadillos();
-                cerrarVentana();
             }
-        }else {
-            mostrarAlerta("Todos los campos son obligatorios");
+
+            crudBocadilloController.mostrarBocadillos();
+            cerrarVentana();
+        } else {
+            mostrarAlerta("Todos los campos son obligatorios.");
         }
     }
 
+    /**
+     * Valida que todos los campos estén completos
+     */
     private boolean validarCampos() {
-        return !txtNombre.getText().isEmpty() && !tipoBox.getValue().isEmpty() &&
-                !txtDescrip.getText().isEmpty() && !txtPrecio.getText().isEmpty() &&
-                diaBox.getValue()>=1 || diaBox.getValue()<=5;
+        return !txtNombre.getText().isEmpty() &&
+                tipoBox.getValue() != null &&
+                !txtDescrip.getText().isEmpty() &&
+                !txtPrecio.getText().isEmpty() &&
+                diaBox.getValue() != null;
     }
 
+    /**
+     * Cierra la ventana actual
+     */
     @FXML
     private void cerrarVentana() {
         btnGuardar.getScene().getWindow().hide();
     }
 
+    /**
+     * Muestra una alerta con un mensaje
+     */
     private void mostrarAlerta(String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Atención");
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    /**
+     * Asigna el controlador de CrudBocadilloController
+     */
+    public void setAdminController(CrudBocadilloController cru) {
+        this.crudBocadilloController = cru;
     }
 }

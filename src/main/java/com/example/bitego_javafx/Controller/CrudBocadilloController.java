@@ -40,6 +40,8 @@ public class CrudBocadilloController implements Initializable {
     private TableColumn<Bocadillo, String> colPrecio;
     @FXML
     private TableColumn<Bocadillo,String> colAlergenos;
+    @FXML
+    private TableColumn<Bocadillo,Integer> colDIa;
 
     @FXML
     private TextField txtFiltroNombre;
@@ -65,9 +67,7 @@ public class CrudBocadilloController implements Initializable {
             Bocadillo bocadillo = cellData.getValue();
             return new SimpleStringProperty(obtenerListaAlergenos(bocadillo));
         });
-
-
-
+        this.colDIa.setCellValueFactory(new PropertyValueFactory<>("dia_asociado"));
 
         this.colPrecio.setCellValueFactory(cellData -> {
             Bocadillo bocadillo = cellData.getValue();
@@ -148,7 +148,7 @@ public class CrudBocadilloController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminBocadillo.fxml"));
             Stage stage = new Stage();
-            Scene scene = new Scene(loader.load(), 500, 500);
+            Scene scene = new Scene(loader.load(), 500, 700);
             stage.setScene(scene);
             stage.setTitle("Añadir Bocadillo");
 
@@ -168,7 +168,7 @@ public class CrudBocadilloController implements Initializable {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/bitego_javafx/AdminBocadillo.fxml"));
                 Stage stage = new Stage();
-                Scene scene = new Scene(loader.load(), 500, 500);
+                Scene scene = new Scene(loader.load(), 500, 700);
                 stage.setScene(scene);
                 stage.setTitle("Editar Bocadillo");
 
