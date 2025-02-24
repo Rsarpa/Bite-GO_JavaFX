@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class AdminBocadilloController implements Initializable {
+public class    AdminBocadilloController implements Initializable {
 
     @FXML
     private TextField txtNombre, txtDescrip, txtPrecio;
