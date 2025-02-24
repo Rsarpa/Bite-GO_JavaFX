@@ -37,10 +37,10 @@
             <Label styleClass="section-title" text="Pedidos en Cocina" />
             <TableView fx:id="tableView" maxWidth="800.0" minWidth="550.0">
                 <columns>
+                    <TableColumn fx:id="colIdPedido" minWidth="100" text="ID Pedido" />
                     <!--<TableColumn fx:id="colNombreAlu" text="Nombre de alumno" />-->
-                    <TableColumn fx:id="colIdBocadillo" minWidth="150" text="ID Bocadillo" />
-                    <TableColumn fx:id="colAlumno" minWidth="150" text="Nombre Alumno" />
-                    <TableColumn fx:id="colCurso" text="Curso" />
+                    <TableColumn fx:id="colIdBocadillo" minWidth="200" text="ID Bocadillo" />
+                    <TableColumn fx:id="colTipo" text="Tipo" />
                     <!--<TableColumn fx:id="colFechaHora" text="Fecha y Hora" />-->
                     <!--<TableColumn fx:id="colCurso" text="Curso" />-->
                     <TableColumn fx:id="botonPreparar" minWidth="60" text="-" />
@@ -49,13 +49,6 @@
                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
             </TableView>
-
-            <!-- Paginación personalizada -->
-            <HBox alignment="CENTER" spacing="10">
-                <Button fx:id="btnAnterior" onAction="#paginaAnterior" styleClass="top-button" text="Anterior" />
-                <TextField fx:id="txtPaginaActual" alignment="CENTER" prefWidth="50.0" styleClass="text-field" text="1" />
-                <Button fx:id="btnSiguiente" onAction="#paginaSiguiente" styleClass="top-button" text="Siguiente" />
-            </HBox>
         </VBox>
     </center>
 </BorderPane>
