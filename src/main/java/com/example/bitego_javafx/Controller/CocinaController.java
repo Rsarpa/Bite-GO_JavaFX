@@ -32,13 +32,13 @@ public class CocinaController implements Initializable {
     private TableView<PedidoBocadillo> tableView;
 
     @FXML
-    private TableColumn<PedidoBocadillo, Integer> colIdPedido;
+    private TableColumn<PedidoBocadillo, String> colAlumno;
 
     @FXML
     private TableColumn<PedidoBocadillo, String> colIdBocadillo;
 
     @FXML
-    private TableColumn<PedidoBocadillo, String> colTipo;
+    private TableColumn<PedidoBocadillo, String> colCurso;
 
     @FXML
     private TableColumn<PedidoBocadillo, HBox> botonPreparar;
@@ -55,7 +55,13 @@ public class CocinaController implements Initializable {
     @FXML
     private ComboBox<String> cursoFilter;
 
+    @FXML
+    private Button btnAnterior,btnSiguiente;
+
     private HashMap<String, String> filtros = new HashMap<>();
+
+    private int paginaActual = 1;
+    private final int registrosPorPagina = 10;
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
@@ -87,9 +93,9 @@ public class CocinaController implements Initializable {
             ObservableList<PedidoBocadillo> ol = FXCollections.observableArrayList(pedidoList);
             tableView.setItems(ol);
 
-            colIdPedido.setCellValueFactory(new PropertyValueFactory<>("id_pedido"));
             colIdBocadillo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getNombre()));
-            colTipo.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getBocadillo().getTipo()));
+            colAlumno.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getNombre() + " " + cellData.getValue().getAlumno().getApellidos()));
+            colCurso.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getAlumno().getCurso().getNombre_curso()));
 
             // Agregar botones de acción según el estado de los pedidos
             botonPreparar.setCellValueFactory(param -> {
@@ -112,6 +118,12 @@ public class CocinaController implements Initializable {
                         e.printStackTrace();
                     }
                 });
+
+                long totalRegistros = pedidoDAO.count();
+                int totalPaginas = (int) Math.ceil((double) totalRegistros / registrosPorPagina);
+
+                btnAnterior.setDisable(paginaActual == 1);
+                btnSiguiente.setDisable(paginaActual >= totalPaginas);
 
                 HBox hbox = new HBox(actionButton);
                 hbox.setStyle("-fx-alignment: center");
@@ -139,6 +151,19 @@ public class CocinaController implements Initializable {
         ObservableList ol = FXCollections.observableList(list);
         cursoFilter.getItems().clear();
         cursoFilter.setItems(ol);
+    }
+
+    @FXML
+    public void paginaAnterior() {
+        if (paginaActual > 1) {
+            paginaActual--;
+            cargarDatos();
+        }
+    }
+
+    public void paginaSiguiente() {
+        paginaActual++;
+        cargarDatos();
     }
 
     @FXML

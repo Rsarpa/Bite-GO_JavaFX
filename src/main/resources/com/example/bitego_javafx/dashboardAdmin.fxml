@@ -46,8 +46,8 @@
             </padding>
             <Label styleClass="section-title" text="Filtros de Búsqueda" />
             <TextField fx:id="txtFiltroNombre" promptText="Nombre del Alumno" />
-         <ComboBox fx:id="cmbFiltroCurso" prefWidth="150.0" promptText="Selecciona Curso" />
-         <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#filtrarPorNombre" styleClass="top-button" text="Filtrar" />
+            <ComboBox fx:id="cmbFiltroCurso" prefWidth="150.0" styleClass="text-field" promptText="Selecciona Curso" />
+            <Button fx:id="btnFiltrar" mnemonicParsing="false" onAction="#filtrarPorNombre" styleClass="top-button" text="Filtrar" />
         </VBox>
     </left>
 

@@ -38,7 +38,7 @@
         <PasswordField fx:id="txtContrasena" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="text-field" />
 
         <Label text="Curso:" GridPane.columnIndex="0" GridPane.rowIndex="6" styleClass="label" />
-        <ComboBox fx:id="cbCurso" promptText="Selecciona un curso" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="combo-box" />
+        <ComboBox fx:id="cbCurso" promptText="Selecciona un curso" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="text-field" />
 
         <Label text="Motivo Baja:" GridPane.columnIndex="0" GridPane.rowIndex="7" styleClass="label" />
         <TextField fx:id="txtMotivoBaja" GridPane.columnIndex="1" GridPane.rowIndex="7" styleClass="text-field" />

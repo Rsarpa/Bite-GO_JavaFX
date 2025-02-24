@@ -121,7 +121,21 @@ public class PedidoDAO {
         return null;
     }
 
-    //Otener el pedido del dia del alumno
+    //contar numero de pedidos
+    public long count() {
+        try (Session session = Conexion.getSessionFactory().openSession()) {
+            StringBuilder hql = new StringBuilder("SELECT COUNT(pb) FROM PedidoBocadillo b WHERE 1=1");
+
+            Query<Long> query = session.createQuery(hql.toString(), Long.class);
+            return query.getSingleResult();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    //Otener el pedido del dia del pedido
     public PedidoBocadillo obtenerPedidoDelDia(int id_alumno, Date fecha) {
         PedidoBocadillo pedidoHoy = null;
         Transaction transaction = null;
@@ -213,7 +227,6 @@ public class PedidoDAO {
 
     /*
     Obtenemos los pedidos del alumno teniendo en cuenta el ComboBox para filtrar por los tiempos
-    Pedidos de antes de: 1MES 3 MESES 6 MESES 1 AÑO
      */
     public static List<PedidoBocadillo> obtenerPedidosDelAlumno(int id_alumno, int page, int offset, LocalDate fechaFiltro, LocalDate fechaInicio, LocalDate fechaFin) {
         try (Session session = Conexion.getSessionFactory().openSession()) {
